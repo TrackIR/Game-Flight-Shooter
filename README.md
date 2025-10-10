@@ -18,8 +18,8 @@
 # Summary
 Create a simple 3D game, reminiscent of the old 2D shooter Asteroids, utilizing the TrackIR tracking.
 
-<img width="1024" height="1024" alt="Untitled" src="https://github.com/user-attachments/assets/daac0723-e2c0-441a-b2f4-2a24794bd777" />
-<img width="1022" height="1021" alt="Untitled" src="https://github.com/user-attachments/assets/228c57f4-c7b5-4247-8795-a198fddd881c" />
+<img width="400" height="400" alt="Untitled" src="https://github.com/user-attachments/assets/daac0723-e2c0-441a-b2f4-2a24794bd777" />
+<img width="400" height="400" alt="Untitled" src="https://github.com/user-attachments/assets/228c57f4-c7b5-4247-8795-a198fddd881c" />
 
 
 

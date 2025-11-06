@@ -556,7 +556,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1170210990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d803c5bb5cabac243a40f59d54c69041, type: 3}
+  m_Script: {fileID: 11500000, guid: f0a5f6ee1e9161043b79e7d2c0dc2653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipMovement
 --- !u!54 &1170210996
@@ -581,7 +581,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -656,7 +656,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1817942224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d803c5bb5cabac243a40f59d54c69041, type: 3}
+  m_Script: {fileID: 11500000, guid: f0a5f6ee1e9161043b79e7d2c0dc2653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipMovement
 --- !u!1660057539 &9223372036854775807

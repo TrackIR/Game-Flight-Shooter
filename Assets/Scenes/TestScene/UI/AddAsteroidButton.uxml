@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scenes/TestScene/UI/add-asteroid-button.uss?fileID=7433441132597879392&amp;guid=ef7690aa95ffabd42aa11f22fbb22ce5&amp;type=3#add-asteroid-button" />
+    <ui:Button text="Spawn Asteroid&#10;" name="AddAsteroidButton" style="height: 111px; width: 351px;" />
+    <ui:Button text="Damage First Asteroid" name="DamageAsteroidButton" style="height: 120px; width: 351px;" />
+</ui:UXML>

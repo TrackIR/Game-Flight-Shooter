@@ -1,6 +1,0 @@
-:root {
-}
-
-.unity-button:hover {
-    background-color: rgb(243, 166, 166);
-}

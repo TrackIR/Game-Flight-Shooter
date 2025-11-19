@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using System;
-using System.Runtime.InteropServices;
-using System.Text;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,15 +16,27 @@ public class SpaceshipMovement : MonoBehaviour
     // Sets up the keyboard controls for the spaceship
     private PlayerInputActions spaceshipControls;
     private InputAction thrustInput;
-    private InputAction rollInput;
     private InputAction pitchInput;
     private InputAction yawInput;
+    private InputAction rollInput;
 
-    // Used to change the movement of the spaceship
-    private float thrust;
-    private float roll;
-    private float pitch;
-    private float yaw;
+
+    // Used to change the movement of the spaceship, keyboard controls
+    private float thrustK;
+    private float pitchK;
+    private float yawK;
+    private float rollK;
+
+
+    // Spaceship feel values
+    public float MaxSpeed = 4.25f;
+    public float LinearDamping = 0.5f;
+    public float AngularDamping = 0.5f;
+
+    public float ThrustIRScalar = 50.0f;
+    public float PitchIRScalar = 1.0f;
+    public float YawIRScalar = 1.3f;
+    public float RollIRScalar = 1.1f;
 
 
     // TrackIR varibles
@@ -37,11 +47,11 @@ public class SpaceshipMovement : MonoBehaviour
 
     // TrackIR look directions
     private float thrustIR;
-    private float rollIR;
     private float pitchIR;
     private float yawIR;
-    NaturalPoint.TrackIR.Client m_trackirClient;        // Helper class for interacting with TrackIR API
+    private float rollIR;
 
+    NaturalPoint.TrackIR.Client m_trackirClient;        // Helper class for interacting with TrackIR API
 
     private void Awake()
     {
@@ -53,22 +63,22 @@ public class SpaceshipMovement : MonoBehaviour
         thrustInput = spaceshipControls.Player.Thrust;
         thrustInput.Enable();
 
-        rollInput = spaceshipControls.Player.Roll;
-        rollInput.Enable();
-
         pitchInput = spaceshipControls.Player.Pitch;
         pitchInput.Enable();
 
         yawInput = spaceshipControls.Player.Yaw;
         yawInput.Enable();
+
+        rollInput = spaceshipControls.Player.Roll;
+        rollInput.Enable();
     }
 
     private void OnDisable()
     {
         thrustInput.Disable();
-        rollInput.Disable();
         pitchInput.Disable();
         yawInput.Disable();
+        rollInput.Disable();
     }
 
     void OnApplicationQuit()
@@ -90,9 +100,9 @@ public class SpaceshipMovement : MonoBehaviour
         {
             rb.useGravity = false;
 
-            // adjust these values for feel
-            rb.linearDamping = 0.25f;
-            rb.angularDamping = 0.5f;
+            // Adjust these values for feel
+            rb.linearDamping = LinearDamping;
+            rb.angularDamping = AngularDamping;
         }
 
         InitializeTrackIR();
@@ -124,23 +134,31 @@ public class SpaceshipMovement : MonoBehaviour
     {
         UpdateTrackIR();
                 
-        thrust = thrustInput.ReadValue<float>();
-        roll = rollInput.ReadValue<float>();
-        pitch = pitchInput.ReadValue<float>();
-        yaw = yawInput.ReadValue<float>();
+        thrustK = thrustInput.ReadValue<float>();
+        pitchK = pitchInput.ReadValue<float>();
+        yawK = yawInput.ReadValue<float>();
+        rollK = rollInput.ReadValue<float>();
+
     }
 
-    // Use for physics operations
+    // Use for physics operations (is called at fixed time intervals not every frame)
     void FixedUpdate()
     {
-        rb.AddRelativeForce(Vector3.forward * thrust, ForceMode.Acceleration);
+        float currentSpeed = rb.linearVelocity.magnitude;
+        print(currentSpeed);
 
-        // this order of angles is right
-        Vector3 rotation = new(pitch, yaw, -roll);
+        // Thrust (keyboard then TrackIR)
+        if (currentSpeed < MaxSpeed)
+        {
+            rb.AddRelativeForce(Vector3.forward * thrustK, ForceMode.Acceleration);
+            rb.AddRelativeForce(Vector3.forward * thrustIR, ForceMode.Acceleration);
+        }
+
+        // Keyboard controls
+        Vector3 rotation = new(pitchK, yawK, -rollK);
         rb.AddRelativeTorque(rotation, ForceMode.Acceleration);
 
-        rb.AddRelativeForce(Vector3.forward * thrustIR, ForceMode.Acceleration);
-
+        // TrackIR controls
         Vector3 rotationIR = new(pitchIR, yawIR, rollIR);
         rb.AddRelativeTorque(rotationIR, ForceMode.Acceleration);
     }
@@ -181,12 +199,12 @@ public class SpaceshipMovement : MonoBehaviour
             if (bNewPoseAvailable)
             {
                 // New data was available, apply it directly here.
-                pitchIR = -pose.Orientation.X;
-                yawIR = pose.Orientation.Y;
-                rollIR = -pose.Orientation.Z;
+                // Play with scalars to improve feel
+                pitchIR = -pose.Orientation.X * PitchIRScalar;
+                yawIR = pose.Orientation.Y * YawIRScalar;
+                rollIR = -pose.Orientation.Z * RollIRScalar;
 
-                thrustIR = (Cubed(pose.PositionMeters.Z) * -50) + 0.2f;     //play with scalars to improve feel
-                // print(-pose.PositionMeters.Z);                           //use as reference of raw values
+                thrustIR = (pose.PositionMeters.Z * -1 * ThrustIRScalar) + 0.2f;
 
                 m_staleDataDuration = 0.0f;
             }
@@ -197,23 +215,13 @@ public class SpaceshipMovement : MonoBehaviour
 
                 if (m_staleDataDuration > TrackingLostTimeoutSeconds)
                 {
-                    // change to set pitch/yaw/roll to 0s?
-
+                    // change to set pitch/yaw/roll/thrust to 0s
+                    thrustIR = 0;
                     pitchIR = 0;
                     yawIR = 0;
                     rollIR = 0;
-
-                    thrustIR = 0;
                 }
             }
         }
     }
-
-    private float Cubed(float a)
-    {
-        return a * a * a;
-    }
-
 }
-
-

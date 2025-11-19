@@ -167,6 +167,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb4a8c19ced29b41989b7a0f22a5b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipMovement
+  MaxSpeed: 4.25
+  LinearDamping: 0.5
+  AngularDamping: 0.5
+  ThrustIRScalar: 50
+  PitchIRScalar: 1
+  YawIRScalar: 1.3
+  RollIRScalar: 1.1
   AssignedApplicationId: 1000
   TrackingLostTimeoutSeconds: 3
   TrackingLostRecenterDurationSeconds: 1
@@ -192,7 +199,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -772,6 +779,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb4a8c19ced29b41989b7a0f22a5b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipMovement
+  MaxSpeed: 4.25
+  LinearDamping: 0.5
+  AngularDamping: 0.5
+  ThrustIRScalar: 50
+  PitchIRScalar: 1
+  YawIRScalar: 1.3
+  RollIRScalar: 1.1
   AssignedApplicationId: 1000
   TrackingLostTimeoutSeconds: 3
   TrackingLostRecenterDurationSeconds: 1

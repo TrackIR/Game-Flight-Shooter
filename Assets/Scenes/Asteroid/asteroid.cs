@@ -10,9 +10,11 @@ public class asteroid : MonoBehaviour
     private float rotationSpeed;
     private float size;
 
+    // Events
+    public static event Action<asteroid> OnAsteroidDestroyedEvent;
+
     // Variables used once the asteroid is created
     private int health;
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

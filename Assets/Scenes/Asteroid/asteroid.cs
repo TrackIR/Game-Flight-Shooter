@@ -1,5 +1,5 @@
+using System; // For Action<>
 using UnityEngine;
-
 
 public class asteroid : MonoBehaviour
 {
@@ -20,17 +20,25 @@ public class asteroid : MonoBehaviour
     void Start()
     {
         // Choose a random size for the asteroid
-        size = Random.Range(1.0f, 3.0f);
+        size = UnityEngine.Random.Range(1.0f, 3.0f);
         transform.localScale = new Vector3(size, size, size);
 
         // Choose a random rotation direction and speed
-        rotationSpeed = Random.Range(1.0f, 100.0f);
-        rotationDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
-    
+        rotationSpeed = UnityEngine.Random.Range(1.0f, 100.0f);
+        rotationDirection = new Vector3(
+            UnityEngine.Random.Range(-1.0f, 1.0f),
+            UnityEngine.Random.Range(-1.0f, 1.0f),
+            UnityEngine.Random.Range(-1.0f, 1.0f)
+        ).normalized;
+
         // Choose a random movement direction and speed
-        movementDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
-        movementSpeed = Random.Range(1.0f, 5.0f);
-    
+        movementDirection = new Vector3(
+            UnityEngine.Random.Range(-1.0f, 1.0f),
+            UnityEngine.Random.Range(-1.0f, 1.0f),
+            UnityEngine.Random.Range(-1.0f, 1.0f)
+        ).normalized;
+        movementSpeed = UnityEngine.Random.Range(1.0f, 5.0f);
+
         // Set a health based on the size of the asteroid
         health = Mathf.FloorToInt(size * 1.5f);
     }

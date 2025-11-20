@@ -8,12 +8,17 @@ public class MainMenuUI : MonoBehaviour
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
 
-        // Find the button by name
         Button levelButton = root.Q<Button>("levelModeButton");
-
         levelButton.clicked += () =>
         {
             SceneManager.LoadScene("GameScene");
+        };
+
+        // Display Mode button
+        Button displayButton = root.Q<Button>("displayModeButton");
+        displayButton.clicked += () =>
+        {
+            SceneManager.LoadScene("Asteroid");
         };
     }
 }

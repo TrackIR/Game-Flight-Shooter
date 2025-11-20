@@ -173,7 +173,6 @@ public class TrackIRComponent : MonoBehaviour
 
             if ( bNewPoseAvailable )
             {
-                //// New data was available, apply it directly here.
                 // New data was available, apply it with some manipulation here
 
                 // Apply forward-based movement
@@ -183,7 +182,7 @@ public class TrackIRComponent : MonoBehaviour
                 transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + (forwardDirection * acceleration), 0.5f);
 
                 // Apply rotation
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, poseOrientation, 1.0f);
+                transform.Rotate(poseOrientation.x, poseOrientation.y, poseOrientation.z);
                 m_staleDataDuration = 0.0f;
             }
             else

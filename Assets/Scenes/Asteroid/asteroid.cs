@@ -17,15 +17,12 @@ public class asteroid : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("Debug in Asteroid.cs:20 : Starting Instantiation");
-
         // Choose a random size for the asteroid
         size = Random.Range(1.0f, 3.0f);
         transform.localScale = new Vector3(size, size, size);
 
         // Choose a random rotation direction and speed
         rotationSpeed = Random.Range(1.0f, 100.0f);
-        Debug.Log("Debug in Asteroid.cs:28 : " + rotationSpeed);
         rotationDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
     
         // Choose a random movement direction and speed
@@ -34,7 +31,6 @@ public class asteroid : MonoBehaviour
     
         // Set a health based on the size of the asteroid
         health = Mathf.FloorToInt(size * 1.5f);
-        Debug.Log("Debug in Asteroid.cs:37 : " + health);
     }
 
     // Update is called once per frame

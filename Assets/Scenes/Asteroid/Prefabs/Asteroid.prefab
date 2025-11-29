@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6587214928776763791}
   - component: {fileID: 1140242452640262083}
   - component: {fileID: 2556643104002727770}
-  - component: {fileID: 7449400079218031031}
+  - component: {fileID: -8950005675739906545}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -112,7 +112,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7449400079218031031
+--- !u!114 &-8950005675739906545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,6 +121,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2879669842489544092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 926bb0b978778ff43a359c9b2bd32727, type: 3}
+  m_Script: {fileID: 11500000, guid: 214b4cca0e041504aad72498ea85ef47, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::asteroid

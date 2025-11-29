@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 public class ButtonHoverEffects : MonoBehaviour
 {
-    public Color hoverColor = new Color(1f, 0.65f, 0f);   // orange
+    public Color hoverColor = new Color(0.7137255f, 0.372549f, 0f);   // dark orange
     public Color normalColor = Color.black;
 
     void Awake()

@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 481987480}
   - component: {fileID: 481987479}
+  - component: {fileID: 481987481}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -216,12 +217,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!4 &1483140915 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1287952056925543075, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
-  m_PrefabInstance: {fileID: 4988616409898853961}
+--- !u!114 &481987481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4988616409898853961
+  m_GameObject: {fileID: 481987478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!1001 &572772843
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -229,70 +254,123 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1619010421882919695, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8248849232421670897, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4711195907479616232, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
-      propertyPath: laser
-      value: 
-      objectReference: {fileID: 7282591820192904243, guid: 3b70015a5d220d549a560661127d304d, type: 3}
-    - target: {fileID: 4711195907479616232, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
-      propertyPath: laserObject
-      value: 
-      objectReference: {fileID: 7282591820192904243, guid: 3b70015a5d220d549a560661127d304d, type: 3}
-    - target: {fileID: 4711195907479616232, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
-      propertyPath: spaceshipModel
-      value: 
-      objectReference: {fileID: 1483140915}
-    - target: {fileID: 5572535262888686245, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    - target: {fileID: 8629124652543282146, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
       propertyPath: m_Name
       value: Spaceship
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2448667274059413588, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+    - {fileID: 409920672540209568, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: efb60bcfbce4be14ca01f8ce83e1f17a, type: 3}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8629124652543282146, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 774126473}
+    - targetCorrespondingSourceObject: {fileID: 8629124652543282146, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 774126472}
+    - targetCorrespondingSourceObject: {fileID: 8629124652543282146, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 774126471}
+  m_SourcePrefab: {fileID: 100100000, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+--- !u!1 &774126469 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8629124652543282146, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+  m_PrefabInstance: {fileID: 572772843}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &774126471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774126469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbe67ff065d228468ad2c1443f0931a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AsteroidSpawner
+  prefab: {fileID: 2879669842489544092, guid: 20b238d13f5adaf4b912d9039f41dc63, type: 3}
+  asteroids: []
+--- !u!114 &774126472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774126469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a95211e151afe34696be3795f8b00d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceshipShoot
+  spaceshipModel: {fileID: 1925352068}
+  laserObject: {fileID: 7282591820192904243, guid: de38739979ed00d4e89859d89eb8953e, type: 3}
+--- !u!114 &774126473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774126469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9cd731819442a4f9d91a79dec91ef2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceShipMovement2
+  accelerationSensitivity: 1
+  AssignedApplicationId: 1000
+  TrackingLostTimeoutSeconds: 3
+  TrackingLostRecenterDurationSeconds: 1
+--- !u!4 &1925352068 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5922724043226523641, guid: 5262e476fc8992048bac0fc758d0f3a8, type: 3}
+  m_PrefabInstance: {fileID: 572772843}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 481987480}
-  - {fileID: 4988616409898853961}
+  - {fileID: 572772843}

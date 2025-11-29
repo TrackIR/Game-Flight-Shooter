@@ -4,13 +4,17 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
+    public static int controlType;
+
     private void OnEnable()
     {
+        
         var root = GetComponent<UIDocument>().rootVisualElement;
 
         Button levelButton = root.Q<Button>("levelModeButton");
         levelButton.clicked += () =>
         {
+            controlType = 1;
             SceneManager.LoadScene("GameScene");
         };
 
@@ -18,7 +22,8 @@ public class MainMenuUI : MonoBehaviour
         Button displayButton = root.Q<Button>("displayModeButton");
         displayButton.clicked += () =>
         {
-            SceneManager.LoadScene("Asteroid");
+            controlType = 2;
+            SceneManager.LoadScene("GameScene");
         };
     }
 }

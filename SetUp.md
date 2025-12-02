@@ -30,8 +30,8 @@ How to get the project working
 - Laser Object -> Assets/Laser
 
 ## Spaceship/Laser/Laser (prefab)
-- Script (Laser)
-- Speed (200)
+- Script -> Laser
+- Speed -> 200
 
 ## Asteroids/Prefabs/Asteroid
 - Script -> Asteroids/asteroid.cs

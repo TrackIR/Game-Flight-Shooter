@@ -272,14 +272,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 60033867}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd0f9de4a28207e479a1f6ed7f69875c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7eb4a8c19ced29b41989b7a0f22a5b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipMovement
   InputType: 0
-  MaxSpeed: 4.75
+  MaxSpeed: 4.25
   LinearDamping: 0.5
-  AngularDamping: 0.8
-  ThrustScalar: 60
+  AngularDamping: 0.5
+  ThrustScalar: 50
   PitchScalar: 1
   YawScalar: 1.3
   RollScalar: 1.1
@@ -558,59 +558,59 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 60033868}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.4
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.4
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.4
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+    - target: {fileID: 919132149155446097, guid: 3839a77947e46354c920374050bd3048, type: 3}
       propertyPath: m_Name
       value: spaceship-concept
       objectReference: {fileID: 0}
@@ -618,7 +618,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 3839a77947e46354c920374050bd3048, type: 3}
 --- !u!1 &729194731
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,14 +820,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 970893455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a95211e151afe34696be3795f8b00d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 465f77d06fe736a48b4884992ea574f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipShoot
   spaceshipModel: {fileID: 1592239279}
-  laserObject: {fileID: 7282591820192904243, guid: de38739979ed00d4e89859d89eb8953e, type: 3}
+  laserObject: {fileID: 7282591820192904243, guid: 475bae9203e64f54a85e5471815a80f0, type: 3}
 --- !u!4 &1592239279 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9c245d73302c476449dd85df37a36835, type: 3}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3839a77947e46354c920374050bd3048, type: 3}
   m_PrefabInstance: {fileID: 679197351}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1692036989
@@ -871,10 +871,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1692036989}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fbe67ff065d228468ad2c1443f0931a, type: 3}
+  m_Script: {fileID: 11500000, guid: fd7c9dafe16886c4e8aad359bf1eb539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AsteroidSpawner
-  prefab: {fileID: 2879669842489544092, guid: 20b238d13f5adaf4b912d9039f41dc63, type: 3}
+  prefab: {fileID: 2879669842489544092, guid: 04fb025aa6d0b644e9895f613ba8b82e, type: 3}
   asteroids: []
 --- !u!1 &1841824100
 GameObject:

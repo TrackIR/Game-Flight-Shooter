@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "AltGame(Testing).sln"
+    "dotnet.defaultSolution": "Game-Flight-Shooter.sln"
 }

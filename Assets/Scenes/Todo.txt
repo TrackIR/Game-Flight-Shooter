@@ -1,0 +1,5 @@
+- Asteroid collision:
+	- On player collision:
+		- Player takes damage, is sent to place with no asteroids
+	- On asteroid collision:
+		- Asteroids bounce off each other

@@ -13,7 +13,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Start()
     {
-        spawnAsteroid(100);
+        spawnAsteroid(50);
     }
 
     void Update()

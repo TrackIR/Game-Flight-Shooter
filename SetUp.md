@@ -12,6 +12,11 @@ How to get the project working
 - Script -> MainMenu/MainMenu.cs
 - Script -> MainMenu/ButtonHoverEffects.cs
 
+### AsteroidSpawner
+- Script -> MainMenuAsteroidSpawner
+- Prefab -> Assets/Asteroid-concept
+- Asteroid Settings (inspector) -> right click, properties -> import cameras unchecked
+
 # GameScene
 ## Spaceship
 - Script -> Spaceship/SpaceshipMovement.cs

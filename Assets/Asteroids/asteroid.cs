@@ -61,6 +61,7 @@ public class asteroid : MonoBehaviour
 
     void Die()
     {
+        ScoreManager.Instance.AddScore(1);
         Destroy(gameObject);
     }
 }

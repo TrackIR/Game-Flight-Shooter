@@ -14,8 +14,7 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Move laser forward in local space (fix for rotation issue)
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        transform.Translate(forwardDirection * speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other) 

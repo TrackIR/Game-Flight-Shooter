@@ -327,8 +327,8 @@ Camera:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -856,9 +856,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 76fd46bc31bc2d44b9c58de11bb02e39, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 76fd46bc31bc2d44b9c58de11bb02e39, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 51df4a1af1d688c44a9c419ca145ce42, type: 2}
+      objectReference: {fileID: 2100000, guid: c28fb8b734c36b943bba8cf231405648, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 76fd46bc31bc2d44b9c58de11bb02e39, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b282fed8aa870c34795680a98ac0c624, type: 3}
     - target: {fileID: 919132149155446097, guid: 76fd46bc31bc2d44b9c58de11bb02e39, type: 3}
       propertyPath: m_Name
       value: Spaceship

@@ -125,5 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::asteroid
   size: 0
-  asteroidPrefab: {fileID: 0}
+  asteroidPrefab: {fileID: 2879669842489544092}
   splitNum: 2

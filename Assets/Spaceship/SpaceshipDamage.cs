@@ -4,17 +4,41 @@ using UnityEngine.SceneManagement;
 public class SpaceshipDamage : MonoBehaviour
 {
     public int playerHealth = 5;
+
+    //cooldown timer
+    public float damageCooldown = 1f;
+    private float lastDamageTime = 0f;
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Asteroid"))
         {
-            playerHealth -= 1;
-            Debug.Log("Spaceship collided with asteroid! -1 Health");
+            // Only take damage if enough time has passed
+            if (Time.time - lastDamageTime >= damageCooldown)
+            {
+                playerHealth -= 1;
+                lastDamageTime = Time.time;  // reset cooldown
+
+                Debug.Log("Spaceship collided with asteroid! -1 Health");
+            }
+            else
+            {
+                Debug.Log("Hit asteroid, but cooldown active — no damage taken.");
+            }
         }
+
         if (playerHealth == 0)
         {
-            FindObjectOfType<GameOverUI>().Show();
-            Time.timeScale = 0f; // optional: freeze game
+            GameOverUI ui = FindObjectOfType<GameOverUI>();
+            if (ui != null)
+            {
+                ui.Show();
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Debug.LogError("GameOverUI not found in scene!");
+            }
         }
     }
 }

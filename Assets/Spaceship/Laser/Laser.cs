@@ -4,6 +4,16 @@ public class Laser : MonoBehaviour
 {
     public Vector3 forwardDirection;
     [SerializeField] private float speed;
+    private LayerMask layerMask;
+
+    // Timer
+    private float time = 0.0f;
+    private float timeout = 5.0f;
+
+    void Awake()
+    {
+        layerMask = LayerMask.GetMask("Asteroids");
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -14,17 +24,26 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        ForceRaycast();
+        transform.Translate(forwardDirection * speed * Time.deltaTime);
+
+        time += Time.deltaTime;
+        if (time >= timeout)
+            Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other) 
+    // Hitscan Method
+    void ForceRaycast()
     {
-        if (other.tag == "Asteroid")
-        {
-            GameObject asteroid = other.gameObject;
-            asteroid.GetComponent<asteroid>().Damage(100);
-        }
+        // Declare the container for hit data
+        RaycastHit hitData;
 
-        Destroy(gameObject);
+        if (Physics.SphereCast(transform.position, 3.0f, forwardDirection, out hitData, 1.0f, layerMask) && hitData.collider.tag == "Asteroid")
+        {
+            // The ray hit an asteroid!
+            GameObject asteroid = hitData.transform.gameObject;
+            asteroid.GetComponent<asteroid>().Die();
+            Destroy(gameObject);
+        }
     }
 }

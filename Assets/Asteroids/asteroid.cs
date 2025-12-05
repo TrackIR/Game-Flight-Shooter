@@ -1,46 +1,41 @@
-using System; // For Action<>
 using UnityEngine;
+using System.Collections.Generic;
 
 public class asteroid : MonoBehaviour
 {
-    // Variables declared in the creation of the asteroid
-    private Vector3 movementDirection;
-    private float movementSpeed;
-    private Vector3 rotationDirection;
+    // Asteroid Stats
+    public int size;
     private float rotationSpeed;
-    private float size;
+    private Vector3 rotationDirection;
+    private float movementSpeed;
+    private Vector3 movementDirection;
 
-    // Events
-    public static event Action<asteroid> OnAsteroidDestroyedEvent;
+    // Asteroid Splitting
+    [SerializeField] private GameObject asteroidPrefab;
+    [SerializeField] private int splitNum = 2;
+    private List<GameObject> children = new List<GameObject>();
+    
+    /*=================================================================*/
 
-    // Variables used once the asteroid is created
-    private int health;
+    public void Init(int iSize, 
+                     float iRotationSpeed, 
+                     Vector3 iRotationDirection, 
+                     float iMovementSpeed,
+                     Vector3 iMovementDirection)
+    {
+        size = iSize;
+        rotationSpeed = iRotationSpeed;
+        rotationDirection = iRotationDirection;
+        movementSpeed = iMovementSpeed;
+        movementDirection = iMovementDirection;
+        
+        transform.localScale = new Vector3(size, size, size);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Choose a random size for the asteroid
-        size = UnityEngine.Random.Range(1.0f, 3.0f);
-        transform.localScale = new Vector3(size, size, size);
-
-        // Choose a random rotation direction and speed
-        rotationSpeed = UnityEngine.Random.Range(1.0f, 100.0f);
-        rotationDirection = new Vector3(
-            UnityEngine.Random.Range(-1.0f, 1.0f),
-            UnityEngine.Random.Range(-1.0f, 1.0f),
-            UnityEngine.Random.Range(-1.0f, 1.0f)
-        ).normalized;
-
-        // Choose a random movement direction and speed
-        movementDirection = new Vector3(
-            UnityEngine.Random.Range(-1.0f, 1.0f),
-            UnityEngine.Random.Range(-1.0f, 1.0f),
-            UnityEngine.Random.Range(-1.0f, 1.0f)
-        ).normalized;
-        movementSpeed = UnityEngine.Random.Range(1.0f, 5.0f);
-
-        // Set a health based on the size of the asteroid
-        health = Mathf.FloorToInt(size * 1.5f);
+        
     }
 
     // Update is called once per frame
@@ -50,19 +45,27 @@ public class asteroid : MonoBehaviour
         transform.position += movementDirection * movementSpeed * Time.deltaTime;
     }
 
-    public void Damage(int amount)
+    public void Die()
     {
-        health -= amount;
-        if (health <= 0)
-        {
-            Die();
-        }
+        Split();
+        Destroy(gameObject);
     }
 
-    void Die()
+    public void Split()
     {
-        ScoreManager.Instance.AddScore(1);
+        if (size - 1 == 0)
+            return;
 
-        Destroy(gameObject);
+        // Spawn child asteroids
+        for (int i = 0; i < splitNum; i++)
+        {
+            GameObject asteroid = Instantiate(asteroidPrefab, transform.position, Quaternion.identity);
+            children.Add(asteroid);
+            asteroid.GetComponent<asteroid>().Init(/*iSize = */gameObject.GetComponent<asteroid>().size - 1,
+                                                   /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                   /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                   /*iMovementSpeed =*/Random.Range(4.0f, 5.0f),
+                                                   /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
+        }
     }
 }

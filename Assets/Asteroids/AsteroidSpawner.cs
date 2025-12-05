@@ -36,6 +36,11 @@ public class AsteroidSpawner : MonoBehaviour
         {
             GameObject asteroid = Instantiate(prefab, transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
             asteroids.Add(asteroid);
+            asteroid.GetComponent<asteroid>().Init(/*iSize = */Mathf.FloorToInt(Random.Range(1.0f, 3.99f)),
+                                                   /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                   /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                   /*iMovementSpeed =*/Random.Range(1.0f, 5.0f),
+                                                   /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
         }
     }
 

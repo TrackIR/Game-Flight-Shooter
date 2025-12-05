@@ -35,7 +35,7 @@ public class SpaceshipShoot : MonoBehaviour
         {
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;
-            asteroid.GetComponent<asteroid>().Damage(100);
+            asteroid.GetComponent<asteroid>().Die();
         }
     }
 
@@ -51,7 +51,8 @@ public class SpaceshipShoot : MonoBehaviour
         Vector3 rightWorldPos = transform.TransformPoint(rightLocal);
 
         // Use the ship's rotation so lasers face the same direction as before
-        Quaternion spawnRotation = transform.rotation;
+        Vector3 forwardByQuat = transform.rotation * transform.forward;
+        Quaternion spawnRotation = Quaternion.Euler(forwardByQuat);
 
         // Instantiate left laser
         GameObject laserLeft = Instantiate(laserObject, leftWorldPos, spawnRotation);

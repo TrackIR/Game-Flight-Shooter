@@ -21,7 +21,7 @@ public class SpaceshipMovement : MonoBehaviour
     private InputAction rollInput;
 
     // Input type
-    public int InputType;       // 0 = keyboard, 1 = match head rotation, 2 = angular momentum
+    public int InputType;       // 1 = match head rotation, 2 = angular momentum
 
     // Used to change the movement of the spaceship, keyboard controls
     private float thrust;
@@ -58,37 +58,30 @@ public class SpaceshipMovement : MonoBehaviour
     
     private void OnEnable()
     {
-        if (InputType == 0)
-        {
-            thrustInput = InputSystem.actions.FindAction("Thrust");
-            thrustInput.Enable();
+        thrustInput = InputSystem.actions.FindAction("Thrust");
+        thrustInput.Enable();
 
-            pitchInput = InputSystem.actions.FindAction("Pitch");
-            pitchInput.Enable();
+        pitchInput = InputSystem.actions.FindAction("Pitch");
+        pitchInput.Enable();
 
-            yawInput = InputSystem.actions.FindAction("Yaw");
-            yawInput.Enable();
+        yawInput = InputSystem.actions.FindAction("Yaw");
+        yawInput.Enable();
 
-            rollInput = InputSystem.actions.FindAction("Roll");
-            rollInput.Enable();
-        }
+        rollInput = InputSystem.actions.FindAction("Roll");
+        rollInput.Enable();
     }
 
     private void OnDisable()
     {
-        if (InputType == 0)
-        {
-            thrustInput.Disable();
-            pitchInput.Disable();
-            yawInput.Disable();
-            rollInput.Disable();
-        }
+        thrustInput.Disable();
+        pitchInput.Disable();
+        yawInput.Disable();
+        rollInput.Disable();
     }
 
     void OnApplicationQuit()
     {
-        if(InputType != 0)
-            ShutDownTrackIR();
+        ShutDownTrackIR();
     }
 
     private void ShutDownTrackIR()
@@ -112,8 +105,7 @@ public class SpaceshipMovement : MonoBehaviour
 
         InputType = MainMenuUI.controlType;
 
-        if (InputType != 0)
-            InitializeTrackIR();
+        InitializeTrackIR();
     }
 
     /// <summary>
@@ -140,22 +132,18 @@ public class SpaceshipMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InputType != 0)
-            UpdateTrackIR();
-        else
-        {
-            thrust = thrustInput.ReadValue<float>() * ThrustScalar;
-            pitch = pitchInput.ReadValue<float>();
-            yaw = yawInput.ReadValue<float>();
-            roll = -rollInput.ReadValue<float>();
-        }
+        UpdateTrackIR();
+
+        thrust += thrustInput.ReadValue<float>() * ThrustScalar;
+        pitch += pitchInput.ReadValue<float>();
+        yaw += yawInput.ReadValue<float>();
+        roll += -rollInput.ReadValue<float>();
     }
 
     // Use for physics operations (is called at fixed time intervals not every frame)
     void FixedUpdate()
     {
         float currentSpeed = rb.linearVelocity.magnitude;
-        // print(currentSpeed);
 
         // Thrust, if less than max speed
         if (currentSpeed < MaxSpeed)

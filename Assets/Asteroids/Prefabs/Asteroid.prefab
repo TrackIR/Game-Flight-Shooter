@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1140242452640262083}
   - component: {fileID: 2556643104002727770}
   - component: {fileID: -8950005675739906545}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Asteroid
   m_TagString: Asteroid
   m_Icon: {fileID: 0}
@@ -124,3 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c51e74a6284ba4dbe49abe550cfc5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::asteroid
+  size: 0
+  asteroidPrefab: {fileID: 0}
+  splitNum: 2

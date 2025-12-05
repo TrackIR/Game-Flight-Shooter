@@ -42,9 +42,23 @@ public class SpaceshipShoot : MonoBehaviour
     // Projectile Method
     void ShootLaser()
     {
-        Vector3 forwardByQuat = transform.rotation * transform.forward;
-        Quaternion forwardQuat = Quaternion.Euler(forwardByQuat);
-        GameObject laser = Instantiate(laserObject, transform.position, forwardQuat);
-        laser.GetComponent<Laser>().forwardDirection = transform.forward;
+        // Left/right local offsets (adjust X to move left/right, Y/Z if needed)
+        Vector3 leftLocal  = new Vector3(-0.4f, 0f, 0f);
+        Vector3 rightLocal = new Vector3( 0.4f, 0f, 0f);
+
+        // Convert local offsets to world space so they follow the ship's rotation/position
+        Vector3 leftWorldPos  = transform.TransformPoint(leftLocal);
+        Vector3 rightWorldPos = transform.TransformPoint(rightLocal);
+
+        // Use the ship's rotation so lasers face the same direction as before
+        Quaternion spawnRotation = transform.rotation;
+
+        // Instantiate left laser
+        GameObject laserLeft = Instantiate(laserObject, leftWorldPos, spawnRotation);
+        laserLeft.GetComponent<Laser>().forwardDirection = transform.forward;
+
+        // Instantiate right laser
+        GameObject laserRight = Instantiate(laserObject, rightWorldPos, spawnRotation);
+        laserRight.GetComponent<Laser>().forwardDirection = transform.forward;
     }
 }

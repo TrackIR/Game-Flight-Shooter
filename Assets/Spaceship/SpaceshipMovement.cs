@@ -132,6 +132,11 @@ public class SpaceshipMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        thrust = 0;
+        pitch = 0;
+        yaw = 0;
+        roll = 0;
+        
         UpdateTrackIR();
 
         thrust += thrustInput.ReadValue<float>() * ThrustScalar;

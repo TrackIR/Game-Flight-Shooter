@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SpaceshipDamage : MonoBehaviour
 {
-    int playerHealth = 5;
+    public int playerHealth = 5;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Asteroid"))
@@ -13,7 +13,8 @@ public class SpaceshipDamage : MonoBehaviour
         }
         if (playerHealth == 0)
         {
-            SceneManager.LoadScene("Main Menu");
+            FindObjectOfType<GameOverUI>().Show();
+            Time.timeScale = 0f; // optional: freeze game
         }
     }
 }

@@ -21,9 +21,9 @@ public class SpaceshipMovement : MonoBehaviour
     private InputAction rollInput;
 
     // Input type
-    public int InputType;       // 1 = match head rotation, 2 = angular momentum
+    public static int InputType = 1;       // 1 = no angular momentum, 2 = yes angular momentum
 
-    // Used to change the movement of the spaceship, keyboard controls
+    // Used to change the movement of the spaceship
     private float thrust;
     private float pitch;
     private float yaw;
@@ -35,10 +35,10 @@ public class SpaceshipMovement : MonoBehaviour
     public float LinearDamping = 0.5f;
     public float AngularDamping = 0.5f;
 
-    public float ThrustScalar = 50.0f;
-    public float PitchScalar = 1.0f;
-    public float YawScalar = 1.3f;
-    public float RollScalar = 1.1f;
+    public static float ThrustScaler = 50.0f;
+    public static float PitchScaler = 1.0f;
+    public static float YawScaler = 1.5f;
+    public static float RollScaler = 1.1f;
 
 
     // TrackIR varibles
@@ -103,7 +103,7 @@ public class SpaceshipMovement : MonoBehaviour
             rb.angularDamping = AngularDamping;
         }
 
-        InputType = MainMenuUI.controlType;
+        // InputType = MainMenu.controlType;
 
         InitializeTrackIR();
     }
@@ -139,10 +139,10 @@ public class SpaceshipMovement : MonoBehaviour
         
         UpdateTrackIR();
 
-        thrust += thrustInput.ReadValue<float>() * ThrustScalar;
-        pitch += pitchInput.ReadValue<float>();
-        yaw += yawInput.ReadValue<float>();
-        roll += -rollInput.ReadValue<float>();
+        thrust += thrustInput.ReadValue<float>() * ThrustScaler;
+        pitch += pitchInput.ReadValue<float>() * PitchScaler;
+        yaw += yawInput.ReadValue<float>() * YawScaler;
+        roll += -rollInput.ReadValue<float>() * RollScaler;
     }
 
     // Use for physics operations (is called at fixed time intervals not every frame)
@@ -215,13 +215,13 @@ public class SpaceshipMovement : MonoBehaviour
                 // angular momentum
                 else if (InputType == 2)
                 {
-                    // Play with scalars to improve feel
-                    pitch = -pose.Orientation.X * PitchScalar;
-                    yaw = pose.Orientation.Y * YawScalar;
-                    roll = -pose.Orientation.Z * RollScalar;
+                    // Play with scalers to improve feel
+                    pitch = -pose.Orientation.X * PitchScaler;
+                    yaw = pose.Orientation.Y * YawScaler;
+                    roll = -pose.Orientation.Z * RollScaler;
                 }
 
-                thrust = (pose.PositionMeters.Z * -1 * ThrustScalar) + 0.2f;
+                thrust = (pose.PositionMeters.Z * -1 * ThrustScaler) + 0.2f;
 
                 // moved applying the transformations to FixedUpdate so that movement isn't based on framerate 
 

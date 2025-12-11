@@ -38,7 +38,6 @@ public class SpaceshipDamage : MonoBehaviour
             if (ui != null)
             {
                 ui.Show();
-                Time.timeScale = 0f;
             }
             else
             {
@@ -47,4 +46,5 @@ public class SpaceshipDamage : MonoBehaviour
         }
     }
 }
+
 

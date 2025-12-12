@@ -3,6 +3,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#summary">Summary</a></li>
+    <li><a href="#our-team">Summary</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -22,6 +23,13 @@ Create a simple 3D game, reminiscent of the old 2D shooter Asteroids, utilizing 
 <img width="400" height="400" alt="Untitled" src="https://github.com/user-attachments/assets/228c57f4-c7b5-4247-8795-a198fddd881c" />
 
 
+<!-- OUR TEAM -->
+# Our Team
+Samuel Cardwell --> cardwels@oregonstate.edu
+<br>Bryan Partida --> partidab@oregonstate.edu
+<br>Hunter Simpson --> simpsohu@oregonstate.edu
+<br>Jakob Jensen --> jensjako@oregonstate.edu
+<br>Leo Yudelson --> yudelsol@oregonstate.edu
 
 <!-- GETTING STARTED -->
 # Getting Started
@@ -54,10 +62,12 @@ _Below is an example of how you can instruct your audience on installing and set
 
 <!-- LICENSE -->
 # License
+All non-third party code included in this repository is jointly owned by the team mentioned above and NaturalPoint Inc. DBA OptiTrack.
 
-Distributed under the ___ License. 
 See `LICENSE.txt` in the "licenses" folder for more information.
+
 Third party licenses can also be found in the "licenses" folder named accordingly.
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

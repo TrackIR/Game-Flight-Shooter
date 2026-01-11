@@ -71,7 +71,7 @@ public class SpaceshipMovement : MonoBehaviour
         rollInput.Enable();
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         thrustInput.Disable();
         pitchInput.Disable();

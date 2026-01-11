@@ -11,6 +11,14 @@ public class SpaceshipDamage : MonoBehaviour
     public DamageFlashEffect damageFlash;
     public AudioSource damageAudio;
 
+    // private SpaceshipMovement spaceshipMovement; 
+    // private SpaceshipShoot spaceshipShoot;
+
+    // private void Start()
+    // {
+    //     spaceshipMovement = GetComponent<SpaceshipMovement>();
+    // }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Asteroid"))
@@ -33,11 +41,13 @@ public class SpaceshipDamage : MonoBehaviour
 
         if (playerHealth == 0)
         {
-            GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
-            GameOverUI ui = FindObjectOfType<GameOverUI>();
+            GameOverUI ui = FindAnyObjectByType<GameOverUI>();
             if (ui != null)
             {
                 ui.Show();
+                Time.timeScale = 0f;
+                // spaceshipMovement.OnDisable();
+                // // SpaceshipShoot.OnDestroy();
             }
             else
             {

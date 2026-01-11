@@ -9,6 +9,7 @@ public class SettingsMenu : MonoBehaviour
 
     public GameObject settingsMenu;
     public GameObject mainMenu;
+    public GameObject audioMenu;
 
     private Toggle angularMomentum;
     private FloatField pitchScale;
@@ -17,7 +18,9 @@ public class SettingsMenu : MonoBehaviour
     private Button rollDec, rollInc;
     private FloatField yawScale;
     private Button yawDec, yawInc;
+    private Toggle fullScreen;
     private Button backButton;
+    private Button audioButton;
 
     private void OnEnable()
     {
@@ -38,13 +41,17 @@ public class SettingsMenu : MonoBehaviour
         yawDec = root.Q<Button>("yawDec");
         yawInc = root.Q<Button>("yawInc");
 
+        fullScreen = root.Q<Toggle>("fullScreen");
+
         backButton = root.Q<Button>("backButton");
+        audioButton = root.Q<Button>("audioButton");
         
         // get the current values
         if(SpaceshipMovement.InputType == 1)
             angularMomentum.value = false;
         else
             angularMomentum.value = true;
+        
         pitchScale.value = SpaceshipMovement.PitchScaler;
         rollScale.value = SpaceshipMovement.RollScaler;
         yawScale.value = SpaceshipMovement.YawScaler;
@@ -61,7 +68,10 @@ public class SettingsMenu : MonoBehaviour
         yawDec.clicked += DecYaw;
         yawInc.clicked += IncYaw;
 
+        fullScreen.RegisterValueChangedCallback(FSToggle);
+
         backButton.clicked += LeaveMenu;
+        audioButton.clicked += ToAudioMenu;
     }
 
     private void OnDisable()
@@ -77,7 +87,10 @@ public class SettingsMenu : MonoBehaviour
         yawDec.clicked -= DecYaw;
         yawInc.clicked -= IncYaw;
 
+        fullScreen.UnregisterValueChangedCallback(FSToggle);
+
         backButton.clicked -= LeaveMenu;
+        audioButton.clicked -= ToAudioMenu;
     }
 
     private void AMToggle(ChangeEvent<bool> evt)
@@ -92,43 +105,75 @@ public class SettingsMenu : MonoBehaviour
 
     private void DecPitch()
     {
-        SpaceshipMovement.PitchScaler -= 0.1f;
-        pitchScale.value = SpaceshipMovement.PitchScaler;
+        if(SpaceshipMovement.PitchScaler > 0.0f)
+        {
+            SpaceshipMovement.PitchScaler -= 0.1f;
+           pitchScale.value = SpaceshipMovement.PitchScaler;
+        }
     }
 
     private void IncPitch()
     {
-        SpaceshipMovement.PitchScaler += 0.1f;
-        pitchScale.value = SpaceshipMovement.PitchScaler;
+        if(SpaceshipMovement.PitchScaler < 3.0f)
+        {
+            SpaceshipMovement.PitchScaler += 0.1f;
+            pitchScale.value = SpaceshipMovement.PitchScaler;
+        }
     }
 
     private void DecRoll()
     {
-        SpaceshipMovement.RollScaler -= 0.1f;
-        rollScale.value = SpaceshipMovement.RollScaler;
+        if(SpaceshipMovement.RollScaler > 0.0f)
+        {
+            SpaceshipMovement.RollScaler -= 0.1f;
+            rollScale.value = SpaceshipMovement.RollScaler;
+        }
     }
 
     private void IncRoll()
     {
-        SpaceshipMovement.RollScaler += 0.1f;
-        rollScale.value = SpaceshipMovement.RollScaler;
+        if(SpaceshipMovement.RollScaler < 3.0f)
+        {
+            SpaceshipMovement.RollScaler += 0.1f;
+            rollScale.value = SpaceshipMovement.RollScaler;
+        }
     }
 
     private void DecYaw()
     {
-        SpaceshipMovement.YawScaler -= 0.1f;
-        yawScale.value = SpaceshipMovement.YawScaler;
+        if(SpaceshipMovement.YawScaler > 0.0f)
+        {
+            SpaceshipMovement.YawScaler -= 0.1f;
+            yawScale.value = SpaceshipMovement.YawScaler;
+        }
     }
 
     private void IncYaw()
     {
-        SpaceshipMovement.YawScaler += 0.1f;
-        yawScale.value = SpaceshipMovement.YawScaler;
+        if(SpaceshipMovement.YawScaler < 3.0f)
+        {
+            SpaceshipMovement.YawScaler += 0.1f;
+            yawScale.value = SpaceshipMovement.YawScaler;
+        }
+    }
+
+    private void FSToggle(ChangeEvent<bool> evt)
+    {
+        if(evt.newValue)
+            print("full screen ON");
+        else
+            print("full screen OFF");
     }
 
     private void LeaveMenu()
     {
         settingsMenu.SetActive(false);
         mainMenu.SetActive(true);
+    }
+
+    private void ToAudioMenu()
+    {
+        settingsMenu.SetActive(false);
+        audioMenu.SetActive(true);
     }
 }

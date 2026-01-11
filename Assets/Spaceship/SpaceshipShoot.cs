@@ -21,6 +21,11 @@ public class SpaceshipShoot : MonoBehaviour
         
     }
 
+    public void OnDestroy()
+    {
+        shootAction.Disable();
+    }
+
     // Hitscan Method
     void ForceRaycast()
     {

@@ -8,24 +8,28 @@
             <ui:VisualElement name="settingsArea" style="flex-grow: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; background-color: rgba(0, 0, 0, 0); border-left-color: rgb(255, 166, 0); border-right-color: rgb(255, 166, 0); border-top-color: rgb(255, 166, 0); border-bottom-color: rgb(255, 166, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; margin-top: 0;">
                 <ui:Toggle label="Angular Momentum&#x9;&#x9;" name="angularMomentum" value="false" toggle-on-label-click="false" class="SettingsLabel" />
                 <ui:VisualElement name="Pitch" style="flex-grow: 0; align-content: flex-start; align-self: auto; justify-content: flex-start; flex-direction: row; align-items: center;">
-                    <ui:Label text="Pitch Sensitivty&#x9;&#x9;" name="pitchLabel" class="SettingsLabel" />
+                    <ui:Label text="Pitch Sensitivity&#x9;&#x9;" name="pitchLabel" class="SettingsLabel" />
                     <ui:Button text="-" name="pitchDec" style="font-size: 48px;" />
                     <ui:FloatField value="42.2" name="pitchScale" max-length="5" readonly="false" class="SettingsLabel" />
                     <ui:Button text="+" name="pitchInc" style="font-size: 48px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Roll" style="flex-grow: 0; align-content: flex-start; align-self: auto; justify-content: flex-start; flex-direction: row; align-items: center;">
-                    <ui:Label text="Roll Sensitivty&#x9;&#x9;" name="rollLabel" class="SettingsLabel" />
+                    <ui:Label text="Roll Sensitivity&#x9;&#x9;" name="rollLabel" class="SettingsLabel" />
                     <ui:Button text="-" name="rollDec" style="font-size: 48px;" />
                     <ui:FloatField value="42.2" name="rollScale" max-length="5" readonly="false" class="SettingsLabel" />
                     <ui:Button text="+" name="rollInc" style="font-size: 48px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="Yaw" style="flex-grow: 0; align-content: flex-start; align-self: auto; justify-content: flex-start; flex-direction: row; align-items: center;">
-                    <ui:Label text="Yaw Sensitivty&#x9;&#x9;" name="yawLabel" class="SettingsLabel" />
+                    <ui:Label text="Yaw Sensitivity&#x9;&#x9;" name="yawLabel" emoji-fallback-support="true" class="SettingsLabel" />
                     <ui:Button text="-" name="yawDec" style="font-size: 48px;" />
                     <ui:FloatField value="42.2" name="yawScale" max-length="5" readonly="false" class="SettingsLabel" />
                     <ui:Button text="+" name="yawInc" style="font-size: 48px;" />
                 </ui:VisualElement>
-                <ui:Button text="Back" name="backButton" class="MainMenuButton" style="width: 300px; -unity-font-style: normal;" />
+                <ui:Toggle label="Full Screen&#x9;&#x9;" name="fullScreen" value="false" toggle-on-label-click="false" class="SettingsLabel" />
+                <ui:VisualElement name="NavButtons" style="flex-grow: 0; align-content: flex-start; align-self: auto; justify-content: flex-start; flex-direction: row; align-items: center;">
+                    <ui:Button text="Back" name="backButton" class="MainMenuButton" style="width: 300px; -unity-font-style: normal; margin-right: 36px;" />
+                    <ui:Button text="Audio" name="audioButton" class="MainMenuButton" style="width: 300px; -unity-font-style: normal; margin-left: 36px;" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

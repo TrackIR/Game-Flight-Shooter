@@ -120,7 +120,6 @@
 
     z-index: 1;
 
-    /* Icy neon gradient-ish look (UI Toolkit doesn’t do true gradients everywhere, so we fake it) */
     background-color: rgba(110, 220, 255, 0.18);
 
     /* Glow */
@@ -132,7 +131,6 @@
     transition-timing-function: ease-out;
 }
 
-/* A diagonal "scanner" streak that sweeps across */
 .ButtonSheen {
     position: absolute;
     top: -20%;
@@ -306,7 +304,6 @@
     justify-content: center;
     align-items: stretch;
 
-    /* consistent spacing */
     row-gap: 22px;
 }
 
@@ -316,20 +313,17 @@
     flex-direction: row;
     align-items: center;
 
-    /* key: push the control away */
     justify-content: space-between;
 
-    /* optional: gives breathing room between rows */
     padding-left: 30px;
     padding-right: 30px;
 }
 
 .SettingName {
-    /* keep it from running into the control */
     max-width: 520px;
     flex-grow: 1;
 
-    text-align: left;      /* looks cleaner with your font */
+    text-align: left; 
     white-space: nowrap;
 
     -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
@@ -346,17 +340,16 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-end;   /* key: checkbox stays away */
+    justify-content: flex-end;  
 
     column-gap: 14px;
 }
 
 .ToggleControl {
     width: 260px;
-    justify-content: flex-end;   /* checkbox to the far right */
+    justify-content: flex-end; 
 }
 
-/* Smaller number fields with consistent width */
 .NumberField {
     width: 90px;
 }

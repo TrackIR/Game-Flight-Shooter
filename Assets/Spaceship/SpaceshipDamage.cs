@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class SpaceshipDamage : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class SpaceshipDamage : MonoBehaviour
     //cooldown timer
     public float damageCooldown = 1f;
     private float lastDamageTime = 0f;
+
+    public GameObject gameOverMenu;
 
     // private SpaceshipMovement spaceshipMovement; 
     // private SpaceshipShoot spaceshipShoot;
@@ -37,18 +40,19 @@ public class SpaceshipDamage : MonoBehaviour
 
         if (playerHealth == 0)
         {
-            GameOverUI ui = FindAnyObjectByType<GameOverUI>();
-            if (ui != null)
-            {
-                ui.Show();
+            // GameOverUI ui = FindAnyObjectByType<GameOverUI>();
+            // if (ui != null)
+            // {
+                // ui.Show();
                 Time.timeScale = 0f;
                 // spaceshipMovement.OnDisable();
                 // // SpaceshipShoot.OnDestroy();
-            }
-            else
-            {
-                Debug.LogError("GameOverUI not found in scene!");
-            }
+                gameOverMenu.SetActive(true);
+            // }
+            // else
+            // {
+                // Debug.LogError("GameOverUI not found in scene!");
+            // }
         }
     }
 }

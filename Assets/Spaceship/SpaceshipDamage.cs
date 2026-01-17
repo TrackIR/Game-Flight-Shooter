@@ -11,6 +11,8 @@ public class SpaceshipDamage : MonoBehaviour
     private float lastDamageTime = 0f;
     private float startTime;
     public GameObject gameOverMenu;
+    public DamageFlashEffect damageFlash;
+    public AudioSource damageAudio;
 
     // private SpaceshipMovement spaceshipMovement; 
     // private SpaceshipShoot spaceshipShoot;
@@ -27,6 +29,8 @@ public class SpaceshipDamage : MonoBehaviour
             // Only take damage if enough time has passed
             if (Time.time - startTime - lastDamageTime >= damageCooldown)
             {
+                damageFlash.Flash();
+                damageAudio.Play();
                 playerHealth -= 1;
                 lastDamageTime = Time.time;  // reset cooldown
 
@@ -45,3 +49,5 @@ public class SpaceshipDamage : MonoBehaviour
         }
     }
 }
+
+

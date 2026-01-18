@@ -29,7 +29,6 @@ public class SpaceshipMovement : MonoBehaviour
     private float yaw;
     private float roll;
 
-
     // Spaceship feel values
     public float MaxSpeed = 4.25f;
     public float LinearDamping = 0.5f;
@@ -40,6 +39,8 @@ public class SpaceshipMovement : MonoBehaviour
     public static float YawScaler = 1.5f;
     public static float RollScaler = 1.1f;
 
+    // Direct rotation feel (deg/sec) instead of per tick
+    public float DirectRotationSpeed = 120.0f;
 
     // TrackIR varibles
     public UInt16 AssignedApplicationId = 1000;     // Unique ID for application, used by TrackIR software
@@ -47,7 +48,11 @@ public class SpaceshipMovement : MonoBehaviour
     public float TrackingLostRecenterDurationSeconds = 1.0f;    // Seconds it takes to recenter after tracking is lost
     float m_staleDataDuration;      // How long since new tracking data
 
-
+    // Cache TrackIR rotation so it doesn't "drop to zero" between pose updates
+    private float trackirPitch;
+    private float trackirYaw;
+    private float trackirRoll;
+    private float trackirThrust;
 
     NaturalPoint.TrackIR.Client m_trackirClient;        // Helper class for interacting with TrackIR API
 
@@ -55,7 +60,7 @@ public class SpaceshipMovement : MonoBehaviour
     {
         spaceshipControls = new PlayerInputActions();
     }
-    
+
     private void OnEnable()
     {
         thrustInput = InputSystem.actions.FindAction("Thrust");
@@ -101,6 +106,9 @@ public class SpaceshipMovement : MonoBehaviour
             // Adjust these values for feel
             rb.linearDamping = LinearDamping;
             rb.angularDamping = AngularDamping;
+
+            // Helps smooth rendering between FixedUpdate steps
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         // InputType = MainMenu.controlType;
@@ -132,17 +140,24 @@ public class SpaceshipMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        thrust = 0;
-        pitch = 0;
-        yaw = 0;
-        roll = 0;
-        
+        // Read keyboard every frame
+        float kbThrust = thrustInput.ReadValue<float>() * ThrustScaler;
+
+        // For direct mode we treat pitch/yaw/roll as "input" (-1..1) and convert to deg/sec later
+        float kbPitch = pitchInput.ReadValue<float>();
+        float kbYaw = yawInput.ReadValue<float>();
+        float kbRoll = -rollInput.ReadValue<float>();
+
+        // Update TrackIR
         UpdateTrackIR();
 
-        thrust += thrustInput.ReadValue<float>() * ThrustScaler;
-        pitch += pitchInput.ReadValue<float>() * PitchScaler;
-        yaw += yawInput.ReadValue<float>() * YawScaler;
-        roll += -rollInput.ReadValue<float>() * RollScaler;
+        // Combine inputs (TrackIR stays stable between updates; keyboard is continuous)
+        thrust = kbThrust + trackirThrust;
+
+        // For direct mode
+        pitch = kbPitch + trackirPitch;
+        yaw = kbYaw + trackirYaw;
+        roll = kbRoll + trackirRoll;
     }
 
     // Use for physics operations (is called at fixed time intervals not every frame)
@@ -158,12 +173,17 @@ public class SpaceshipMovement : MonoBehaviour
         // head match rotation
         if (InputType == 1)
         {
-            transform.Rotate(pitch, yaw, roll);
+            // Convert input to degrees per second, then apply per fixed step
+            Vector3 eulerDelta =
+                new Vector3(pitch, yaw, roll) * DirectRotationSpeed * Time.fixedDeltaTime;
+
+            // Use Rigidbody rotation
+            rb.MoveRotation(rb.rotation * Quaternion.Euler(eulerDelta));
         }
         //key board and angular momentum
         else
         {
-            Vector3 rotation = new(pitch, yaw, roll);
+            Vector3 rotation = new(pitch * PitchScaler, yaw * YawScaler, roll * RollScaler);
             rb.AddRelativeTorque(rotation, ForceMode.Acceleration);
         }
     }
@@ -203,28 +223,28 @@ public class SpaceshipMovement : MonoBehaviour
 
             if (bNewPoseAvailable)
             {
-                // New data was available, apply it directly here.
+                // New data was available, cache it so it doesn't "drop to zero" between updates.
 
                 // head match rotation
                 if (InputType == 1)
                 {
-                    pitch = -pose.Orientation.X;
-                    yaw = pose.Orientation.Y;
-                    roll = -pose.Orientation.Z;
+                    // Cache as input-like values
+                    trackirPitch = -pose.Orientation.X;
+                    trackirYaw = pose.Orientation.Y;
+                    trackirRoll = -pose.Orientation.Z;
                 }
                 // angular momentum
                 else if (InputType == 2)
                 {
-                    // Play with scalers to improve feel
-                    pitch = -pose.Orientation.X * PitchScaler;
-                    yaw = pose.Orientation.Y * YawScaler;
-                    roll = -pose.Orientation.Z * RollScaler;
+                    // Cache values for torque mode
+                    trackirPitch = -pose.Orientation.X;
+                    trackirYaw = pose.Orientation.Y;
+                    trackirRoll = -pose.Orientation.Z;
                 }
 
-                thrust = (pose.PositionMeters.Z * -1 * ThrustScaler) + 0.2f;
+                trackirThrust = (pose.PositionMeters.Z * -1f * ThrustScaler) + 0.2f;
 
-                // moved applying the transformations to FixedUpdate so that movement isn't based on framerate 
-
+                // moved applying the transformations to FixedUpdate so that movement isn't based on framerate
                 m_staleDataDuration = 0.0f;
             }
             else
@@ -235,10 +255,10 @@ public class SpaceshipMovement : MonoBehaviour
                 if (m_staleDataDuration > TrackingLostTimeoutSeconds)
                 {
                     // change to set pitch/yaw/roll/thrust to 0s
-                    thrust = 0;
-                    pitch = 0;
-                    yaw = 0;
-                    roll = 0;
+                    trackirThrust = 0;
+                    trackirPitch = 0;
+                    trackirYaw = 0;
+                    trackirRoll = 0;
                 }
             }
         }

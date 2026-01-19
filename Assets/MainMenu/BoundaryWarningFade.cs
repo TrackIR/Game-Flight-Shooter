@@ -9,10 +9,10 @@ public class BoundaryWarningFade : MonoBehaviour
 
     [Header("Boundary Settings")]
     public Vector3 boxSize = new Vector3(300f, 300f, 300f);
-    public float warningDistance = 40f;
+    public float warningDistance = 20f;
 
     [Header("Fade Settings")]
-    public float maxAlpha = 0.8f;
+    public float maxAlpha = 0.3f;
     public float fadeSpeed = 5f;
 
     private Vector3 halfSize;

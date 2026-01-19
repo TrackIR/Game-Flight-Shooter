@@ -4,14 +4,14 @@ public class MainMenuAsteroidSpawner : MonoBehaviour
 {
     [Header("Asteroid Settings")]
     public GameObject asteroidPrefab; // Assign your asteroid prefab in the Inspector
-    public int numberOfAsteroids = 5;
+    public int numberOfAsteroids = 10;
     public float spawnRadius = 10f;
     public float minMovementSpeed = 0.5f;
     public float maxMovementSpeed = 2f;
     public float minRotationSpeed = 10f;
     public float maxRotationSpeed = 50f;
     public float minSize = 1f;
-    public float maxSize = 3f;
+    public float maxSize = 1f;
 
     // Internal data for each asteroid
     private class AsteroidData

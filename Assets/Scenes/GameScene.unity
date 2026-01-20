@@ -283,7 +283,8 @@ MonoBehaviour:
   MaxSpeed: 30
   LinearDamping: 0.5
   AngularDamping: 0.5
-  AssignedApplicationId: 1000
+  DirectRotationSpeed: 120
+  AssignedApplicationId: 1001
   TrackingLostTimeoutSeconds: 3
   TrackingLostRecenterDurationSeconds: 1
 --- !u!114 &60033875
@@ -318,6 +319,8 @@ MonoBehaviour:
   playerHealth: 5
   damageCooldown: 1
   gameOverMenu: {fileID: 1905255179}
+  damageFlash: {fileID: 0}
+  damageAudio: {fileID: 0}
 --- !u!114 &60033877
 MonoBehaviour:
   m_ObjectHideFlags: 0

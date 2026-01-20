@@ -5,9 +5,6 @@ public class CursorMovement : MonoBehaviour
 {
     public RectTransform cursorTransform;
 
-    public float deadzone = 5;
-    public float sensitivity = 1000;
-
     private Vector2 cursorPos;
     private float vertical;
     private float horizontal;    
@@ -25,20 +22,14 @@ public class CursorMovement : MonoBehaviour
     {
         // cursorRectTransform = GetComponent<RectTransform>();
 
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         cursorPos = cursorTransform.anchoredPosition;
 
         InitializeTrackIR();
     }
-
-    // void OnDisable()
-    // {
-    //     Cursor.visible = true;
-    //     Cursor.lockState = CursorLockMode.Unlocked;
-    // }
-
+    
 
     /// <summary>
     /// Attempts to instantiate the TrackIR client object using the specified application ID as well as the handle for
@@ -61,13 +52,28 @@ public class CursorMovement : MonoBehaviour
         }
     }
 
+       void OnApplicationQuit()
+    {
+        ShutDownTrackIR();
+    }
+
+    private void ShutDownTrackIR()
+    {
+        if (m_trackirClient != null)
+            m_trackirClient.Disconnect();
+    }
+
     void Update()
     {
         UpdateTrackIR();
 
-        cursorPos += new Vector2(horizontal, vertical) * Time.deltaTime * 1000;
+        // deadzone
+        if (Mathf.Abs(horizontal) < 0.075f)
+            horizontal = 0f;
+        if (Mathf.Abs(vertical) < 0.075f)
+            vertical = 0f;
 
-        print("cursorPos.X: " + cursorPos.x + "   cursorPos.Y: " + cursorPos.y);
+        cursorPos += new Vector2(horizontal, vertical) * Time.deltaTime * 1000;
         
         RectTransform canvas = cursorTransform.root as RectTransform;
 

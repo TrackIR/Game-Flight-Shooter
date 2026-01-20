@@ -1,96 +1,116 @@
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class CursorInput : MonoBehaviour
 {
     public RectTransform cursorTransform;
-    public UIDocument uiDocument;
-
-    VisualElement root;
-    int pointerId = 0;
-
-    void Awake()
-    {
-        root = uiDocument.rootVisualElement;
-    }
+    public UIDocument[] allMenus;
+    private UIDocument activeUIDocument;
+    private VisualElement lastHovered;
+    private VisualElement pickedElement;
+    private float nullElementTimer = 0.25f;
 
     void Update()
     {
+        // select the correct UI Document
+        foreach (var menu in allMenus)
+        {
+            if (menu.isActiveAndEnabled)
+            {
+                activeUIDocument = menu;
+                break;
+            }
+        }
+        if (activeUIDocument == null)
+            return;
+
+        // UI toolkit uses top left as origin instead of bottom left
         Vector2 screenPos = cursorTransform.position;
+        screenPos.y = Screen.height - screenPos.y;
 
-        SendPointerMove(screenPos);
+        IPanel panel = activeUIDocument.rootVisualElement.panel;
+        Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            SendPointerDown(screenPos);
+        //find the element under the cursor + radius
+        VisualElement newPickedElement = PickRadius(panel, panelPos, 30f);
 
-        if (Input.GetKeyUp(KeyCode.Space))
-            SendPointerUp(screenPos);
-    }
 
-    void SendPointerMove(Vector2 pos)
-    {
-        // var evt = new PointerMoveEvent();
-        // evt.Init(
-        //     pointerId,
-        //     pos,
-        //     Vector2.zero,
-        //     0,
-        //     PointerType.mouse,
-        //     0
-        // );
-
-        using (var moveEvt = PointerMoveEvent.GetPooled(
-            pointerId,
-            screenPos,
-            Vector2.zero
-        ))
+        // 0.25 seconds of nullElements before deselecting a button
+        if (newPickedElement != null)
         {
-            root.SendEvent(moveEvt);
+            pickedElement = newPickedElement;
+            nullElementTimer = 0.25f;
+        }
+        else
+        {
+            if(nullElementTimer < 0f)
+                pickedElement = newPickedElement;
+
+            nullElementTimer -= Time.deltaTime;
+        }
+
+        // hover effects
+        HandleHover(pickedElement);
+
+        // click button under cursor when hit spacebar
+        if (Input.GetKeyDown(KeyCode.Space) && pickedElement != null)
+        {
+            using (var clickEvt = NavigationSubmitEvent.GetPooled())
+            {
+                clickEvt.target = pickedElement;
+                pickedElement.SendEvent(clickEvt);
+            }
         }
     }
 
-    void SendPointerDown(Vector2 pos)
+    private VisualElement PickRadius(IPanel panel, Vector2 center, float radius)
     {
-        // var evt = new PointerDownEvent();
-        // evt.Init(
-        //     pointerId,
-        //     pos,
-        //     Vector2.zero,
-        //     0,
-        //     PointerType.mouse,
-        //     0
-        // );
-
-        using (var downEvt = PointerMoveEvent.GetPooled(
-            pointerId,
-            screenPos,
-            0
-        ))
+        Vector2[] pointsToQuery = new Vector2[]
         {
-            root.SendEvent(downEvt);
-        }
+            center,
+            center + new Vector2(0, radius),
+            center + new Vector2(0, -radius),
+            center + new Vector2(radius, 0),
+            center + new Vector2(-radius, 0),
+            center + new Vector2(radius/2, radius/2),
+            center + new Vector2(radius/2, -radius/2),
+            center + new Vector2(-radius/2, radius/2),
+            center + new Vector2(-radius/2, -radius/2)
+        };
 
+        foreach (var point in pointsToQuery)
+        {
+            var element = panel.Pick(point);
+
+            if (element != null && element is Button)
+                return element;
+        }
+        return null;
     }
 
-    void SendPointerUp(Vector2 pos)
+    private void HandleHover(VisualElement currElement)
     {
-        // var evt = PointerUpEvent();
-        // evt.Init(
-        //     pointerId,
-        //     pos,
-        //     Vector2.zero,
-        //     0,
-        //     PointerType.mouse,
-        //     0
-        // );
-        using (var upEvt = PointerUpEvent.GetPooled(
-            pointerId,
-            screenPos,
-            0
-        ))
+        if (currElement == lastHovered)
+            return;
+
+        if (lastHovered != null)
         {
-            root.SendEvent(evt);
+            using (var leaveEvt = PointerLeaveEvent.GetPooled())
+            {
+                leaveEvt.target = lastHovered;
+                lastHovered.SendEvent(leaveEvt);
+            }
         }
+
+        if (currElement != null)
+        {
+            using (var enterEvt = PointerEnterEvent.GetPooled())
+            {
+                enterEvt.target = currElement;
+                currElement.SendEvent(enterEvt);
+            }
+        }
+
+        lastHovered = currElement;
     }
 }

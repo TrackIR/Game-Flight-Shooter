@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviour
     private Button playButton;
     private Button settingsButton;
     private Button leaderboardButton;
+    private Button exitButton;
     
     private void OnEnable()
     {
@@ -21,10 +22,12 @@ public class MainMenu : MonoBehaviour
         playButton = root.Q<Button>("playButton");
         settingsButton = root.Q<Button>("settingButton");
         leaderboardButton = root.Q<Button>("leaderboardButton");
+        exitButton = root.Q<Button>("exitButton");
 
         playButton.clicked += PlayGame;
         settingsButton.clicked += DisplaySettingMenu;
         leaderboardButton.clicked += DisplayLeaderBoard;
+        exitButton.clicked += ExitGame;
     }
 
     private void OnDisable()
@@ -32,6 +35,7 @@ public class MainMenu : MonoBehaviour
         playButton.clicked -= PlayGame;
         settingsButton.clicked -= DisplaySettingMenu;
         leaderboardButton.clicked -= DisplayLeaderBoard;
+        exitButton.clicked -= ExitGame;
     }
 
     private void PlayGame()
@@ -48,5 +52,16 @@ public class MainMenu : MonoBehaviour
     private void DisplayLeaderBoard()
     {
         print("display leaderboard");
+    }
+
+    private void ExitGame()
+    {
+        Application.Quit();
+
+        print("game is exiting");
+        
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }

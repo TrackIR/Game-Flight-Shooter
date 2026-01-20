@@ -11,14 +11,14 @@ public class SettingsMenu : MonoBehaviour
     public GameObject mainMenu;
     public GameObject audioMenu;
 
-    private Toggle angularMomentum;
+    private Button angularMomentum;
     private FloatField pitchScale;
     private Button pitchDec, pitchInc;
     private FloatField rollScale;
     private Button rollDec, rollInc;
     private FloatField yawScale;
     private Button yawDec, yawInc;
-    private Toggle fullScreen;
+    private Button fullScreen;
     private Button backButton;
     private Button audioButton;
 
@@ -27,7 +27,7 @@ public class SettingsMenu : MonoBehaviour
         VisualElement root = settingsMenuDocument.rootVisualElement;
 
         // get the UI element
-        angularMomentum = root.Q<Toggle>("angularMomentum");
+        angularMomentum = root.Q<Button>("angularMomentum");
 
         pitchScale = root.Q<FloatField>("pitchScale");
         pitchDec = root.Q<Button>("pitchDec");
@@ -41,23 +41,23 @@ public class SettingsMenu : MonoBehaviour
         yawDec = root.Q<Button>("yawDec");
         yawInc = root.Q<Button>("yawInc");
 
-        fullScreen = root.Q<Toggle>("fullScreen");
+        fullScreen = root.Q<Button>("fullScreen");
 
         backButton = root.Q<Button>("backButton");
         audioButton = root.Q<Button>("audioButton");
         
         // get the current values
         if(SpaceshipMovement.InputType == 1)
-            angularMomentum.value = false;
+            angularMomentum.text = "OFF";
         else
-            angularMomentum.value = true;
+            angularMomentum.text = "ON";
         
         pitchScale.value = SpaceshipMovement.PitchScaler;
         rollScale.value = SpaceshipMovement.RollScaler;
         yawScale.value = SpaceshipMovement.YawScaler;
 
         // handler methods
-        angularMomentum.RegisterValueChangedCallback(AMToggle);
+        angularMomentum.clicked += AMToggle;
 
         pitchDec.clicked += DecPitch;
         pitchInc.clicked += IncPitch;
@@ -68,7 +68,7 @@ public class SettingsMenu : MonoBehaviour
         yawDec.clicked += DecYaw;
         yawInc.clicked += IncYaw;
 
-        fullScreen.RegisterValueChangedCallback(FSToggle);
+        fullScreen.clicked += FSToggle;
 
         backButton.clicked += LeaveMenu;
         audioButton.clicked += ToAudioMenu;
@@ -76,7 +76,7 @@ public class SettingsMenu : MonoBehaviour
 
     private void OnDisable()
     {
-        angularMomentum.UnregisterValueChangedCallback(AMToggle);
+        angularMomentum.clicked += AMToggle;
 
         pitchDec.clicked -= DecPitch;
         pitchInc.clicked -= IncPitch;
@@ -87,18 +87,24 @@ public class SettingsMenu : MonoBehaviour
         yawDec.clicked -= DecYaw;
         yawInc.clicked -= IncYaw;
 
-        fullScreen.UnregisterValueChangedCallback(FSToggle);
+        fullScreen.clicked += FSToggle;
 
         backButton.clicked -= LeaveMenu;
         audioButton.clicked -= ToAudioMenu;
     }
 
-    private void AMToggle(ChangeEvent<bool> evt)
+    private void AMToggle()
     {
-        if(evt.newValue)
+        if(angularMomentum.text == "OFF")
+        {
             SpaceshipMovement.InputType = 2;
+            angularMomentum.text = "ON";
+        }
         else
+        {
             SpaceshipMovement.InputType = 1;
+            angularMomentum.text = "OFF";
+        }
 
         print(SpaceshipMovement.InputType);
     }
@@ -157,12 +163,20 @@ public class SettingsMenu : MonoBehaviour
         }
     }
 
-    private void FSToggle(ChangeEvent<bool> evt)
+    private void FSToggle()
     {
-        if(evt.newValue)
+        if(fullScreen.text == "OFF")
+        {
+            fullScreen.text = "ON";
             print("full screen ON");
+            // change setting
+        }
         else
+        {
+            fullScreen.text = "OFF";
             print("full screen OFF");
+            // change setting
+        }
     }
 
     private void LeaveMenu()

@@ -6,10 +6,10 @@
                 <ui:Label text="SETTINGS" name="Label" class="SettingsTitle" />
             </ui:VisualElement>
             <ui:VisualElement name="settingsArea" class="SettingsArea">
-                <ui:VisualElement class="SettingRow">
-                    <ui:Label text="Angular Momentum" class="SettingName" />
-                    <ui:VisualElement class="SettingControl ToggleControl">
-                        <ui:Toggle name="angularMomentum" value="false" toggle-on-label-click="true" />
+                <ui:VisualElement name="AnugularMomentum" class="SettingRow">
+                    <ui:Label text="Angular Momentum" name="AngMometLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="OFF" name="angularMomentum" class="SmallNeonButton" style="width: 150px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="Pitch" class="SettingRow">
@@ -36,10 +36,10 @@
                         <ui:Button text="+" name="yawInc" class="SmallNeonButton" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement class="SettingRow">
-                    <ui:Label text="Full Screen" class="SettingName" />
-                    <ui:VisualElement class="SettingControl ToggleControl">
-                        <ui:Toggle name="fullScreen" value="false" toggle-on-label-click="true" />
+                <ui:VisualElement name="FullScreen" class="SettingRow">
+                    <ui:Label text="Full Screen" name="fullScreenLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="OFF" name="fullScreen" class="SmallNeonButton" style="width: 150px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="NavButtons" style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 18px;">

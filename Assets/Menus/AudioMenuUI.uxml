@@ -6,10 +6,10 @@
                 <ui:Label text="AUDIO" name="Label" class="SettingsTitle" />
             </ui:VisualElement>
             <ui:VisualElement name="settingsArea" class="SettingsArea">
-                <ui:VisualElement class="SettingRow">
-                    <ui:Label text="Mute" class="SettingName" />
-                    <ui:VisualElement class="SettingControl ToggleControl">
-                        <ui:Toggle name="mute" value="false" toggle-on-label-click="true" />
+                <ui:VisualElement name="Mute" class="SettingRow">
+                    <ui:Label text="Mute" name="muteLabel" class="SettingName" />
+                    <ui:VisualElement name="VisualElement" class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="OFF" name="mute" class="SmallNeonButton" style="width: 150px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="Master" class="SettingRow">

@@ -11,7 +11,7 @@ public class AudioMenu : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject mainMenu;
 
-    private Toggle mute;
+    private Button muteBut;
     private IntegerField masterVol;
     private Button masterDec, masterInc;
     private IntegerField musicVol;
@@ -26,7 +26,7 @@ public class AudioMenu : MonoBehaviour
         VisualElement root = audioMenuDocument.rootVisualElement;
 
         // get the UI element
-        mute = root.Q<Toggle>("mute");
+        muteBut = root.Q<Button>("mute");
 
         masterVol = root.Q<IntegerField>("masterVol");
         masterInc = root.Q<Button>("masterInc");
@@ -49,7 +49,7 @@ public class AudioMenu : MonoBehaviour
         sfxVol.value = 50;
 
         // handler methods
-        mute.RegisterValueChangedCallback(muteToggle);
+        muteBut.clicked += muteToggle;
 
         masterDec.clicked += DecMaster;
         masterInc.clicked += IncMaster;
@@ -66,7 +66,7 @@ public class AudioMenu : MonoBehaviour
 
     private void OnDisable()
     {
-        mute.UnregisterValueChangedCallback(muteToggle);
+        muteBut.clicked -= muteToggle;
 
         masterDec.clicked -= DecMaster;
         masterInc.clicked -= IncMaster;
@@ -81,17 +81,20 @@ public class AudioMenu : MonoBehaviour
         settingsButton.clicked -= ToSettingsMenu;
     }
 
-    private void muteToggle(ChangeEvent<bool> evt)
+    private void muteToggle()
     {
-        if(evt.newValue)
+        if(muteBut.text == "OFF")
+        {
+            muteBut.text = "ON";
             //change gamewide master volume setting to 0, keep menu's setting value
             //idea for ui design: grey out the settings values to indicate muted?
-            ;
+        }
         else
+        {
+            muteBut.text = "OFF";
             //reset gamewide master volume setting to the menu's setting value
             //un-grey out the settings values?
-            ;
-
+        }
     }
 
     private void DecMaster()

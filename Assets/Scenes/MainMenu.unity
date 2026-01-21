@@ -348,7 +348,7 @@ MonoBehaviour:
   minRotationSpeed: 10
   maxRotationSpeed: 50
   minSize: 1
-  maxSize: 3
+  maxSize: 1
 --- !u!4 &837854502
 Transform:
   m_ObjectHideFlags: 0

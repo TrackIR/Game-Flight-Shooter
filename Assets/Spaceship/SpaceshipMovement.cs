@@ -95,7 +95,6 @@ public class SpaceshipMovement : MonoBehaviour
             m_trackirClient.Disconnect();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -112,8 +111,9 @@ public class SpaceshipMovement : MonoBehaviour
         }
 
         // InputType = MainMenu.controlType;
-
+        print("run this");
         InitializeTrackIR();
+        print("run this 2");
     }
 
     /// <summary>

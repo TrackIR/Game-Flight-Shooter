@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class GameOverMenu : MonoBehaviour
 {
@@ -10,7 +11,17 @@ public class GameOverMenu : MonoBehaviour
 
     private IntegerField scoreField;
     private Button backButton;
-    
+    private bool menuEnabled = false;
+
+    void Update()
+    {
+        if (menuEnabled && Input.GetKeyDown(KeyCode.Space))
+        {
+            //include other button press effects, if any
+            ToMainMenu();
+        }
+    }
+
     void OnEnable()
     {
         VisualElement root = gameOverMenuDocument.rootVisualElement;
@@ -21,6 +32,8 @@ public class GameOverMenu : MonoBehaviour
         backButton.clicked += ToMainMenu;
 
         scoreField.value = ScoreManager.Instance.GetScore();
+
+        menuEnabled = true;
     }
 
     void OnDisable()

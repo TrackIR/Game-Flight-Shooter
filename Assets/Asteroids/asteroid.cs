@@ -13,6 +13,7 @@ public class asteroid : MonoBehaviour
     // Asteroid Splitting
     [SerializeField] private GameObject asteroidPrefab;
     [SerializeField] private int splitNum = 2;
+    [SerializeField] private ExplosionParticleVFX explosionVFX;
     private List<GameObject> children = new List<GameObject>();
     
     /*=================================================================*/
@@ -49,6 +50,9 @@ public class asteroid : MonoBehaviour
     {
         Split();
         ScoreManager.Instance.AddScore(1 + (int)Mathf.Floor(Time.time * 0.25f));
+        ExplosionParticleVFX explosion = Instantiate(explosionVFX);
+        explosion.transform.position = gameObject.transform.position;
+        SoundManager.PlaySound(SoundType.EXPLOSION);
         Destroy(gameObject);
     }
 

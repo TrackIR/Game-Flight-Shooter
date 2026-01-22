@@ -13,7 +13,6 @@ public class SpaceshipDamage : MonoBehaviour
     //private SpaceshipDeathAnimation deathAnimation;
     public GameObject gameOverMenu;
     public DamageFlashEffect damageFlash;
-    public AudioSource damageAudio;
 
     // private SpaceshipMovement spaceshipMovement; 
     // private SpaceshipShoot spaceshipShoot;
@@ -30,8 +29,8 @@ public class SpaceshipDamage : MonoBehaviour
             // Only take damage if enough time has passed
             if (Time.time - startTime - lastDamageTime >= damageCooldown)
             {
-                damageFlash.Flash();
-                damageAudio.Play();
+                // damageFlash.Flash();
+                SoundManager.PlaySound(SoundType.DAMAGE, 0.5f);
                 playerHealth -= 1;
                 lastDamageTime = Time.time;  // reset cooldown
 
@@ -45,7 +44,9 @@ public class SpaceshipDamage : MonoBehaviour
 
         if (playerHealth <= 0)
         {
-            //GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
+            SoundManager.PlaySound(SoundType.DEATH, 0.75f);
+            GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
+
             int highScore = PlayerPrefs.GetInt("HighScore", 0);
             if (ScoreManager.Instance.GetScore() > highScore)
             {

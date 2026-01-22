@@ -127,3 +127,4 @@ MonoBehaviour:
   size: 0
   asteroidPrefab: {fileID: 2879669842489544092}
   splitNum: 2
+  explosionVFX: {fileID: 5333558933292897161, guid: bad5b1ece507efa4c9be534747f28554, type: 3}

@@ -48,6 +48,7 @@ public class asteroid : MonoBehaviour
     public void Die()
     {
         Split();
+        ScoreManager.Instance.AddScore(1 + (int)Mathf.Floor(Time.time * 0.25f));
         Destroy(gameObject);
     }
 

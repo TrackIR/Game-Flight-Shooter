@@ -9,7 +9,6 @@ public class SpaceshipDamage : MonoBehaviour
     public float damageCooldown = 1f;
     private float lastDamageTime = 0f;
     public DamageFlashEffect damageFlash;
-    public AudioSource damageAudio;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -18,8 +17,8 @@ public class SpaceshipDamage : MonoBehaviour
             // Only take damage if enough time has passed
             if (Time.time - lastDamageTime >= damageCooldown)
             {
-                damageFlash.Flash();
-                damageAudio.Play();
+                // damageFlash.Flash();
+                SoundManager.PlaySound(SoundType.DAMAGE, 0.5f);
                 playerHealth -= 1;
                 lastDamageTime = Time.time;  // reset cooldown
 
@@ -33,6 +32,7 @@ public class SpaceshipDamage : MonoBehaviour
 
         if (playerHealth == 0)
         {
+            SoundManager.PlaySound(SoundType.DEATH, 0.75f);
             GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
             GameOverUI ui = FindObjectOfType<GameOverUI>();
             if (ui != null)

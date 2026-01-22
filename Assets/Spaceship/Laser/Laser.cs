@@ -4,6 +4,7 @@ public class Laser : MonoBehaviour
 {
     public Vector3 forwardDirection;
     [SerializeField] private float speed;
+    [SerializeField] private float raycastSize = 6.0f;
     private LayerMask layerMask;
 
     // Timer
@@ -38,7 +39,7 @@ public class Laser : MonoBehaviour
         // Declare the container for hit data
         RaycastHit hitData;
 
-        if (Physics.SphereCast(transform.position, 3.0f, forwardDirection, out hitData, 1.0f, layerMask) && hitData.collider.tag == "Asteroid")
+        if (Physics.SphereCast(transform.position, raycastSize, forwardDirection, out hitData, 1.0f, layerMask) && hitData.collider.tag == "Asteroid")
         {
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;

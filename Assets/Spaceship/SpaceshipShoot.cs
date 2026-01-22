@@ -5,6 +5,7 @@ public class SpaceshipShoot : MonoBehaviour
 {
     [SerializeField] private Transform spaceshipModel;
     public GameObject laserObject;
+    public CameraShake cameraShake;
     private InputAction shootAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,6 +43,11 @@ public class SpaceshipShoot : MonoBehaviour
     // Projectile Method
     void ShootLaser()
     {
+        // Use the ship's rotation so lasers face the same direction as before
+        Vector3 forwardByQuat = transform.rotation * transform.forward;
+        Quaternion spawnRotation = Quaternion.Euler(forwardByQuat);
+
+        /* For the visual lasers */
         // Left/right local offsets (adjust X to move left/right, Y/Z if needed)
         Vector3 leftLocal  = new Vector3(-0.4f, 0f, 0f);
         Vector3 rightLocal = new Vector3( 0.4f, 0f, 0f);
@@ -50,10 +56,6 @@ public class SpaceshipShoot : MonoBehaviour
         Vector3 leftWorldPos  = transform.TransformPoint(leftLocal);
         Vector3 rightWorldPos = transform.TransformPoint(rightLocal);
 
-        // Use the ship's rotation so lasers face the same direction as before
-        Vector3 forwardByQuat = transform.rotation * transform.forward;
-        Quaternion spawnRotation = Quaternion.Euler(forwardByQuat);
-
         // Instantiate left laser
         GameObject laserLeft = Instantiate(laserObject, leftWorldPos, spawnRotation);
         laserLeft.GetComponent<Laser>().forwardDirection = transform.forward;
@@ -61,5 +63,18 @@ public class SpaceshipShoot : MonoBehaviour
         // Instantiate right laser
         GameObject laserRight = Instantiate(laserObject, rightWorldPos, spawnRotation);
         laserRight.GetComponent<Laser>().forwardDirection = transform.forward;
+
+        /* Put a third laser in the middle to hopefully help with collision detection */
+        Vector3 middleLocal = new Vector3(0.0f, 0.0f, 0.0f);
+        Vector3 middleWorldPos = transform.TransformPoint(middleLocal);
+        GameObject laserMiddle = Instantiate(laserObject, middleWorldPos, spawnRotation);
+        laserMiddle.GetComponent<Laser>().forwardDirection = transform.forward;
+        laserMiddle.GetComponent<MeshRenderer>().enabled = false;
+
+        // Shake da camera oh yeah shake shake shake
+        StartCoroutine(cameraShake.Shake(.1f, .01f));
+
+        // Make a sound when shooting a laser
+        SoundManager.PlaySound(SoundType.LASER);
     }
 }

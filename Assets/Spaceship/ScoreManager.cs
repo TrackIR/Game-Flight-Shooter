@@ -5,6 +5,7 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance;
 
     private int score = 0;
+    private int count = 0;
 
     void Awake()
     {
@@ -14,7 +15,8 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        score += amount;
+        score += amount + count;
+        count++;
         Debug.Log("Score: " + score);
     }
 

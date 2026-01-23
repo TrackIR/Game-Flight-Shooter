@@ -51,7 +51,7 @@ public class MainMenu : MonoBehaviour
 
     private void DisplayLeaderBoard()
     {
-        print("display leaderboard");
+        SceneManager.LoadScene("Leaderboard");
     }
 
     private void ExitGame()

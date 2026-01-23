@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
+    private bool canShake = true;
+
     public IEnumerator Shake (float duration, float magnitude)
     {
         Vector3 originalPos = transform.localPosition;

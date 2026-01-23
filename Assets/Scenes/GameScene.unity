@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 61f5278240536ce49b67993ab9698666, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -466,7 +466,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f591e4545a759442a081cc5228d2e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  soundList: []
+  soundList:
+  - {fileID: 8300000, guid: cdac1e9deb8b0ef4e8a18bdc07c49290, type: 3}
+  - {fileID: 8300000, guid: 7d52d6b3e9bc7bd4fad1e24223888d3b, type: 3}
+  - {fileID: 8300000, guid: ce18fec764b1b0c47a99ddf03f24a5e0, type: 3}
+  - {fileID: 0}
 --- !u!1 &115963254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f38428e88cd30a540a981c55d07fa959, type: 3}
@@ -510,10 +514,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 708000484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 1000}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &153945042
 MonoBehaviour:
@@ -839,7 +843,7 @@ Camera:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2

@@ -8,7 +8,7 @@ public class CameraModeController : MonoBehaviour
     public GameObject exteriorShipModel;
     public GameObject cockpitModel;
 
-    public Camera mainCamera;
+    public GameObject cameraHolder;
 
     private bool inFirstPerson = false;
 
@@ -36,13 +36,13 @@ public class CameraModeController : MonoBehaviour
     {
         if (inFirstPerson)
         {
-            mainCamera.transform.position = firstPersonPivot.position;
-            mainCamera.transform.rotation = firstPersonPivot.rotation;
+            cameraHolder.transform.position = firstPersonPivot.position;
+            cameraHolder.transform.rotation = firstPersonPivot.rotation;
         }
         else
         {
-            mainCamera.transform.position = thirdPersonPivot.position;
-            mainCamera.transform.rotation = thirdPersonPivot.rotation;
+            cameraHolder.transform.position = thirdPersonPivot.position;
+            cameraHolder.transform.rotation = thirdPersonPivot.rotation;
         }
     }
 }

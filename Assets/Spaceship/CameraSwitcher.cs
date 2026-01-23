@@ -5,7 +5,7 @@ public class CameraSwitcher : MonoBehaviour
     public Transform thirdPersonPivot;
     public Transform firstPersonPivot;
 
-    private bool isFirstPerson = false;
+    public bool isFirstPerson = false;
 
     void Update()
     {
@@ -16,13 +16,15 @@ public class CameraSwitcher : MonoBehaviour
 
         if (isFirstPerson)
         {
-            transform.position = firstPersonPivot.position;
-            transform.rotation = firstPersonPivot.rotation;
+            this.transform.position = firstPersonPivot.position;
+            this.transform.rotation = firstPersonPivot.rotation;
+            Debug.Log("is first person!");
         }
         else
         {
-            transform.position = thirdPersonPivot.position;
-            transform.rotation = thirdPersonPivot.rotation;
+            this.transform.position = thirdPersonPivot.position;
+            this.transform.rotation = thirdPersonPivot.rotation;
+            Debug.Log("not first person...");
         }
     }
 }

@@ -56,10 +56,6 @@ public class SpaceshipMovement : MonoBehaviour
 
     NaturalPoint.TrackIR.Client m_trackirClient;        // Helper class for interacting with TrackIR API
 
-    private void Awake()
-    {
-        spaceshipControls = new PlayerInputActions();
-    }
 
     private void OnEnable()
     {
@@ -110,10 +106,7 @@ public class SpaceshipMovement : MonoBehaviour
             rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
-        // InputType = MainMenu.controlType;
-        print("run this");
         InitializeTrackIR();
-        print("run this 2");
     }
 
     /// <summary>

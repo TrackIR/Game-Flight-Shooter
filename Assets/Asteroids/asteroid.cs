@@ -49,7 +49,7 @@ public class asteroid : MonoBehaviour
     public void Die()
     {
         Split();
-        ScoreManager.Instance.AddScore(1 + (int)Mathf.Floor(Time.time * 0.25f));
+        ScoreManager.Instance.AddScore(1);
         ExplosionParticleVFX explosion = Instantiate(explosionVFX);
         explosion.transform.position = gameObject.transform.position;
         SoundManager.PlaySound(SoundType.EXPLOSION);

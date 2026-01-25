@@ -1,0 +1,54 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Menus/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=1bda5f1b0a660b842850d9bec8f30d82&amp;type=3#MainMenuStyle" />
+    <ui:VisualElement name="MenuContainer" style="flex-grow: 1; align-content: center; justify-content: center; align-self: auto; align-items: stretch;">
+        <ui:VisualElement name="root" class="SettingsPanel">
+            <ui:VisualElement name="header" style="width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; padding-bottom: 10px;">
+                <ui:Label text="AUDIO" name="Label" class="SettingsTitle" />
+            </ui:VisualElement>
+            <ui:VisualElement name="settingsArea" class="SettingsArea">
+                <ui:VisualElement name="Mute" class="SettingRow">
+                    <ui:Label text="Mute" name="muteLabel" class="SettingName" />
+                    <ui:VisualElement name="VisualElement" class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="OFF" name="mute" class="SmallNeonButton" style="width: 150px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Master" class="SettingRow">
+                    <ui:Label text="Master Volume" name="masterLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="masterDec" class="SmallNeonButton" />
+                        <ui:IntegerField value="42" name="masterVol" password="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(67, 79, 84);" />
+                        <ui:Button text="+" name="masterInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Music" class="SettingRow">
+                    <ui:Label text="Music Volume" name="musicLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="musicDec" class="SmallNeonButton" />
+                        <ui:IntegerField value="42" name="musicVol" password="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(67, 79, 84);" />
+                        <ui:Button text="+" name="musicInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="SFX" class="SettingRow">
+                    <ui:Label text="SFX Volume" name="sfxLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="sfxDec" class="SmallNeonButton" />
+                        <ui:IntegerField value="42" name="sfxVol" password="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(67, 79, 84);" />
+                        <ui:Button text="+" name="sfxInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="NavButtons" style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 18px;">
+                    <ui:Button name="backButton" class="MainMenuButton" style="width: 300px; margin-right: 36px;">
+                        <ui:VisualElement class="ButtonFill" />
+                        <ui:VisualElement class="ButtonSheen" />
+                        <ui:Label text="Back" class="ButtonText" />
+                    </ui:Button>
+                    <ui:Button name="settingsButton" class="MainMenuButton" style="width: 300px; margin-left: 36px;">
+                        <ui:VisualElement class="ButtonFill" />
+                        <ui:VisualElement class="ButtonSheen" />
+                        <ui:Label text="Settings" class="ButtonText" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

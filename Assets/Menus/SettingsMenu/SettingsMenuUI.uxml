@@ -1,0 +1,60 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Menus/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=1bda5f1b0a660b842850d9bec8f30d82&amp;type=3#MainMenuStyle" />
+    <ui:VisualElement name="MenuContainer" style="flex-grow: 1; align-content: center; justify-content: center; align-self: auto; align-items: stretch;">
+        <ui:VisualElement name="root" class="SettingsPanel">
+            <ui:VisualElement name="header" style="width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; padding-bottom: 10px;">
+                <ui:Label text="SETTINGS" name="Label" class="SettingsTitle" />
+            </ui:VisualElement>
+            <ui:VisualElement name="settingsArea" class="SettingsArea">
+                <ui:VisualElement name="AnugularMomentum" class="SettingRow">
+                    <ui:Label text="Angular Momentum" name="AngMometLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="OFF" name="angularMomentum" class="SmallNeonButton" style="width: 150px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Pitch" class="SettingRow">
+                    <ui:Label text="Pitch Sensitivity" name="pitchLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="pitchDec" class="SmallNeonButton" />
+                        <ui:FloatField value="42.2" name="pitchScale" max-length="5" readonly="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(83, 94, 99);" />
+                        <ui:Button text="+" name="pitchInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Roll" class="SettingRow">
+                    <ui:Label text="Roll Sensitivity" name="rollLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="rollDec" class="SmallNeonButton" />
+                        <ui:FloatField value="42.2" name="rollScale" max-length="5" readonly="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(70, 78, 82);" />
+                        <ui:Button text="+" name="rollInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Yaw" class="SettingRow">
+                    <ui:Label text="Yaw Sensitivity" name="yawLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="yawDec" class="SmallNeonButton" />
+                        <ui:FloatField value="42.2" name="yawScale" max-length="5" readonly="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(83, 98, 103);" />
+                        <ui:Button text="+" name="yawInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="FullScreen" class="SettingRow">
+                    <ui:Label text="Full Screen" name="fullScreenLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="OFF" name="fullScreen" class="SmallNeonButton" style="width: 150px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="NavButtons" style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 18px;">
+                    <ui:Button name="backButton" class="MainMenuButton" style="width: 300px; margin-right: 36px;">
+                        <ui:VisualElement class="ButtonFill" />
+                        <ui:VisualElement class="ButtonSheen" />
+                        <ui:Label text="Back" class="ButtonText" />
+                    </ui:Button>
+                    <ui:Button name="audioButton" class="MainMenuButton" style="width: 300px; margin-left: 36px;">
+                        <ui:VisualElement class="ButtonFill" />
+                        <ui:VisualElement class="ButtonSheen" />
+                        <ui:Label text="Audio" class="ButtonText" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

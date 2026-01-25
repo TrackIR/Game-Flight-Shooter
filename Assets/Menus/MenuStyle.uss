@@ -1,0 +1,355 @@
+:root {
+}
+
+/* =========================
+   TITLE
+   ========================= */
+
+.TitleLabel {
+    -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
+    font-size: 100px;
+
+    /* Snow white text */
+    color: rgb(240, 250, 255);
+
+    /* Icy neon outline */
+    -unity-text-outline-color: rgba(110, 220, 255, 0.9);
+    -unity-text-outline-width: 0.22;
+
+    /* Neon ice glow */
+    text-shadow:
+        0 0 14px rgba(110, 220, 255, 0.85),
+        0 0 28px rgba(170, 245, 255, 0.45);
+}
+
+
+
+/* =========================
+   MAIN MENU BUTTONS
+   ========================= */
+
+.MainMenuButton {
+    width: 450px;
+    height: 72px;
+
+    -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
+    font-size: 42px;
+    -unity-font-style: bold;
+
+    /* Snow / ice text */
+    color: rgb(230, 245, 255);
+
+    -unity-text-outline-color: rgba(110, 220, 255, 0.75);
+    -unity-text-outline-width: 0.18;
+
+    /* Deep space glass */
+    background-color: rgba(5, 10, 18, 0.85);
+
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+
+    border-top-color: rgba(110, 220, 255, 0.65);
+    border-bottom-color: rgba(110, 220, 255, 0.65);
+    border-left-color: rgba(110, 220, 255, 0.65);
+    border-right-color: rgba(110, 220, 255, 0.65);
+
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+
+    /* Soft neon frame glow */
+    box-shadow: 0 0 18px rgba(110, 220, 255, 0.35);
+
+    /* effect load */
+    position: relative;
+    overflow: hidden;
+
+    /* Smooth animation */
+    transition-property: box-shadow, border-top-color, border-right-color, border-bottom-color, border-left-color, background-color;
+    transition-duration: 0.18s;
+}
+
+/* hover effect fill */
+
+.MainMenuButton:hover .ButtonFill {
+    width: 100%;
+}
+
+.MainMenuButton:hover .ButtonSheen {
+    left: 120%;
+    opacity: 1;
+}
+
+/* Stronger neon frame on hover */
+.MainMenuButton:hover {
+    background-color: rgba(10, 20, 35, 0.95);
+
+    border-top-color: rgba(170, 245, 255, 1.0);
+    border-bottom-color: rgba(170, 245, 255, 1.0);
+    border-left-color: rgba(170, 245, 255, 1.0);
+    border-right-color: rgba(170, 245, 255, 1.0);
+
+    box-shadow: 0 0 36px rgba(170, 245, 255, 0.85);
+}
+
+
+/* Text stays above the animated layers */
+.ButtonText {
+    position: relative;
+    z-index: 3;
+
+    -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
+    font-size: 42px;
+    -unity-font-style: bold;
+
+    color: rgb(230, 245, 255);
+    -unity-text-outline-color: rgba(110, 220, 255, 0.75);
+    -unity-text-outline-width: 0.18;
+}
+
+/* The left-to-right "loading" fill */
+.ButtonFill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+
+    z-index: 1;
+
+    background-color: rgba(110, 220, 255, 0.18);
+
+    /* Glow */
+    box-shadow: 0 0 28px rgba(170, 245, 255, 0.35);
+
+    /* Animate the fill */
+    transition-property: width;
+    transition-duration: 0.35s;
+    transition-timing-function: ease-out;
+}
+
+.ButtonSheen {
+    position: absolute;
+    top: -20%;
+    left: -40%;
+    width: 35%;
+    height: 140%;
+
+    z-index: 2;
+
+    background-color: rgba(170, 245, 255, 0.22);
+
+    /* tilt the sheen */
+    rotate: 18deg;
+
+    /* smooth move */
+    transition-property: left, opacity;
+    transition-duration: 0.45s;
+    transition-timing-function: ease-out;
+
+    opacity: 0;
+}
+
+
+
+/* =========================
+   HOVER EFFECT
+   ========================= */
+
+.MainMenuButton:hover {
+    background-color: rgba(10, 20, 35, 0.95);
+
+    border-top-color: rgba(170, 245, 255, 1.0);
+    border-bottom-color: rgba(170, 245, 255, 1.0);
+    border-left-color: rgba(170, 245, 255, 1.0);
+    border-right-color: rgba(170, 245, 255, 1.0);
+
+    box-shadow: 0 0 30px rgba(170, 245, 255, 0.75);
+}
+
+
+/* =========================
+   ACTIVE / CLICK
+   ========================= */
+
+.MainMenuButton:active {
+    background-color: rgba(0, 5, 12, 1.0);
+    text-shadow: 0 0 12px rgba(110, 220, 255, 0.45);
+}
+
+
+/* =========================
+   SETTINGS LABEL
+   ========================= */
+
+.SettingsLabel {
+    font-size: 56px;
+
+    color: rgb(220, 245, 255);
+
+    -unity-text-outline-color: rgba(110, 220, 255, 0.7);
+    -unity-text-outline-width: 0.18;
+
+    -unity-font-style: normal;
+}
+
+
+/* =========================
+   SETTINGS PANEL LOOK
+   ========================= */
+
+.SettingsPanel {
+    width: 45%;
+    height: 75%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-self: center;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-top: 25px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    background-color: rgba(5, 10, 18, 0.92);
+
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+
+    border-top-color: rgba(110, 220, 255, 0.55);
+    border-right-color: rgba(110, 220, 255, 0.55);
+    border-bottom-color: rgba(110, 220, 255, 0.55);
+    border-left-color: rgba(110, 220, 255, 0.55);
+
+    box-shadow: 0 0 34px rgba(110, 220, 255, 0.18);
+
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+/* Settings screen title */
+.SettingsTitle {
+    -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
+    font-size: 80px;
+    -unity-font-style: bold;
+
+    color: rgb(240, 250, 255);
+
+    -unity-text-outline-color: rgba(110, 220, 255, 0.9);
+    -unity-text-outline-width: 0.22;
+
+    text-shadow:
+        0 0 14px rgba(110, 220, 255, 0.85),
+        0 0 28px rgba(170, 245, 255, 0.45);
+}
+
+/* Small +/- buttons in settings */
+.SmallNeonButton {
+    width: 70px;
+    height: 56px;
+
+    -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
+    font-size: 48px;
+    -unity-font-style: bold;
+
+    color: rgb(230, 245, 255);
+    -unity-text-outline-color: rgba(110, 220, 255, 0.75);
+    -unity-text-outline-width: 0.18;
+
+    background-color: rgba(5, 10, 18, 0.85);
+
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+
+    border-top-color: rgba(110, 220, 255, 0.55);
+    border-bottom-color: rgba(110, 220, 255, 0.55);
+    border-left-color: rgba(110, 220, 255, 0.55);
+    border-right-color: rgba(110, 220, 255, 0.55);
+
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+    box-shadow: 0 0 16px rgba(110, 220, 255, 0.25);
+}
+
+.SmallNeonButton:hover {
+    background-color: rgba(10, 20, 35, 0.95);
+    box-shadow: 0 0 24px rgba(170, 245, 255, 0.65);
+}
+
+
+
+/* =========================
+   SETTINGS LAYOUT ALIGNMENT
+   ========================= */
+
+.SettingsArea {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+
+    row-gap: 22px;
+}
+
+.SettingRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.SettingName {
+    max-width: 520px;
+    flex-grow: 1;
+
+    text-align: left; 
+    white-space: nowrap;
+
+    -unity-font-definition: url("project://database/Assets/Fonts/Evil_Empire.otf");
+    font-size: 56px;
+    -unity-font-style: normal;
+
+    color: rgb(220, 245, 255);
+    -unity-text-outline-color: rgba(110, 220, 255, 0.7);
+    -unity-text-outline-width: 0.18;
+}
+
+.SettingControl {
+    width: 260px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;  
+
+    column-gap: 14px;
+}
+
+.ToggleControl {
+    width: 260px;
+    justify-content: flex-end; 
+}
+
+.NumberField {
+    width: 90px;
+}

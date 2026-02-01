@@ -21,6 +21,11 @@
                     <ui:VisualElement class="ButtonSheen" />
                     <ui:Label text="Leaderboard" class="ButtonText" style="font-size: 60px;" />
                 </ui:Button>
+                <ui:Button name="colorsButton" class="MainMenuButton">
+                    <ui:VisualElement class="ButtonFill" />
+                    <ui:VisualElement class="ButtonSheen" />
+                    <ui:Label text="Colors" class="ButtonText" />
+                </ui:Button>
                 <ui:Button name="exitButton" class="MainMenuButton">
                     <ui:VisualElement class="ButtonFill" />
                     <ui:VisualElement class="ButtonSheen" />

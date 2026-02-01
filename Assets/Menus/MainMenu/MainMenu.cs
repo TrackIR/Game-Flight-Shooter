@@ -9,11 +9,15 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenu;
     public GameObject settingsMenu;
 
+    public GameObject colorsMenu;
+
 
     private Button playButton;
     private Button settingsButton;
     private Button leaderboardButton;
     private Button exitButton;
+
+    private Button colorsButton;
     
     private void OnEnable()
     {
@@ -24,10 +28,17 @@ public class MainMenu : MonoBehaviour
         leaderboardButton = root.Q<Button>("leaderboardButton");
         exitButton = root.Q<Button>("exitButton");
 
+        colorsButton = root.Q<Button>("colorsButton");
+
         playButton.clicked += PlayGame;
         settingsButton.clicked += DisplaySettingMenu;
         leaderboardButton.clicked += DisplayLeaderBoard;
         exitButton.clicked += ExitGame;
+
+        if (colorsButton != null)
+        {
+            colorsButton.clicked += DisplayColorsMenu;
+        }
     }
 
     private void OnDisable()
@@ -36,6 +47,11 @@ public class MainMenu : MonoBehaviour
         settingsButton.clicked -= DisplaySettingMenu;
         leaderboardButton.clicked -= DisplayLeaderBoard;
         exitButton.clicked -= ExitGame;
+
+        if (colorsButton != null)
+        {
+            colorsButton.clicked += DisplayColorsMenu;
+        }
     }
 
     private void PlayGame()
@@ -47,6 +63,12 @@ public class MainMenu : MonoBehaviour
     {
         mainMenu.SetActive(false);
         settingsMenu.SetActive(true);
+    }
+
+    private void DisplayColorsMenu()
+    {
+        mainMenu.SetActive(false);
+        colorsMenu.SetActive(true);
     }
 
     private void DisplayLeaderBoard()

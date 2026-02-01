@@ -1,0 +1,75 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Menus/MenuStyle.uss" />
+
+    <ui:VisualElement name="MenuContainer" style="flex-grow: 1; justify-content: center; align-items: center;">
+        <ui:VisualElement name="root" class="SettingsPanel">
+
+            <ui:VisualElement name="header" style="width: 100%; height: 90px; justify-content: center; align-items: center;">
+                <ui:Label text="COLORS" class="SettingsTitle" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="content" class="ColorContent">
+
+                <!-- SHIP -->
+                <ui:VisualElement class="ColorSection">
+                    <ui:Label text="SPACESHIP" class="SettingsLabel" />
+
+                    <ui:VisualElement class="ColorRow">
+                        <ui:Label text="R" class="ColorLabel" />
+                        <ui:SliderInt name="shipR" low-value="0" high-value="255" value="240" class="ColorSlider" />
+                        <ui:Label name="shipRVal" text="240" class="ColorValue" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="ColorRow">
+                        <ui:Label text="G" class="ColorLabel" />
+                        <ui:SliderInt name="shipG" low-value="0" high-value="255" value="250" class="ColorSlider" />
+                        <ui:Label name="shipGVal" text="250" class="ColorValue" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="ColorRow">
+                        <ui:Label text="B" class="ColorLabel" />
+                        <ui:SliderInt name="shipB" low-value="0" high-value="255" value="255" class="ColorSlider" />
+                        <ui:Label name="shipBVal" text="255" class="ColorValue" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="shipPreview" class="ColorPreview" />
+                </ui:VisualElement>
+
+                <!-- ASTEROIDS -->
+                <ui:VisualElement class="ColorSection">
+                    <ui:Label text="ASTEROIDS" class="SettingsLabel" />
+
+                    <ui:VisualElement class="ColorRow">
+                        <ui:Label text="R" class="ColorLabel" />
+                        <ui:SliderInt name="astR" low-value="0" high-value="255" value="180" class="ColorSlider" />
+                        <ui:Label name="astRVal" text="180" class="ColorValue" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="ColorRow">
+                        <ui:Label text="G" class="ColorLabel" />
+                        <ui:SliderInt name="astG" low-value="0" high-value="255" value="220" class="ColorSlider" />
+                        <ui:Label name="astGVal" text="220" class="ColorValue" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="ColorRow">
+                        <ui:Label text="B" class="ColorLabel" />
+                        <ui:SliderInt name="astB" low-value="0" high-value="255" value="255" class="ColorSlider" />
+                        <ui:Label name="astBVal" text="255" class="ColorValue" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="astPreview" class="ColorPreview" />
+                </ui:VisualElement>
+
+                <!-- DONE -->
+                <ui:VisualElement name="NavButtons" style="flex-direction: row; justify-content: center; align-items: center; margin-top: 12px;">
+                    <ui:Button name="doneButton" class="MainMenuButton" style="width: 320px;">
+                        <ui:VisualElement class="ButtonFill" />
+                        <ui:VisualElement class="ButtonSheen" />
+                        <ui:Label text="Done" class="ButtonText" />
+                    </ui:Button>
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

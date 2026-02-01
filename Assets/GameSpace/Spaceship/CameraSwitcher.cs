@@ -5,7 +5,7 @@ public class CameraSwitcher : MonoBehaviour
     public Transform thirdPersonPivot;
     public Transform firstPersonPivot;
 
-    public bool isFirstPerson = false;
+    public static bool isFirstPerson = false;
 
     void Update()
     {

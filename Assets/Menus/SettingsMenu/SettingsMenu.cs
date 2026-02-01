@@ -19,6 +19,7 @@ public class SettingsMenu : MonoBehaviour
     private FloatField yawScale;
     private Button yawDec, yawInc;
     private Button fullScreen;
+    private Button pov;
     private Button backButton;
     private Button audioButton;
 
@@ -42,6 +43,7 @@ public class SettingsMenu : MonoBehaviour
         yawInc = root.Q<Button>("yawInc");
 
         fullScreen = root.Q<Button>("fullScreen");
+        pov = root.Q<Button>("pointofView");
 
         backButton = root.Q<Button>("backButton");
         audioButton = root.Q<Button>("audioButton");
@@ -69,6 +71,7 @@ public class SettingsMenu : MonoBehaviour
         yawInc.clicked += IncYaw;
 
         fullScreen.clicked += FSToggle;
+        pov.clicked += PoVToggle;
 
         backButton.clicked += LeaveMenu;
         audioButton.clicked += ToAudioMenu;
@@ -87,7 +90,8 @@ public class SettingsMenu : MonoBehaviour
         yawDec.clicked -= DecYaw;
         yawInc.clicked -= IncYaw;
 
-        fullScreen.clicked += FSToggle;
+        fullScreen.clicked -= FSToggle;
+        pov.clicked -= PoVToggle;
 
         backButton.clicked -= LeaveMenu;
         audioButton.clicked -= ToAudioMenu;
@@ -176,6 +180,22 @@ public class SettingsMenu : MonoBehaviour
             fullScreen.text = "OFF";
             print("full screen OFF");
             // change setting
+        }
+    }
+
+    private void PoVToggle()
+    {
+        CameraModeController.toggleCameraFlag = !CameraModeController.toggleCameraFlag;
+
+        if(pov.text == "First")
+        {
+            pov.text = "Third";
+            CameraSwitcher.isFirstPerson = false;
+        }
+        else
+        {
+            pov.text = "First";
+            CameraSwitcher.isFirstPerson = true;
         }
     }
 

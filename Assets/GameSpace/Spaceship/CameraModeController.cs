@@ -12,11 +12,14 @@ public class CameraModeController : MonoBehaviour
 
     private bool inFirstPerson = false;
 
+    public static bool toggleCameraFlag = false;
+
     void Update()
     {
         // Press C to toggle camera mode
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) || toggleCameraFlag)
         {
+            toggleCameraFlag = false;
             ToggleCameraMode();
         }
 

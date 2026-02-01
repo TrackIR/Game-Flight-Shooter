@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Menus/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=1bda5f1b0a660b842850d9bec8f30d82&amp;type=3#MainMenuStyle" />
+    <Style src="project://database/Assets/Menus/MenuStyle.uss?fileID=7433441132597879392&amp;guid=1bda5f1b0a660b842850d9bec8f30d82&amp;type=3#MenuStyle" />
     <ui:VisualElement name="MenuContainer" style="flex-grow: 1; align-content: center; justify-content: center; align-self: auto; align-items: stretch;">
         <ui:VisualElement name="root" class="SettingsPanel">
             <ui:VisualElement name="header" style="width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; padding-bottom: 10px;">
@@ -40,6 +40,12 @@
                     <ui:Label text="Full Screen" name="fullScreenLabel" class="SettingName" />
                     <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
                         <ui:Button text="OFF" name="fullScreen" class="SmallNeonButton" style="width: 150px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="PointOfView" class="SettingRow">
+                    <ui:Label text="Point of View" name="PoVLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="Third" name="pointofView" class="SmallNeonButton" style="width: 200px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="NavButtons" style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 18px;">

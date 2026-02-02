@@ -920,7 +920,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thirdPersonPivot: {fileID: 1925770278}
   firstPersonPivot: {fileID: 1939948137}
-  isFirstPerson: 0
 --- !u!114 &330585548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2145,11 +2144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f392bb4947d90644b0690a5ee06b766, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f392bb4947d90644b0690a5ee06b766, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f392bb4947d90644b0690a5ee06b766, type: 3}
       propertyPath: m_LocalRotation.w

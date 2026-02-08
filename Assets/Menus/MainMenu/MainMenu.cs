@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
     private Button exitButton;
 
     private Button colorsButton;
-    
+
     private void OnEnable()
     {
         VisualElement root = mainMenuDocument.rootVisualElement;
@@ -50,8 +50,9 @@ public class MainMenu : MonoBehaviour
 
         if (colorsButton != null)
         {
-            colorsButton.clicked += DisplayColorsMenu;
+            colorsButton.clicked -= DisplayColorsMenu;
         }
+
     }
 
     private void PlayGame()
@@ -81,7 +82,7 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
 
         print("game is exiting");
-        
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif

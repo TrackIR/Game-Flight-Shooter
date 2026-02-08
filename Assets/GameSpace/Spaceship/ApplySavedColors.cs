@@ -8,6 +8,10 @@ public class ApplySavedColors : MonoBehaviour
     public static event Action ColorsChanged;
     public static void NotifyColorsChanged() => ColorsChanged?.Invoke();
 
+    private static readonly int ColorId = Shader.PropertyToID("_Color");
+    private static readonly int EmissionId = Shader.PropertyToID("_EmissionColor");
+
+
     [Header("Target (optional)")]
     [SerializeField] private GameObject target;
 
@@ -100,9 +104,20 @@ public class ApplySavedColors : MonoBehaviour
                 if (!string.IsNullOrEmpty(materialNameContains) && !m.name.Contains(materialNameContains))
                     continue;
 
-                // URP/Lit Base Map color uses _BaseColor.
+                // URP Lit: Base Map tint uses _BaseColor
                 if (m.HasProperty(BaseColorId))
-                    m.SetColor(BaseColorId, color);
+                {
+                    // keep existing alpha just in case
+                    var cur = m.GetColor(BaseColorId);
+                    m.SetColor(BaseColorId, new Color(color.r, color.g, color.b, cur.a));
+                }
+
+                else if (m.HasProperty(ColorId))
+                {
+                    var cur = m.GetColor(ColorId);
+                    m.SetColor(ColorId, new Color(color.r, color.g, color.b, cur.a));
+                }
+
             }
         }
     }
@@ -144,16 +159,15 @@ public class ApplySavedColors : MonoBehaviour
 
     private float ReadChannel01(string key)
     {
-        // Read both; Unity will usually return something even if type differs,
-        // but this logic makes it robust.
+
         int i = PlayerPrefs.GetInt(key, int.MinValue);
         float f = PlayerPrefs.GetFloat(key, float.NaN);
 
-        // If int looks valid (0..255), prefer it.
+
         if (i != int.MinValue && i >= 0 && i <= 255)
             return Mathf.Clamp01(i / 255f);
 
-        // Else use float:
+
         if (!float.IsNaN(f))
         {
             // If stored as 0..1

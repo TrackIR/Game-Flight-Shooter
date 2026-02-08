@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1140242452640262083}
   - component: {fileID: 2556643104002727770}
   - component: {fileID: -8950005675739906545}
+  - component: {fileID: 2015916412418609099}
   m_Layer: 3
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -128,3 +129,21 @@ MonoBehaviour:
   asteroidPrefab: {fileID: 2879669842489544092}
   splitNum: 2
   explosionVFX: {fileID: 5333558933292897161, guid: bad5b1ece507efa4c9be534747f28554, type: 3}
+--- !u!114 &2015916412418609099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2879669842489544092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb0a10539241964293ad07af1bd91b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ApplySavedColors
+  target: {fileID: 0}
+  renderers: []
+  materialNameContains: 
+  useSharedMaterial: 1
+  applySpaceshipColor: 0
+  applyAsteroidColor: 1

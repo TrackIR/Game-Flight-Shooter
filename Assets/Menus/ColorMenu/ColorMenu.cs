@@ -73,7 +73,7 @@ public class ColorMenu : MonoBehaviour
         SetupSwatches(shipSwatches, isShip: true);
         SetupSwatches(astSwatches, isShip: false);
 
-        // Load saved colors (supports old formats because ApplySavedColors does)
+
         currentShip = LoadColor32(ShipPrefix, defaultColor: new Color32(240, 250, 255, 255));
         currentAst = LoadColor32(AstPrefixA, defaultColor: new Color32(240, 250, 255, 255));
         // If AstColor not present, try AsteroidColor
@@ -102,7 +102,7 @@ public class ColorMenu : MonoBehaviour
             int idx = i;
             var btn = swatches[i];
 
-            // Some extra buttons might exist; hide them
+
             if (i >= count)
             {
                 btn.style.display = DisplayStyle.None;
@@ -172,12 +172,8 @@ public class ColorMenu : MonoBehaviour
         PlayerPrefs.SetInt(prefix + "_R", c.r);
         PlayerPrefs.SetInt(prefix + "_G", c.g);
         PlayerPrefs.SetInt(prefix + "_B", c.b);
-
-        // (Optional) also store floats for compatibility with older code that read floats
-        PlayerPrefs.SetFloat(prefix + "_R", c.r / 255f);
-        PlayerPrefs.SetFloat(prefix + "_G", c.g / 255f);
-        PlayerPrefs.SetFloat(prefix + "_B", c.b / 255f);
     }
+
 
     private static bool HasRGB(string prefix)
     {

@@ -169,17 +169,17 @@ public class SettingsMenu : MonoBehaviour
 
     private void FSToggle()
     {
+        Screen.fullScreen = !Screen.fullScreen;
+
         if(fullScreen.text == "OFF")
         {
             fullScreen.text = "ON";
-            print("full screen ON");
-            // change setting
+            // print("full screen ON");
         }
         else
         {
             fullScreen.text = "OFF";
-            print("full screen OFF");
-            // change setting
+            // print("full screen OFF");
         }
     }
 

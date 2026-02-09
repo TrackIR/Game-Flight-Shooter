@@ -20,11 +20,11 @@ public class CursorMovement : MonoBehaviour
 
     void Start()
     {
-        // cursorRectTransform = GetComponent<RectTransform>();
-
+    #if !UNITY_EDITOR
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
+    #endif
+    
         cursorPos = cursorTransform.anchoredPosition;
 
         InitializeTrackIR();

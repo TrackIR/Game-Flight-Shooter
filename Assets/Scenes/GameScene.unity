@@ -632,6 +632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreUI
   scoreText: {fileID: 213431647}
+  zeroPad: 6
 --- !u!114 &213431647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1625,7 +1626,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 519351343}
   m_SourcePrefab: {fileID: 100100000, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
 --- !u!4 &519351341 stripped
 Transform:
@@ -1637,6 +1641,24 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
   m_PrefabInstance: {fileID: 519351340}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &519351343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344812445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb0a10539241964293ad07af1bd91b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ApplySavedColors
+  target: {fileID: 0}
+  renderers: []
+  materialNameContains: 
+  useSharedMaterial: 1
+  applySpaceshipColor: 1
+  applyAsteroidColor: 0
 --- !u!1 &708000480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2138,10 +2160,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 60033868}
     m_Modifications:
-    - target: {fileID: -7918335002988649766, guid: f38428e88cd30a540a981c55d07fa959, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: eafb8a2381f89064b9dbca2b5f90ae82, type: 2}
     - target: {fileID: -8679921383154817045, guid: bb654381e1083ef42ae744e6767499c9, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.1
@@ -2206,6 +2224,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7918335002988649766, guid: f38428e88cd30a540a981c55d07fa959, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: eafb8a2381f89064b9dbca2b5f90ae82, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2256,7 +2278,86 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthUI
   player: {fileID: 60033876}
-  healthText: {fileID: 441884473}
+  maxLives: 3
+  segmentsParent: {fileID: 0}
+  segmentPrefab: {fileID: 0}
+  healthyColor: {r: 1, g: 0.65, b: 0, a: 1}
+  dangerColor: {r: 1, g: 0, b: 0, a: 1}
+  emptyColor: {r: 1, g: 1, b: 1, a: 0.15}
+  livesText: {fileID: 0}
+--- !u!1 &1580774559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1580774562}
+  - component: {fileID: 1580774561}
+  - component: {fileID: 1580774560}
+  m_Layer: 0
+  m_Name: HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1580774560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580774559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34181b5e1099fb14e9179cb9ac18d0e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HUDUIController
+  hudDocument: {fileID: 0}
+  player: {fileID: 60033876}
+  legacyHudCanvasRoot: {fileID: 1780026797}
+  maxLives: 3
+  zeroPad: 6
+--- !u!114 &1580774561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580774559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 722fa41b38b6a6b448db7d07f7b3b473, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 854dc143b9fc13649bcce08265e3035f, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &1580774562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580774559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.83264, y: 8.1244, z: -33.07151}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617551419
 GameObject:
   m_ObjectHideFlags: 0
@@ -2827,6 +2928,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 441609216}
+  - {fileID: 1580774562}
   - {fileID: 1780026801}
   - {fileID: 1198387378}
   - {fileID: 60033868}

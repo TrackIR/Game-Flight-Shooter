@@ -76,20 +76,35 @@ public class HUDUIController : MonoBehaviour
 
     private void UpdateLives(int lives)
     {
-        bool danger = (lives <= 2);
+        // Decide what color the *filled* segments should use
+        string fillClass = null;
+
+        if (lives >= maxLives)
+            fillClass = "segment-good";          // 3/3
+        else if (lives == maxLives - 1)
+            fillClass = "segment-warn";          // 2/3
+        else if (lives > 0)
+            fillClass = "segment-danger";        // 1/3
 
         for (int i = 0; i < segments.Length; i++)
         {
-            segments[i].RemoveFromClassList("segment-empty");
-            segments[i].RemoveFromClassList("segment-danger");
+            var seg = segments[i];
 
+            // clear previous state
+            seg.RemoveFromClassList("segment-empty");
+            seg.RemoveFromClassList("segment-good");
+            seg.RemoveFromClassList("segment-warn");
+            seg.RemoveFromClassList("segment-danger");
+
+            // apply new state
             if (i >= lives)
-                segments[i].AddToClassList("segment-empty");
-            else if (danger)
-                segments[i].AddToClassList("segment-danger");
-            // else default "segment" stays orange
+                seg.AddToClassList("segment-empty");
+            else if (!string.IsNullOrEmpty(fillClass))
+                seg.AddToClassList(fillClass);
+            // else: leave default ".segment" styling
         }
     }
+
 
     private void UpdateScore(int score)
     {

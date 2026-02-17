@@ -43,10 +43,8 @@ public class AudioMenu : MonoBehaviour
         backButton = root.Q<Button>("backButton");
         settingsButton = root.Q<Button>("settingsButton");
         
-        // get the current values (from save file later?)
-        masterVol.value = 50;
-        musicVol.value = 50;
-        sfxVol.value = 50;
+        // get the current values
+        GetAudioPrefs();
 
         // handler methods
         muteBut.clicked += muteToggle;
@@ -64,8 +62,38 @@ public class AudioMenu : MonoBehaviour
         settingsButton.clicked += ToSettingsMenu;
     }
 
+    // Gets the PlayerPrefs for the audio settings
+    private void GetAudioPrefs()
+    {
+        if (PlayerPrefs.HasKey("muteVol"))
+            muteBut.text = PlayerPrefs.GetInt("muteVol") == 1 ? "ON" : "OFF";
+        else
+            muteBut.text = "OFF";
+
+        if (PlayerPrefs.HasKey("mstrVol"))
+            masterVol.value = PlayerPrefs.GetInt("mstrVol");
+        else
+            masterVol.value = 50;
+
+        if (PlayerPrefs.HasKey("mscVol"))
+            musicVol.value = PlayerPrefs.GetInt("mscVol");
+        else
+            musicVol.value = 50;
+
+        if (PlayerPrefs.HasKey("sfxVol"))
+            sfxVol.value = PlayerPrefs.GetInt("sfxVol");
+        else
+            sfxVol.value = 50;
+    }
     private void OnDisable()
     {
+        //save the changes
+        PlayerPrefs.SetInt("muteVol", muteBut.text == "ON" ? 1 : 0);
+        PlayerPrefs.SetInt("mstrVol", masterVol.value);
+        PlayerPrefs.SetInt("mscVol", musicVol.value);
+        PlayerPrefs.SetInt("sfxVol", sfxVol.value);
+        PlayerPrefs.Save();
+
         muteBut.clicked -= muteToggle;
 
         masterDec.clicked -= DecMaster;
@@ -86,69 +114,51 @@ public class AudioMenu : MonoBehaviour
         if(muteBut.text == "OFF")
         {
             muteBut.text = "ON";
-            //change gamewide master volume setting to 0, keep menu's setting value
-            //idea for ui design: grey out the settings values to indicate muted?
+
+            //idea for ui design: grey out the vol settings values to indicate muted?
         }
         else
         {
             muteBut.text = "OFF";
-            //reset gamewide master volume setting to the menu's setting value
-            //un-grey out the settings values?
+
+            //un-grey out the vol settings values?
         }
     }
 
     private void DecMaster()
     {
         if(masterVol.value > 0)
-        {
-            // change gamewide setting
             masterVol.value -= 1;
-        }
     }
 
     private void IncMaster()
     {
         if(masterVol.value < 100)
-        {
-            // change gamewide setting
             masterVol.value += 1;
-        }
     }
 
     private void DecMusic()
     {
         if(musicVol.value > 0)
-        {
-            // change gamewide setting
             musicVol.value -= 1;
-        }
     }
 
     private void IncMusic()
     {
         if(musicVol.value < 100)
-        {
-            // change gamewide setting
             musicVol.value += 1;
-        }
     }
 
     private void DecSFX()
     {
         if(sfxVol.value > 0)
-        {
-            // change gamewide setting
             sfxVol.value -= 1;
-        }
     }
 
     private void IncSFX()
     {
         if(sfxVol.value < 100)
-        {
-            // change gamewide setting
             sfxVol.value += 1;
-        }
     }
 
     private void LeaveMenu()

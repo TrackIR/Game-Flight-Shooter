@@ -21,7 +21,7 @@ public class SpaceshipMovement : MonoBehaviour
     private InputAction rollInput;
 
     // Input type
-    public static int InputType = 1;       // 1 = no angular momentum, 2 = yes angular momentum
+    public static bool angMomentum;       //false for no angular momentum, true for angular momentum
 
     // Used to change the movement of the spaceship
     private float thrust;
@@ -106,6 +106,18 @@ public class SpaceshipMovement : MonoBehaviour
             rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
+        //get settings values
+        angMomentum = PlayerPrefs.GetInt("angMoment") == 1;
+        
+        if (PlayerPrefs.HasKey("ptchScl"))
+            PitchScaler = PlayerPrefs.GetFloat("ptchScl");
+
+        if (PlayerPrefs.HasKey("rollScl"))
+            RollScaler = PlayerPrefs.GetFloat("rollScl");
+
+        if (PlayerPrefs.HasKey("yawScl"))
+            YawScaler = PlayerPrefs.GetFloat("yawScl");        
+
         InitializeTrackIR();
     }
 
@@ -164,7 +176,7 @@ public class SpaceshipMovement : MonoBehaviour
 
         // Rotation
         // head match rotation
-        if (InputType == 1)
+        if (angMomentum == false)
         {
             // Convert input to degrees per second, then apply per fixed step
             Vector3 eulerDelta =
@@ -173,7 +185,7 @@ public class SpaceshipMovement : MonoBehaviour
             // Use Rigidbody rotation
             rb.MoveRotation(rb.rotation * Quaternion.Euler(eulerDelta));
         }
-        //key board and angular momentum
+        //angular momentum
         else
         {
             Vector3 rotation = new(pitch * PitchScaler, yaw * YawScaler, roll * RollScaler);
@@ -219,7 +231,7 @@ public class SpaceshipMovement : MonoBehaviour
                 // New data was available, cache it so it doesn't "drop to zero" between updates.
 
                 // head match rotation
-                if (InputType == 1)
+                if (angMomentum == false)
                 {
                     // Cache as input-like values
                     trackirPitch = -pose.Orientation.X;
@@ -227,7 +239,7 @@ public class SpaceshipMovement : MonoBehaviour
                     trackirRoll = -pose.Orientation.Z;
                 }
                 // angular momentum
-                else if (InputType == 2)
+                else
                 {
                     // Cache values for torque mode
                     trackirPitch = -pose.Orientation.X;

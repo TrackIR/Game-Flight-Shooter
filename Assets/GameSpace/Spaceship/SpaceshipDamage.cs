@@ -18,8 +18,8 @@ public class SpaceshipDamage : MonoBehaviour
     private float lastDamageTime = 0f;
     private float startTime;
 
-    // Reorientation method
-    [Header("Reorientation Method")]
+    // Coroutine method
+    [Header("Coroutine Method")]
     public float damageBlinkDuration = 0.8f;
     public float damageBlinkTime = 0.1f;
     public float screenFadingDuration = 1.0f;
@@ -94,18 +94,19 @@ public class SpaceshipDamage : MonoBehaviour
     {
         canTakeDamage = false;
 
-        StartCoroutine(BlinkShipModel());
+        yield return StartCoroutine(BlinkShipModel());
 
-        yield return StartCoroutine(FadeToBlack());
+        /**== Not In Use ==**/
+        // yield return StartCoroutine(FadeToBlack());
 
-        // Move, stop, and reorient spaceship
-        transform.position = Vector3.zero;
-        transform.rotation = Quaternion.identity;
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        // // Move, stop, and reorient spaceship
+        // transform.position = Vector3.zero;
+        // transform.rotation = Quaternion.identity;
+        // Rigidbody rb = GetComponent<Rigidbody>();
+        // rb.linearVelocity = Vector3.zero;
+        // rb.angularVelocity = Vector3.zero;
 
-        StartCoroutine(FadeFromBlack());
+        // StartCoroutine(FadeFromBlack());
 
         canTakeDamage = true;
     }
@@ -120,29 +121,30 @@ public class SpaceshipDamage : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeToBlack()
-    {
-        for (float i = 0.0f; i < screenFadingDuration; i += Time.deltaTime)
-        {
-            Color tempColor = fadeScreenImage.color;
-            tempColor.a = i / screenFadingDuration;
-            fadeScreenImage.color = tempColor;
+    /**== Not In Use ==**/
+    // private IEnumerator FadeToBlack()
+    // {
+    //     for (float i = 0.0f; i < screenFadingDuration; i += Time.deltaTime)
+    //     {
+    //         Color tempColor = fadeScreenImage.color;
+    //         tempColor.a = i / screenFadingDuration;
+    //         fadeScreenImage.color = tempColor;
 
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-    }
+    //         yield return new WaitForSeconds(Time.deltaTime);
+    //     }
+    // }
 
-    private IEnumerator FadeFromBlack()
-    {
-        for (float i = 0.0f; i < screenFadingDuration; i += Time.deltaTime)
-        {
-            Color tempColor = fadeScreenImage.color;
-            tempColor.a = screenFadingDuration - (i / screenFadingDuration);
-            fadeScreenImage.color = tempColor;
+    // private IEnumerator FadeFromBlack()
+    // {
+    //     for (float i = 0.0f; i < screenFadingDuration; i += Time.deltaTime)
+    //     {
+    //         Color tempColor = fadeScreenImage.color;
+    //         tempColor.a = screenFadingDuration - (i / screenFadingDuration);
+    //         fadeScreenImage.color = tempColor;
 
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-    }
+    //         yield return new WaitForSeconds(Time.deltaTime);
+    //     }
+    // }
 }
 
 

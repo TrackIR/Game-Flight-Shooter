@@ -159,7 +159,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1692036990}
   - {fileID: 970893456}
   - {fileID: 519351341}
   - {fileID: 115963255}
@@ -920,7 +919,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thirdPersonPivot: {fileID: 1925770278}
   firstPersonPivot: {fileID: 1939948137}
-  isFirstPerson: 0
 --- !u!114 &330585548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2342,7 +2340,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 60033868}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1692036991
 MonoBehaviour:
@@ -2814,6 +2812,7 @@ SceneRoots:
   - {fileID: 441609216}
   - {fileID: 1780026801}
   - {fileID: 1198387378}
+  - {fileID: 1692036990}
   - {fileID: 60033868}
   - {fileID: 708000484}
   - {fileID: 367284544}

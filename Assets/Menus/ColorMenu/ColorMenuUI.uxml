@@ -1,75 +1,80 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Menus/MenuStyle.uss" />
+    <Style src="project://database/Assets/Menus/MenuStyle.uss?fileID=7433441132597879392&amp;guid=1bda5f1b0a660b842850d9bec8f30d82&amp;type=3#MenuStyle" />
 
-    <ui:VisualElement name="MenuContainer" style="flex-grow: 1; justify-content: center; align-items: center;">
+    <ui:VisualElement name="MenuContainer" class="MenuContainer" style="flex-grow: 1; justify-content: center; align-items: center;">
         <ui:VisualElement name="root" class="SettingsPanel">
 
-            <ui:VisualElement name="header" style="width: 100%; height: 90px; justify-content: center; align-items: center;">
+            <ui:VisualElement name="header" style="width: 100%; height: 80px; justify-content: center; align-items: center;">
                 <ui:Label text="COLORS" class="SettingsTitle" />
             </ui:VisualElement>
 
-            <ui:VisualElement name="content" class="ColorContent">
+            <ui:VisualElement name="content" class="ColorPaletteContent">
 
-                <!-- SHIP -->
-                <ui:VisualElement class="ColorSection">
-                    <ui:Label text="SPACESHIP" class="SettingsLabel" />
-
-                    <ui:VisualElement class="ColorRow">
-                        <ui:Label text="R" class="ColorLabel" />
-                        <ui:SliderInt name="shipR" low-value="0" high-value="255" value="240" class="ColorSlider" />
-                        <ui:Label name="shipRVal" text="240" class="ColorValue" />
+                <!-- SPACESHIP -->
+                <ui:VisualElement name="shipSection" class="ColorPaletteSection">
+                    <ui:Label text="SPACESHIP COLOR" class="ColorSectionTitle" />
+                    <ui:VisualElement name="shipSwatches" class="SwatchRow">
+                        <ui:Button name="shipSwatch0" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch1" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch2" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch3" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch4" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch5" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch6" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch7" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch8" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch9" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch10" class="ColorSwatch ShipSwatch" />
+                        <ui:Button name="shipSwatch11" class="ColorSwatch ShipSwatch" />
                     </ui:VisualElement>
 
-                    <ui:VisualElement class="ColorRow">
-                        <ui:Label text="G" class="ColorLabel" />
-                        <ui:SliderInt name="shipG" low-value="0" high-value="255" value="250" class="ColorSlider" />
-                        <ui:Label name="shipGVal" text="250" class="ColorValue" />
+                    <ui:VisualElement class="PreviewRow">
+                        <ui:Label text="Preview:" class="SettingsLabel" />
+                        <ui:VisualElement name="shipPreview" class="ColorPreviewBox" />
                     </ui:VisualElement>
-
-                    <ui:VisualElement class="ColorRow">
-                        <ui:Label text="B" class="ColorLabel" />
-                        <ui:SliderInt name="shipB" low-value="0" high-value="255" value="255" class="ColorSlider" />
-                        <ui:Label name="shipBVal" text="255" class="ColorValue" />
-                    </ui:VisualElement>
-
-                    <ui:VisualElement name="shipPreview" class="ColorPreview" />
                 </ui:VisualElement>
 
-                <!-- ASTEROIDS -->
-                <ui:VisualElement class="ColorSection">
-                    <ui:Label text="ASTEROIDS" class="SettingsLabel" />
-
-                    <ui:VisualElement class="ColorRow">
-                        <ui:Label text="R" class="ColorLabel" />
-                        <ui:SliderInt name="astR" low-value="0" high-value="255" value="180" class="ColorSlider" />
-                        <ui:Label name="astRVal" text="180" class="ColorValue" />
+                <!-- ASTEROID -->
+                <ui:VisualElement name="astSection" class="ColorPaletteSection">
+                    <ui:Label text="ASTEROID COLOR" class="ColorSectionTitle" />
+                    <ui:VisualElement name="astSwatches" class="SwatchRow">
+                        <ui:Button name="astSwatch0" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch1" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch2" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch3" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch4" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch5" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch6" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch7" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch8" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch9" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch10" class="ColorSwatch AstSwatch" />
+                        <ui:Button name="astSwatch11" class="ColorSwatch AstSwatch" />
                     </ui:VisualElement>
 
-                    <ui:VisualElement class="ColorRow">
-                        <ui:Label text="G" class="ColorLabel" />
-                        <ui:SliderInt name="astG" low-value="0" high-value="255" value="220" class="ColorSlider" />
-                        <ui:Label name="astGVal" text="220" class="ColorValue" />
+                    <ui:VisualElement class="PreviewRow">
+                        <ui:Label text="Preview:" class="SettingsLabel" />
+                        <ui:VisualElement name="astPreview" class="ColorPreviewBox" />
                     </ui:VisualElement>
-
-                    <ui:VisualElement class="ColorRow">
-                        <ui:Label text="B" class="ColorLabel" />
-                        <ui:SliderInt name="astB" low-value="0" high-value="255" value="255" class="ColorSlider" />
-                        <ui:Label name="astBVal" text="255" class="ColorValue" />
-                    </ui:VisualElement>
-
-                    <ui:VisualElement name="astPreview" class="ColorPreview" />
-                </ui:VisualElement>
-
-                <!-- DONE -->
-                <ui:VisualElement name="NavButtons" style="flex-direction: row; justify-content: center; align-items: center; margin-top: 12px;">
-                    <ui:Button name="doneButton" class="MainMenuButton" style="width: 320px;">
-                        <ui:VisualElement class="ButtonFill" />
-                        <ui:VisualElement class="ButtonSheen" />
-                        <ui:Label text="Done" class="ButtonText" />
-                    </ui:Button>
                 </ui:VisualElement>
 
             </ui:VisualElement>
+
+            <!-- NAV -->
+            <ui:VisualElement name="NavButtons" style="flex-direction: row; justify-content: center; align-items: center; margin-top: 16px;">
+                <ui:Button name="backButton" class="MainMenuButton" style="width: 260px; margin-right: 24px;">
+                    <ui:VisualElement class="ButtonFill" />
+                    <ui:VisualElement class="ButtonSheen" />
+                    <ui:Label text="BACK" class="ButtonText" />
+                </ui:Button>
+
+                <ui:Button name="doneButton" class="MainMenuButton" style="width: 260px; margin-left: 24px;">
+                    <ui:VisualElement class="ButtonFill" />
+                    <ui:VisualElement class="ButtonSheen" />
+                    <ui:Label text="DONE" class="ButtonText" />
+                </ui:Button>
+            </ui:VisualElement>
+
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

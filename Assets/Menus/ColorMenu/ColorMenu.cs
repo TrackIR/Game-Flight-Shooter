@@ -1,136 +1,212 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class ColorMenu : MonoBehaviour
 {
-    [SerializeField] private UIDocument colorMenuDocument;
+    [Header("UI")]
+    [SerializeField] private UIDocument uiDocument;
 
-    public GameObject colorMenu;
-    public GameObject mainMenu;
+    [Header("Menu Switching (match how your other menus work)")]
+    [SerializeField] private GameObject colorMenu;
+    [SerializeField] private GameObject mainMenu;
 
-    private SliderInt shipR, shipG, shipB;
-    private SliderInt astR, astG, astB;
+    private VisualElement root;
 
-    private Label shipRVal, shipGVal, shipBVal;
-    private Label astRVal, astGVal, astBVal;
+    private VisualElement shipPreview;
+    private VisualElement astPreview;
 
-    private VisualElement shipPreview, astPreview;
+    private Button backButton;
     private Button doneButton;
 
-    private const string ShipKey = "ShipColor";
-    private const string AstKey  = "AstColor";
+    private readonly List<Button> shipSwatches = new();
+    private readonly List<Button> astSwatches = new();
+
+    // PlayerPrefs keys we will write
+    private const string ShipPrefix = "ShipColor";
+
+    // We write BOTH for asteroid to stay compatible with older code.
+    private const string AstPrefixA = "AstColor";
+    private const string AstPrefixB = "AsteroidColor";
+
+    // Pick a palette that matches your neon style
+    private static readonly Color32[] Palette =
+    {
+        new Color32(240, 250, 255, 255), // white
+        new Color32(110, 220, 255, 255), // cyan
+        new Color32( 80, 255, 255, 255), // bright cyan
+        new Color32(170, 120, 255, 255), // purple
+        new Color32(255,  80, 200, 255), // pink
+        new Color32(255,  90,  70, 255), // red-ish
+        new Color32(255, 166,   0, 255), // orange
+        new Color32(255, 216,  74, 255), // yellow
+        new Color32( 80, 255, 154, 255), // green
+        new Color32( 13,  41,  53, 255), // deep blue/teal
+        new Color32( 35,  35,  35, 255), // dark gray
+        new Color32(  0,   0,   0, 255), // black
+    };
+
+    private Color32 currentShip;
+    private Color32 currentAst;
 
     private void OnEnable()
     {
-        var root = colorMenuDocument.rootVisualElement;
-
-        shipR = root.Q<SliderInt>("shipR");
-        shipG = root.Q<SliderInt>("shipG");
-        shipB = root.Q<SliderInt>("shipB");
-
-        astR = root.Q<SliderInt>("astR");
-        astG = root.Q<SliderInt>("astG");
-        astB = root.Q<SliderInt>("astB");
-
-        shipRVal = root.Q<Label>("shipRVal");
-        shipGVal = root.Q<Label>("shipGVal");
-        shipBVal = root.Q<Label>("shipBVal");
-
-        astRVal = root.Q<Label>("astRVal");
-        astGVal = root.Q<Label>("astGVal");
-        astBVal = root.Q<Label>("astBVal");
+        if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
+        root = uiDocument.rootVisualElement;
 
         shipPreview = root.Q<VisualElement>("shipPreview");
         astPreview = root.Q<VisualElement>("astPreview");
 
+        backButton = root.Q<Button>("backButton");
         doneButton = root.Q<Button>("doneButton");
 
-        // Load saved colors (or defaults)
-        LoadIntoSliders();
+        // Gather swatch buttons by class
+        shipSwatches.Clear();
+        astSwatches.Clear();
 
-        // Hook events
-        shipR.RegisterValueChangedCallback(_ => UpdateShipUI());
-        shipG.RegisterValueChangedCallback(_ => UpdateShipUI());
-        shipB.RegisterValueChangedCallback(_ => UpdateShipUI());
+        foreach (var b in root.Query<Button>().ToList())
+        {
+            if (b.ClassListContains("ShipSwatch")) shipSwatches.Add(b);
+            if (b.ClassListContains("AstSwatch")) astSwatches.Add(b);
+        }
 
-        astR.RegisterValueChangedCallback(_ => UpdateAstUI());
-        astG.RegisterValueChangedCallback(_ => UpdateAstUI());
-        astB.RegisterValueChangedCallback(_ => UpdateAstUI());
+        SetupSwatches(shipSwatches, isShip: true);
+        SetupSwatches(astSwatches, isShip: false);
 
-        doneButton.clicked += Done;
 
-        // Refresh previews/labels
-        UpdateShipUI();
-        UpdateAstUI();
+        currentShip = LoadColor32(ShipPrefix, defaultColor: new Color32(240, 250, 255, 255));
+        currentAst = LoadColor32(AstPrefixA, defaultColor: new Color32(240, 250, 255, 255));
+        // If AstColor not present, try AsteroidColor
+        if (!HasRGB(AstPrefixA) && HasRGB(AstPrefixB))
+            currentAst = LoadColor32(AstPrefixB, currentAst);
+
+        UpdatePreview(shipPreview, currentShip);
+        UpdatePreview(astPreview, currentAst);
+
+        backButton.clicked += OnBack;
+        doneButton.clicked += OnDone;
     }
 
     private void OnDisable()
     {
-        if (doneButton != null) doneButton.clicked -= Done;
+        if (backButton != null) backButton.clicked -= OnBack;
+        if (doneButton != null) doneButton.clicked -= OnDone;
     }
 
-    private void LoadIntoSliders()
+    private void SetupSwatches(List<Button> swatches, bool isShip)
     {
-        var ship = LoadColor(ShipKey, new Color(240/255f, 250/255f, 255/255f, 1f));
-        var ast  = LoadColor(AstKey,  new Color(180/255f, 220/255f, 255/255f, 1f));
+        int count = Mathf.Min(swatches.Count, Palette.Length);
 
-        shipR.value = Mathf.RoundToInt(ship.r * 255f);
-        shipG.value = Mathf.RoundToInt(ship.g * 255f);
-        shipB.value = Mathf.RoundToInt(ship.b * 255f);
+        for (int i = 0; i < swatches.Count; i++)
+        {
+            int idx = i;
+            var btn = swatches[i];
 
-        astR.value = Mathf.RoundToInt(ast.r * 255f);
-        astG.value = Mathf.RoundToInt(ast.g * 255f);
-        astB.value = Mathf.RoundToInt(ast.b * 255f);
+
+            if (i >= count)
+            {
+                btn.style.display = DisplayStyle.None;
+                continue;
+            }
+
+            btn.style.backgroundColor = new StyleColor(Palette[i]);
+
+            btn.clicked += () =>
+            {
+                if (isShip)
+                {
+                    currentShip = Palette[idx];
+                    UpdatePreview(shipPreview, currentShip);
+                    SetSelected(swatches, btn);
+                }
+                else
+                {
+                    currentAst = Palette[idx];
+                    UpdatePreview(astPreview, currentAst);
+                    SetSelected(swatches, btn);
+                }
+            };
+        }
     }
 
-    private void UpdateShipUI()
+    private void SetSelected(List<Button> swatches, Button selected)
     {
-        shipRVal.text = shipR.value.ToString();
-        shipGVal.text = shipG.value.ToString();
-        shipBVal.text = shipB.value.ToString();
-
-        var c = new Color(shipR.value/255f, shipG.value/255f, shipB.value/255f, 1f);
-        shipPreview.style.backgroundColor = new StyleColor(c);
+        foreach (var b in swatches)
+            b.EnableInClassList("ColorSwatchSelected", b == selected);
     }
 
-    private void UpdateAstUI()
+    private void UpdatePreview(VisualElement preview, Color32 color)
     {
-        astRVal.text = astR.value.ToString();
-        astGVal.text = astG.value.ToString();
-        astBVal.text = astB.value.ToString();
-
-        var c = new Color(astR.value/255f, astG.value/255f, astB.value/255f, 1f);
-        astPreview.style.backgroundColor = new StyleColor(c);
+        if (preview == null) return;
+        preview.style.backgroundColor = new StyleColor(color);
     }
 
-    private void Done()
+    private void OnBack()
     {
-        var ship = new Color(shipR.value/255f, shipG.value/255f, shipB.value/255f, 1f);
-        var ast  = new Color(astR.value/255f,  astG.value/255f,  astB.value/255f,  1f);
-
-        SaveColor(ShipKey, ship);
-        SaveColor(AstKey, ast);
-
-        // Return to main menu
-        colorMenu.SetActive(false);
-        mainMenu.SetActive(true);
+        // Just close without saving
+        if (colorMenu != null) colorMenu.SetActive(false);
+        if (mainMenu != null) mainMenu.SetActive(true);
     }
 
-    private static void SaveColor(string keyPrefix, Color c)
+    private void OnDone()
     {
-        PlayerPrefs.SetFloat(keyPrefix + "_R", c.r);
-        PlayerPrefs.SetFloat(keyPrefix + "_G", c.g);
-        PlayerPrefs.SetFloat(keyPrefix + "_B", c.b);
+        // Save ship (ints 0..255)
+        SaveColor32(ShipPrefix, currentShip);
+
+        // Save asteroid in BOTH key formats to avoid future mismatch
+        SaveColor32(AstPrefixA, currentAst);
+        SaveColor32(AstPrefixB, currentAst);
+
         PlayerPrefs.Save();
+
+        // Tell all ApplySavedColors instances to refresh right now
+        ApplySavedColors.NotifyColorsChanged();
+
+        // Close menu
+        if (colorMenu != null) colorMenu.SetActive(false);
+        if (mainMenu != null) mainMenu.SetActive(true);
     }
 
-    private static Color LoadColor(string keyPrefix, Color fallback)
+    private static void SaveColor32(string prefix, Color32 c)
     {
-        if (!PlayerPrefs.HasKey(keyPrefix + "_R")) return fallback;
+        PlayerPrefs.SetInt(prefix + "_R", c.r);
+        PlayerPrefs.SetInt(prefix + "_G", c.g);
+        PlayerPrefs.SetInt(prefix + "_B", c.b);
+    }
 
-        float r = PlayerPrefs.GetFloat(keyPrefix + "_R", fallback.r);
-        float g = PlayerPrefs.GetFloat(keyPrefix + "_G", fallback.g);
-        float b = PlayerPrefs.GetFloat(keyPrefix + "_B", fallback.b);
-        return new Color(r, g, b, 1f);
+
+    private static bool HasRGB(string prefix)
+    {
+        return PlayerPrefs.HasKey(prefix + "_R")
+            && PlayerPrefs.HasKey(prefix + "_G")
+            && PlayerPrefs.HasKey(prefix + "_B");
+    }
+
+    private static Color32 LoadColor32(string prefix, Color32 defaultColor)
+    {
+        if (!HasRGB(prefix))
+            return defaultColor;
+
+        // Prefer int if present
+        int r = PlayerPrefs.GetInt(prefix + "_R", defaultColor.r);
+        int g = PlayerPrefs.GetInt(prefix + "_G", defaultColor.g);
+        int b = PlayerPrefs.GetInt(prefix + "_B", defaultColor.b);
+
+        // If ints look wrong (like 0 but float exists), fall back to floats
+        if ((r == 0 && g == 0 && b == 0) && PlayerPrefs.HasKey(prefix + "_R"))
+        {
+            float rf = PlayerPrefs.GetFloat(prefix + "_R", defaultColor.r / 255f);
+            float gf = PlayerPrefs.GetFloat(prefix + "_G", defaultColor.g / 255f);
+            float bf = PlayerPrefs.GetFloat(prefix + "_B", defaultColor.b / 255f);
+
+            // handle 0..1 or 0..255 floats
+            rf = rf > 1.5f ? rf / 255f : rf;
+            gf = gf > 1.5f ? gf / 255f : gf;
+            bf = bf > 1.5f ? bf / 255f : bf;
+
+            return new Color(rf, gf, bf, 1f);
+        }
+
+        return new Color32((byte)Mathf.Clamp(r, 0, 255), (byte)Mathf.Clamp(g, 0, 255), (byte)Mathf.Clamp(b, 0, 255), 255);
     }
 }

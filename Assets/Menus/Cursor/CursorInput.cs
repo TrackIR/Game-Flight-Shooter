@@ -5,6 +5,7 @@ public class CursorInput : MonoBehaviour
 {
     public RectTransform cursorTransform;
     public UIDocument[] allMenus;
+
     private UIDocument activeUIDocument;
     private VisualElement lastHovered;
     private VisualElement pickedElement;
@@ -12,30 +13,25 @@ public class CursorInput : MonoBehaviour
 
     void Update()
     {
-        // select the correct UI Document
-        foreach (var menu in allMenus)
-        {
-            if (menu.isActiveAndEnabled)
-            {
-                activeUIDocument = menu;
-                break;
-            }
-        }
-        if (activeUIDocument == null)
+        // Pick the TOPMOST active menu (important when multiple menus are enabled)
+        activeUIDocument = GetTopmostActiveMenu();
+        if (activeUIDocument == null || activeUIDocument.rootVisualElement == null)
             return;
 
-        // UI toolkit uses top left as origin instead of bottom left
+        IPanel panel = activeUIDocument.rootVisualElement.panel;
+        if (panel == null)
+            return; // panel not ready yet
+
+        // UI Toolkit uses top-left as origin
         Vector2 screenPos = cursorTransform.position;
         screenPos.y = Screen.height - screenPos.y;
 
-        IPanel panel = activeUIDocument.rootVisualElement.panel;
         Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
 
-        //find the element under the cursor + radius
+        // Find the element under the cursor (and a small radius)
         VisualElement newPickedElement = PickRadius(panel, panelPos, 30f);
 
-
-        // 0.25 seconds of nullElements before deselecting a button
+        // 0.25 seconds of null elements before clearing selection (helps stability)
         if (newPickedElement != null)
         {
             pickedElement = newPickedElement;
@@ -43,48 +39,91 @@ public class CursorInput : MonoBehaviour
         }
         else
         {
-            if(nullElementTimer < 0f)
-                pickedElement = newPickedElement;
-
             nullElementTimer -= Time.deltaTime;
+            if (nullElementTimer <= 0f)
+                pickedElement = null;
         }
 
-        // hover effects
+        // Hover effects
         HandleHover(pickedElement);
 
-        // click button under cursor when hit spacebar
+        // Click when hitting spacebar
         if (Input.GetKeyDown(KeyCode.Space) && pickedElement != null)
         {
-            using (var clickEvt = NavigationSubmitEvent.GetPooled())
+            using (var submitEvt = NavigationSubmitEvent.GetPooled())
             {
-                clickEvt.target = pickedElement;
-                pickedElement.SendEvent(clickEvt);
+                submitEvt.target = pickedElement;
+                pickedElement.SendEvent(submitEvt);
             }
         }
     }
 
+    private UIDocument GetTopmostActiveMenu()
+    {
+        UIDocument best = null;
+        float bestOrder = float.NegativeInfinity;
+
+        if (allMenus == null) return null;
+
+        foreach (var menu in allMenus)
+        {
+            if (menu == null) continue;
+            if (!menu.isActiveAndEnabled) continue;
+            if (!menu.gameObject.activeInHierarchy) continue;
+
+            // sortingOrder is int in most Unity versions, but float-safe here avoids cast issues
+            float order = menu.sortingOrder;
+
+            if (order >= bestOrder)
+            {
+                bestOrder = order;
+                best = menu;
+            }
+        }
+
+        return best;
+    }
+
     private VisualElement PickRadius(IPanel panel, Vector2 center, float radius)
     {
-        Vector2[] pointsToQuery = new Vector2[]
+        Vector2[] pointsToQuery =
         {
             center,
             center + new Vector2(0, radius),
             center + new Vector2(0, -radius),
             center + new Vector2(radius, 0),
             center + new Vector2(-radius, 0),
-            center + new Vector2(radius/2, radius/2),
-            center + new Vector2(radius/2, -radius/2),
-            center + new Vector2(-radius/2, radius/2),
-            center + new Vector2(-radius/2, -radius/2)
+            center + new Vector2(radius/2f, radius/2f),
+            center + new Vector2(radius/2f, -radius/2f),
+            center + new Vector2(-radius/2f, radius/2f),
+            center + new Vector2(-radius/2f, -radius/2f),
         };
 
         foreach (var point in pointsToQuery)
         {
             var element = panel.Pick(point);
 
-            if (element != null && element is Button)
+            // IMPORTANT: Pick() often returns a child (Label / Fill).
+            // Walk upward until we find a Button parent.
+            element = FindParentButton(element);
+
+            if (element != null)
                 return element;
         }
+
+        return null;
+    }
+
+    private VisualElement FindParentButton(VisualElement element)
+    {
+        while (element != null)
+        {
+            if (element is Button)
+                return element;
+
+            element = element.parent;
+        }
+
         return null;
     }
 

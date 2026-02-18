@@ -35,7 +35,7 @@ public class AsteroidSpawner : MonoBehaviour
     {
         m_Timer += Time.deltaTime;
         m_TotalTime += Time.deltaTime;
-        
+
         if (m_Timer >= m_SpawnTime)
         {
             if (m_SpawnType == AsteroidType.Random)
@@ -60,6 +60,12 @@ public class AsteroidSpawner : MonoBehaviour
                                                    /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
                                                    /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
                                                    /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
+            
+            // Apply saved colors to THIS newly spawned asteroid
+            var apply = asteroid.GetComponent<ApplySavedColors>();
+            if (apply != null) apply.ApplyNow();
+            // If ApplySavedColors is on a child instead, use:
+            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
         }
     }
 
@@ -78,6 +84,12 @@ public class AsteroidSpawner : MonoBehaviour
                                                    /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
                                                    /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
                                                    /*iMovementDirection =*/direction);
+            
+            // Apply saved colors to THIS newly spawned asteroid
+            var apply = asteroid.GetComponent<ApplySavedColors>();
+            if (apply != null) apply.ApplyNow();
+            // If ApplySavedColors is on a child instead, use:
+            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
         }
     }
 
@@ -102,7 +114,7 @@ public class AsteroidSpawner : MonoBehaviour
                 m_AsteroidSpeedFloor = 16.0f;
                 Debug.Log("Debug in AsteroidSpawner.cs:62 : m_SpawnTime = 1.0f");
                 break;
-            default: 
+            default:
                 m_SpawnTime = 10.0f;
                 m_AsteroidSpeedFloor = 4.0f;
                 Debug.Log("Debug in AsteroidSpawner.cs:66 : m_SpawnTime = 10.0f");
@@ -126,7 +138,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     private int MinAsInt(float minutes)
     {
-        return (int) minutes;
+        return (int)minutes;
     }
 
     private string FormatMin(float minutes)

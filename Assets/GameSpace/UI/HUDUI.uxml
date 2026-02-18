@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="HUDUI.uss" />
+
+    <ui:VisualElement class="hud-root">
+
+        <!-- Left: Lives -->
+        <ui:VisualElement class="hud-plate">
+            <ui:VisualElement class="plate-fill" />
+            <ui:Label text="HEALTH" class="hud-title" />
+            <ui:VisualElement name="healthSegments" class="hud-segments" />
+        </ui:VisualElement>
+
+        <!-- Right: Score -->
+        <ui:VisualElement class="hud-plate hud-scorePlate">
+            <ui:VisualElement class="plate-fill" />
+            <ui:Label name="scoreLabel" text="SCORE 000000" class="hud-score" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

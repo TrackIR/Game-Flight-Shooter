@@ -49,14 +49,7 @@ public class SettingsMenu : MonoBehaviour
         audioButton = root.Q<Button>("audioButton");
         
         // get the current values
-        if(SpaceshipMovement.InputType == 1)
-            angularMomentum.text = "OFF";
-        else
-            angularMomentum.text = "ON";
-        
-        pitchScale.value = SpaceshipMovement.PitchScaler;
-        rollScale.value = SpaceshipMovement.RollScaler;
-        yawScale.value = SpaceshipMovement.YawScaler;
+        GetSettingsPrefs();
 
         // handler methods
         angularMomentum.clicked += AMToggle;
@@ -77,8 +70,71 @@ public class SettingsMenu : MonoBehaviour
         audioButton.clicked += ToAudioMenu;
     }
 
+    private void GetSettingsPrefs()
+    {
+        if (PlayerPrefs.HasKey("angMoment"))
+        {
+            if (PlayerPrefs.GetInt("angMoment") == 1)
+                angularMomentum.text = "ON";
+        }
+        else
+            angularMomentum.text = "OFF";
+        
+        if (PlayerPrefs.HasKey("ptchScl"))
+            pitchScale.value = PlayerPrefs.GetFloat("ptchScl");
+        else
+            pitchScale.value = 1.0f;     // default values in SpaceshipMovement.cs
+
+        if (PlayerPrefs.HasKey("rollScl"))
+            rollScale.value = PlayerPrefs.GetFloat("rollScl");
+        else
+            rollScale.value = 1.1f;
+
+        if (PlayerPrefs.HasKey("yawScl"))
+            yawScale.value = PlayerPrefs.GetFloat("yawScl");
+        else
+            yawScale.value = 1.5f;
+
+        if (PlayerPrefs.HasKey("fullScrn"))
+        {
+            if (PlayerPrefs.GetInt("fullScrn") == 1)
+            {
+                fullScreen.text = "ON";
+                Screen.fullScreen = true;
+            }
+        }
+        else
+        {
+            fullScreen.text = "OFF";
+            Screen.fullScreen = false;
+        }
+
+        if (PlayerPrefs.HasKey("povFrst"))
+        {
+            if (PlayerPrefs.GetInt("povFrst") == 1)
+            {
+                pov.text = "First";
+                CameraSwitcher.isFirstPerson = true;
+            }
+        }
+        else
+        {
+            pov.text = "Third";
+            CameraSwitcher.isFirstPerson = false;
+        }
+        
+    }
     private void OnDisable()
     {
+        //save playerPrefs
+        PlayerPrefs.SetInt("angMoment", angularMomentum.text == "ON" ? 1 : 0);
+        PlayerPrefs.SetFloat("ptchScl", pitchScale.value);
+        PlayerPrefs.SetFloat("rollScl", rollScale.value);
+        PlayerPrefs.SetFloat("yawScl", yawScale.value);
+        PlayerPrefs.SetInt("fullScrn", fullScreen.text == "ON" ? 1 : 0);
+        PlayerPrefs.SetInt("povFrst", pov.text == "First" ? 1 : 0);
+        PlayerPrefs.Save();
+
         angularMomentum.clicked += AMToggle;
 
         pitchDec.clicked -= DecPitch;
@@ -100,25 +156,18 @@ public class SettingsMenu : MonoBehaviour
     private void AMToggle()
     {
         if(angularMomentum.text == "OFF")
-        {
-            SpaceshipMovement.InputType = 2;
             angularMomentum.text = "ON";
-        }
         else
-        {
-            SpaceshipMovement.InputType = 1;
             angularMomentum.text = "OFF";
-        }
-
-        print(SpaceshipMovement.InputType);
     }
 
     private void DecPitch()
     {
         if(SpaceshipMovement.PitchScaler > 0.0f)
         {
-            SpaceshipMovement.PitchScaler -= 0.1f;
-           pitchScale.value = SpaceshipMovement.PitchScaler;
+            pitchScale.value -= 0.1f;
+            // SpaceshipMovement.PitchScaler -= 0.1f;
+            // pitchScale.value = SpaceshipMovement.PitchScaler;
         }
     }
 
@@ -126,8 +175,9 @@ public class SettingsMenu : MonoBehaviour
     {
         if(SpaceshipMovement.PitchScaler < 3.0f)
         {
-            SpaceshipMovement.PitchScaler += 0.1f;
-            pitchScale.value = SpaceshipMovement.PitchScaler;
+            pitchScale.value += 0.1f;
+            // SpaceshipMovement.PitchScaler += 0.1f;
+            // pitchScale.value = SpaceshipMovement.PitchScaler;
         }
     }
 
@@ -135,8 +185,9 @@ public class SettingsMenu : MonoBehaviour
     {
         if(SpaceshipMovement.RollScaler > 0.0f)
         {
-            SpaceshipMovement.RollScaler -= 0.1f;
-            rollScale.value = SpaceshipMovement.RollScaler;
+            rollScale.value -= 0.1f;
+            // SpaceshipMovement.RollScaler -= 0.1f;
+            // rollScale.value = SpaceshipMovement.RollScaler;
         }
     }
 
@@ -144,8 +195,9 @@ public class SettingsMenu : MonoBehaviour
     {
         if(SpaceshipMovement.RollScaler < 3.0f)
         {
-            SpaceshipMovement.RollScaler += 0.1f;
-            rollScale.value = SpaceshipMovement.RollScaler;
+            rollScale.value += 0.1f;
+            // SpaceshipMovement.RollScaler += 0.1f;
+            // rollScale.value = SpaceshipMovement.RollScaler;
         }
     }
 
@@ -153,8 +205,9 @@ public class SettingsMenu : MonoBehaviour
     {
         if(SpaceshipMovement.YawScaler > 0.0f)
         {
-            SpaceshipMovement.YawScaler -= 0.1f;
-            yawScale.value = SpaceshipMovement.YawScaler;
+            yawScale.value -= 0.1f;
+            // SpaceshipMovement.YawScaler -= 0.1f;
+            // yawScale.value = SpaceshipMovement.YawScaler;
         }
     }
 
@@ -162,40 +215,33 @@ public class SettingsMenu : MonoBehaviour
     {
         if(SpaceshipMovement.YawScaler < 3.0f)
         {
-            SpaceshipMovement.YawScaler += 0.1f;
-            yawScale.value = SpaceshipMovement.YawScaler;
+            yawScale.value += 0.1f;
+            // SpaceshipMovement.YawScaler += 0.1f;
+            // yawScale.value = SpaceshipMovement.YawScaler;
         }
     }
 
     private void FSToggle()
     {
+        Screen.fullScreen = !Screen.fullScreen;
+
         if(fullScreen.text == "OFF")
-        {
             fullScreen.text = "ON";
-            print("full screen ON");
-            // change setting
-        }
         else
-        {
             fullScreen.text = "OFF";
-            print("full screen OFF");
-            // change setting
-        }
     }
 
     private void PoVToggle()
     {
-        CameraModeController.toggleCameraFlag = !CameraModeController.toggleCameraFlag;
-
         if(pov.text == "First")
         {
             pov.text = "Third";
-            CameraSwitcher.isFirstPerson = false;
+            // CameraSwitcher.isFirstPerson = false;
         }
         else
         {
             pov.text = "First";
-            CameraSwitcher.isFirstPerson = true;
+            // CameraSwitcher.isFirstPerson = true;
         }
     }
 

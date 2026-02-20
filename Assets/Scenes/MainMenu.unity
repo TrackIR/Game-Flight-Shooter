@@ -376,10 +376,7 @@ GameObject:
   - component: {fileID: 886789269}
   - component: {fileID: 886789268}
   - component: {fileID: 886789272}
-<<<<<<< HEAD
-=======
   - component: {fileID: 886789274}
->>>>>>> bf0a4abbbfde66b8a81ec01e6809994a4d754965
   - component: {fileID: 886789273}
   m_Layer: 0
   m_Name: Main Camera
@@ -486,8 +483,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 886789267}
   m_Enabled: 1
   m_EditorHideFlags: 0
-<<<<<<< HEAD
-=======
   m_Script: {fileID: 11500000, guid: aa963ddd8d2ade74d95aa0e96b563357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FullScreenController
@@ -500,7 +495,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 886789267}
   m_Enabled: 1
   m_EditorHideFlags: 0
->>>>>>> bf0a4abbbfde66b8a81ec01e6809994a4d754965
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
@@ -711,9 +705,6 @@ MonoBehaviour:
   mainMenuDocument: {fileID: 987804716}
   mainMenu: {fileID: 987804715}
   settingsMenu: {fileID: 541567679}
-<<<<<<< HEAD
-  colorsMenu: {fileID: 0}
-=======
   colorsMenu: {fileID: 1122766568}
 --- !u!1 &1122766568
 GameObject:
@@ -786,7 +777,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> bf0a4abbbfde66b8a81ec01e6809994a4d754965
 --- !u!1 &1225694574
 GameObject:
   m_ObjectHideFlags: 0

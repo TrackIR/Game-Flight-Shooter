@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class AsteroidSpawner : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class AsteroidSpawner : MonoBehaviour
 
     public GameObject prefab;
     public List<GameObject> asteroids = new List<GameObject>();
+
+    [Header("Radar")]
+    public RectTransform radarIcon;   // Assign your UI icon here
+    public Camera playerCamera;
+    public float screenEdgeBuffer = 40f;
 
     // Environtmental Timer
     private float m_TotalTime;
@@ -47,8 +53,73 @@ public class AsteroidSpawner : MonoBehaviour
             UpdateSpawnType();
             Debug.Log("Debug in AsteroidSpawner.cs:28 : Asteroids Spawned");
         }
+
+        UpdateRadar();
     }
 
+    private void UpdateRadar()
+{
+    if (radarIcon == null || playerCamera == null || spaceship == null)
+        return;
+
+    GameObject nearest = null;
+    float closestDistance = float.MaxValue;
+
+    foreach (GameObject asteroid in asteroids)
+    {
+        if (asteroid == null) continue;
+
+        float distance = Vector3.Distance(spaceship.transform.position, asteroid.transform.position);
+        if (distance < closestDistance)
+        {
+            closestDistance = distance;
+            nearest = asteroid;
+        }
+    }
+
+    if (nearest == null)
+    {
+        radarIcon.gameObject.SetActive(false);
+        return;
+    }
+
+    Vector3 viewportPos = playerCamera.WorldToViewportPoint(nearest.transform.position);
+
+    bool isVisible =
+        viewportPos.z > 0 &&
+        viewportPos.x > 0 && viewportPos.x < 1 &&
+        viewportPos.y > 0 && viewportPos.y < 1;
+
+    if (isVisible)
+    {
+        radarIcon.gameObject.SetActive(false);
+        return;
+    }
+
+    radarIcon.gameObject.SetActive(true);
+
+    Vector3 direction = (nearest.transform.position - spaceship.transform.position).normalized;
+    Vector3 screenDir = playerCamera.WorldToScreenPoint(spaceship.transform.position + direction) -
+                        playerCamera.WorldToScreenPoint(spaceship.transform.position);
+
+    float angle = Mathf.Atan2(screenDir.y, screenDir.x) * Mathf.Rad2Deg;
+    radarIcon.rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+    Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+    Vector3 edgePosition = screenCenter + screenDir.normalized * (Screen.height / 2f - screenEdgeBuffer);
+
+    radarIcon.position = edgePosition;
+
+    //Scale icon based on distance
+    float minScale = 0.3f;     // size when far away
+    float maxScale = 2.0f;     // size when very close
+    float maxDistance = 50f;  // distance where scaling stops shrinking
+
+    float t = Mathf.Clamp01(1f - (closestDistance / maxDistance));
+    float scale = Mathf.Lerp(minScale, maxScale, t);
+
+    radarIcon.localScale = Vector3.one * scale;
+}    
     public void spawnAsteroidNoDirection(int amount)
     {
         for (int i = 0; i < amount; i++)

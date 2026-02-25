@@ -9,7 +9,7 @@ public class LeaderboardManager : MonoBehaviour
     private const string PlayerNameKey = "PLAYER_NAME";
 
     [Header("Leaderboard Settings")]
-    public int maxEntries = 10;
+    public int maxEntries = 6;
 
     public List<LeaderboardEntry> entries = new List<LeaderboardEntry>();
     public string CurrentPlayerName { get; private set; } = "Player";

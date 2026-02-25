@@ -55,17 +55,6 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "13d3ac5e-cb58-4e0d-9b92-4be2f98d034e",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Shoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ada003fe-9565-4a57-8dd0-b68dabc3989e",
                     "path": "<Keyboard>/space",
                     "interactions": "",

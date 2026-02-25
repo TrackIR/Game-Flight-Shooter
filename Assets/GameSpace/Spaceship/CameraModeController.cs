@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class CameraModeController : MonoBehaviour
@@ -10,18 +11,29 @@ public class CameraModeController : MonoBehaviour
 
     public GameObject cameraHolder;
 
-    private bool inFirstPerson = false;
+    private bool inFirstPerson;
 
-    public static bool toggleCameraFlag = false;
+    void Start()
+    {
+        if (PlayerPrefs.GetInt("povFrst") == 1)
+        {
+            inFirstPerson = true;
+            exteriorShipModel.SetActive(false);
+            cockpitModel.SetActive(true);
+        }
+        else
+        {
+            inFirstPerson = false;
+            exteriorShipModel.SetActive(true);
+            cockpitModel.SetActive(false);
+        }
+    }
 
     void Update()
     {
         // Press C to toggle camera mode
-        if (Input.GetKeyDown(KeyCode.C) || toggleCameraFlag)
-        {
-            toggleCameraFlag = false;
+        if (Input.GetKeyDown(KeyCode.C))
             ToggleCameraMode();
-        }
 
         UpdateCameraPosition();
     }

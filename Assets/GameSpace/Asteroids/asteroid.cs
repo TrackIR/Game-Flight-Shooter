@@ -48,6 +48,7 @@ public class asteroid : MonoBehaviour
 
     public void Die()
     {
+        Debug.Log("Asteroid Shot!");
         Split();
         ScoreManager.Instance.AddScore(1);
         ExplosionParticleVFX explosion = Instantiate(explosionVFX);

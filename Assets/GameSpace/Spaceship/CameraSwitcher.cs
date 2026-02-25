@@ -5,8 +5,12 @@ public class CameraSwitcher : MonoBehaviour
     public Transform thirdPersonPivot;
     public Transform firstPersonPivot;
 
-    public static bool isFirstPerson = false;
+    public static bool isFirstPerson;
 
+    void Start()
+    {
+        isFirstPerson = PlayerPrefs.GetInt("povFrst") == 1;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))

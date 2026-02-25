@@ -91,6 +91,11 @@ public class SpaceshipMovement : MonoBehaviour
             m_trackirClient.Disconnect();
     }
 
+    void OnDestroy()
+    {
+        ShutDownTrackIR();
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();

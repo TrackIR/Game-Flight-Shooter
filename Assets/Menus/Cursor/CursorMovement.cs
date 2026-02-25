@@ -52,7 +52,7 @@ public class CursorMovement : MonoBehaviour
         }
     }
 
-       void OnApplicationQuit()
+    void OnApplicationQuit()
     {
         ShutDownTrackIR();
     }
@@ -61,6 +61,11 @@ public class CursorMovement : MonoBehaviour
     {
         if (m_trackirClient != null)
             m_trackirClient.Disconnect();
+    }
+
+    void OnDestroy()
+    {
+        ShutDownTrackIR();
     }
 
     void Update()

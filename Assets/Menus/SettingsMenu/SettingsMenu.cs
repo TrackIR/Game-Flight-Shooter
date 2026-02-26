@@ -21,6 +21,7 @@ public class SettingsMenu : MonoBehaviour
     private Button fullScreen;
     private Button pov;
     private Button backButton;
+    private Button defaultsButton;
     private Button audioButton;
 
     private void OnEnable()
@@ -46,6 +47,7 @@ public class SettingsMenu : MonoBehaviour
         pov = root.Q<Button>("pointofView");
 
         backButton = root.Q<Button>("backButton");
+        defaultsButton = root.Q<Button>("defaultsButton");
         audioButton = root.Q<Button>("audioButton");
         
         // get the current values
@@ -67,6 +69,7 @@ public class SettingsMenu : MonoBehaviour
         pov.clicked += PoVToggle;
 
         backButton.clicked += LeaveMenu;
+        defaultsButton.clicked += RestoreDefaults;
         audioButton.clicked += ToAudioMenu;
     }
 
@@ -135,7 +138,7 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetInt("povFrst", pov.text == "First" ? 1 : 0);
         PlayerPrefs.Save();
 
-        angularMomentum.clicked += AMToggle;
+        angularMomentum.clicked -= AMToggle;
 
         pitchDec.clicked -= DecPitch;
         pitchInc.clicked -= IncPitch;
@@ -150,6 +153,7 @@ public class SettingsMenu : MonoBehaviour
         pov.clicked -= PoVToggle;
 
         backButton.clicked -= LeaveMenu;
+        defaultsButton.clicked -= RestoreDefaults;
         audioButton.clicked -= ToAudioMenu;
     }
 
@@ -164,61 +168,37 @@ public class SettingsMenu : MonoBehaviour
     private void DecPitch()
     {
         if(SpaceshipMovement.PitchScaler > 0.0f)
-        {
             pitchScale.value -= 0.1f;
-            // SpaceshipMovement.PitchScaler -= 0.1f;
-            // pitchScale.value = SpaceshipMovement.PitchScaler;
-        }
     }
 
     private void IncPitch()
     {
         if(SpaceshipMovement.PitchScaler < 3.0f)
-        {
             pitchScale.value += 0.1f;
-            // SpaceshipMovement.PitchScaler += 0.1f;
-            // pitchScale.value = SpaceshipMovement.PitchScaler;
-        }
     }
 
     private void DecRoll()
     {
         if(SpaceshipMovement.RollScaler > 0.0f)
-        {
             rollScale.value -= 0.1f;
-            // SpaceshipMovement.RollScaler -= 0.1f;
-            // rollScale.value = SpaceshipMovement.RollScaler;
-        }
     }
 
     private void IncRoll()
     {
         if(SpaceshipMovement.RollScaler < 3.0f)
-        {
             rollScale.value += 0.1f;
-            // SpaceshipMovement.RollScaler += 0.1f;
-            // rollScale.value = SpaceshipMovement.RollScaler;
-        }
     }
 
     private void DecYaw()
     {
         if(SpaceshipMovement.YawScaler > 0.0f)
-        {
             yawScale.value -= 0.1f;
-            // SpaceshipMovement.YawScaler -= 0.1f;
-            // yawScale.value = SpaceshipMovement.YawScaler;
-        }
     }
 
     private void IncYaw()
     {
         if(SpaceshipMovement.YawScaler < 3.0f)
-        {
             yawScale.value += 0.1f;
-            // SpaceshipMovement.YawScaler += 0.1f;
-            // yawScale.value = SpaceshipMovement.YawScaler;
-        }
     }
 
     private void FSToggle()
@@ -234,15 +214,19 @@ public class SettingsMenu : MonoBehaviour
     private void PoVToggle()
     {
         if(pov.text == "First")
-        {
             pov.text = "Third";
-            // CameraSwitcher.isFirstPerson = false;
-        }
         else
-        {
             pov.text = "First";
-            // CameraSwitcher.isFirstPerson = true;
-        }
+    }
+
+    private void RestoreDefaults()
+    {
+        angularMomentum.text = "OFF";
+        pitchScale.value = 1.0f;
+        rollScale.value = 1.1f;
+        yawScale.value =  1.5f;
+        fullScreen.text = "ON";
+        pov.text = "Third";
     }
 
     private void LeaveMenu()

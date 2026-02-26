@@ -8,9 +8,9 @@ public class ApplySavedColors : MonoBehaviour
     public static event Action ColorsChanged;
     public static void NotifyColorsChanged() => ColorsChanged?.Invoke();
 
-    private static readonly int ColorId = Shader.PropertyToID("_Color");
-    private static readonly int EmissionId = Shader.PropertyToID("_EmissionColor");
-
+    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");      // URP Lit
+    private static readonly int ColorId     = Shader.PropertyToID("_Color");         // Built-in fallback
+    private static readonly int EmissionId  = Shader.PropertyToID("_EmissionColor"); // URP/Built-in
 
     [Header("Target (optional)")]
     [SerializeField] private GameObject target;
@@ -30,64 +30,55 @@ public class ApplySavedColors : MonoBehaviour
     [SerializeField] private bool applySpaceshipColor = false;
     [SerializeField] private bool applyAsteroidColor = false;
 
+    [Header("Emission Sync")]
+    [SerializeField] private bool syncEmissionToBaseColor = true;
+
+    [SerializeField, Min(0f)] private float spaceshipEmissionIntensity = 2f;
+    [SerializeField, Min(0f)] private float asteroidEmissionIntensity = 2f;
+
     // Keys we support (new + old)
     private const string ShipPrefix = "ShipColor";
-
-    // We support BOTH asteroid prefixes because your project used both at different times.
     private static readonly string[] AsteroidPrefixes = { "AstColor", "AsteroidColor" };
 
-    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private void Awake() => AutoCollectRenderersIfNeeded();
 
-    private void Awake()
-    {
-        AutoCollectRenderersIfNeeded();
-    }
+    private void OnEnable()  => ColorsChanged += ApplyNow;
+    private void OnDisable() => ColorsChanged -= ApplyNow;
 
-    private void OnEnable()
-    {
-        ColorsChanged += ApplyNow;
-    }
+    private void Start() => ApplyNow();
 
-    private void OnDisable()
+    private void OnValidate()
     {
-        ColorsChanged -= ApplyNow;
-    }
-
-    private void Start()
-    {
-        ApplyNow();
+        if (Application.isPlaying)
+            ApplyNow();
     }
 
     public void ApplyNow()
     {
         AutoCollectRenderersIfNeeded();
-
-        if (renderers == null || renderers.Count == 0)
-            return;
+        if (renderers == null || renderers.Count == 0) return;
 
         if (applySpaceshipColor)
         {
             var shipColor = LoadColorAny(new[] { ShipPrefix }, Color.white);
-            ApplyColorToRenderers(shipColor);
+            ApplyColorToRenderers(shipColor, spaceshipEmissionIntensity);
         }
 
         if (applyAsteroidColor)
         {
             var astColor = LoadColorAny(AsteroidPrefixes, Color.white);
-            ApplyColorToRenderers(astColor);
+            ApplyColorToRenderers(astColor, asteroidEmissionIntensity);
         }
     }
 
     private void AutoCollectRenderersIfNeeded()
     {
-        if (renderers != null && renderers.Count > 0)
-            return;
-
+        if (renderers != null && renderers.Count > 0) return;
         var root = target != null ? target.transform : transform;
         renderers = new List<Renderer>(root.GetComponentsInChildren<Renderer>(true));
     }
 
-    private void ApplyColorToRenderers(Color color)
+    private void ApplyColorToRenderers(Color color, float intensity)
     {
         foreach (var r in renderers)
         {
@@ -104,35 +95,40 @@ public class ApplySavedColors : MonoBehaviour
                 if (!string.IsNullOrEmpty(materialNameContains) && !m.name.Contains(materialNameContains))
                     continue;
 
-                // URP Lit: Base Map tint uses _BaseColor
+                // --- Base color (tint) ---
+                bool setBase = false;
+
                 if (m.HasProperty(BaseColorId))
                 {
-                    // keep existing alpha just in case
-                    var cur = m.GetColor(BaseColorId);
-                    m.SetColor(BaseColorId, new Color(color.r, color.g, color.b, cur.a));
+                    var curA = m.GetColor(BaseColorId).a;
+                    m.SetColor(BaseColorId, new Color(color.r, color.g, color.b, curA));
+                    setBase = true;
                 }
-
                 else if (m.HasProperty(ColorId))
                 {
-                    var cur = m.GetColor(ColorId);
-                    m.SetColor(ColorId, new Color(color.r, color.g, color.b, cur.a));
+                    var curA = m.GetColor(ColorId).a;
+                    m.SetColor(ColorId, new Color(color.r, color.g, color.b, curA));
+                    setBase = true;
                 }
 
+                // --- Emission matches base color ---
+                if (setBase && syncEmissionToBaseColor && m.HasProperty(EmissionId))
+                {
+                    // Multiply by intensity by 4
+                    var emissive = new Color(color.r, color.g, color.b, 1f) * intensity;
+                    m.SetColor(EmissionId, emissive);
+
+                    // Ensure emission is actually enabled on the shader
+                    m.EnableKeyword("_EMISSION");
+                }
             }
         }
     }
 
-    // Loads color from either:
-    // - ints 0..255 (SetInt)
-    // - floats 0..1 (SetFloat)
-    // - floats 0..255 (some projects did this too)
     private Color LoadColorAny(string[] prefixes, Color fallback)
     {
         foreach (var p in prefixes)
-        {
-            if (TryLoadColor(p, out var c))
-                return c;
-        }
+            if (TryLoadColor(p, out var c)) return c;
         return fallback;
     }
 
@@ -142,7 +138,6 @@ public class ApplySavedColors : MonoBehaviour
         string gKey = prefix + "_G";
         string bKey = prefix + "_B";
 
-        // Need at least R key to consider it "present".
         if (!PlayerPrefs.HasKey(rKey) || !PlayerPrefs.HasKey(gKey) || !PlayerPrefs.HasKey(bKey))
         {
             color = default;
@@ -159,27 +154,18 @@ public class ApplySavedColors : MonoBehaviour
 
     private float ReadChannel01(string key)
     {
-
         int i = PlayerPrefs.GetInt(key, int.MinValue);
         float f = PlayerPrefs.GetFloat(key, float.NaN);
-
 
         if (i != int.MinValue && i >= 0 && i <= 255)
             return Mathf.Clamp01(i / 255f);
 
-
         if (!float.IsNaN(f))
         {
-            // If stored as 0..1
-            if (f >= 0f && f <= 1.5f)
-                return Mathf.Clamp01(f);
-
-            // If stored as 0..255
-            if (f > 1.5f)
-                return Mathf.Clamp01(f / 255f);
+            if (f >= 0f && f <= 1.5f) return Mathf.Clamp01(f);
+            if (f > 1.5f) return Mathf.Clamp01(f / 255f);
         }
 
-        // fallback
         return 1f;
     }
 }

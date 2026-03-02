@@ -74,8 +74,8 @@ public class ColorMenu : MonoBehaviour
         SetupSwatches(astSwatches, isShip: false);
 
 
-        currentShip = LoadColor32(ShipPrefix, defaultColor: new Color32(240, 250, 255, 255));
-        currentAst = LoadColor32(AstPrefixA, defaultColor: new Color32(240, 250, 255, 255));
+        currentShip = LoadColor32(ShipPrefix, defaultColor: new Color32(255, 166, 0, 255));
+        currentAst = LoadColor32(AstPrefixA, defaultColor: new Color32(110, 220, 255, 255));
         // If AstColor not present, try AsteroidColor
         if (!HasRGB(AstPrefixA) && HasRGB(AstPrefixB))
             currentAst = LoadColor32(AstPrefixB, currentAst);

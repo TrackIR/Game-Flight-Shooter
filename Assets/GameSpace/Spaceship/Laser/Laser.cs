@@ -43,7 +43,27 @@ public class Laser : MonoBehaviour
         {
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;
-            asteroid.GetComponent<asteroid>().Die();
+
+            Debug.Log("Asteroid hit!");
+
+            // Now we need to check what type of asteroid it is
+            Debug.Log("Hit asteroid is of type " + asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType().ToString());
+            
+            switch (asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType())
+            {
+                case AsteroidParentClass.AsteroidInheritanceType.Basic:
+                    asteroid.GetComponent<BasicAsteroid>().Die();
+                    break;
+                case AsteroidParentClass.AsteroidInheritanceType.Healing:
+                    asteroid.GetComponent<HealingAsteroid>().Die();
+                    break;
+                case AsteroidParentClass.AsteroidInheritanceType.Bomb:
+                    asteroid.GetComponent<BombAsteroid>().Die();
+                    break;
+                default:
+                    break;
+            }
+
             Destroy(gameObject);
         }
     }

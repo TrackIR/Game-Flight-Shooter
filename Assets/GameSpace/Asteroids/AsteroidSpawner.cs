@@ -12,9 +12,15 @@ public class AsteroidSpawner : MonoBehaviour
 
     [Header("References")]
     public GameObject spaceship;
-
-    public GameObject prefab;
+    public List<GameObject> asteroidPrefabs = new List<GameObject>();
     public List<GameObject> asteroids = new List<GameObject>();
+    /* IMPORTANT */
+    // Until I figure out a better system, I'm doing this a stupid way
+    // the `asteroidPrefabs` list is going to be set up in a very specific way:
+    //  - the first element will be the basic asteroid
+    //  - the second element will be the healing asteroid
+    //  - the third element will be the bomb asteroid
+    // When accessing this list for instantiation or other purposes, please remember this order
 
     [Header("Radar")]
     public RectTransform radarIcon;   // Assign your UI icon here
@@ -28,13 +34,13 @@ public class AsteroidSpawner : MonoBehaviour
     
     // Asteroid variables
     private AsteroidType m_SpawnType = AsteroidType.Random;
-    private float m_AsteroidMinSize = 2.0f;
-    private float m_AsteroidMaxSize = 4.99f;
+    private float m_AsteroidMinSize = 3.0f;
+    private float m_AsteroidMaxSize = 5.99f;
     private float m_AsteroidSpeedFloor = 5.0f;
 
     void Start()
     {
-        spawnAsteroidNoDirection(100);
+        SpawnAsteroidNoDirection(100);
     }
 
     void Update()
@@ -45,9 +51,9 @@ public class AsteroidSpawner : MonoBehaviour
         if (m_Timer >= m_SpawnTime)
         {
             if (m_SpawnType == AsteroidType.Random)
-                spawnAsteroidNoDirection(10);
+                SpawnAsteroidNoDirection(10);
             else if (m_SpawnType == AsteroidType.Directional)
-                spawnAsteroidSpaceshipDirection(10);
+                SpawnAsteroidSpaceshipDirection(10);
             m_Timer = 0.0f;
             UpdateSpawnTime();
             UpdateSpawnType();
@@ -58,79 +64,99 @@ public class AsteroidSpawner : MonoBehaviour
     }
 
     private void UpdateRadar()
-{
-    if (radarIcon == null || playerCamera == null || spaceship == null)
-        return;
-
-    GameObject nearest = null;
-    float closestDistance = float.MaxValue;
-
-    foreach (GameObject asteroid in asteroids)
     {
-        if (asteroid == null) continue;
+        if (radarIcon == null || playerCamera == null || spaceship == null)
+            return;
 
-        float distance = Vector3.Distance(spaceship.transform.position, asteroid.transform.position);
-        if (distance < closestDistance)
+        GameObject nearest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (GameObject asteroid in asteroids)
         {
-            closestDistance = distance;
-            nearest = asteroid;
+            if (asteroid == null) continue;
+
+            float distance = Vector3.Distance(spaceship.transform.position, asteroid.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                nearest = asteroid;
+            }
+        }
+
+        if (nearest == null)
+        {
+            radarIcon.gameObject.SetActive(false);
+            return;
+        }
+
+        Vector3 viewportPos = playerCamera.WorldToViewportPoint(nearest.transform.position);
+
+        bool isVisible =
+            viewportPos.z > 0 &&
+            viewportPos.x > 0 && viewportPos.x < 1 &&
+            viewportPos.y > 0 && viewportPos.y < 1;
+
+        if (isVisible)
+        {
+            radarIcon.gameObject.SetActive(false);
+            return;
+        }
+
+        radarIcon.gameObject.SetActive(true);
+
+        Vector3 direction = (nearest.transform.position - spaceship.transform.position).normalized;
+        Vector3 screenDir = playerCamera.WorldToScreenPoint(spaceship.transform.position + direction) -
+                            playerCamera.WorldToScreenPoint(spaceship.transform.position);
+
+        float angle = Mathf.Atan2(screenDir.y, screenDir.x) * Mathf.Rad2Deg;
+        radarIcon.rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+        Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+        Vector3 edgePosition = screenCenter + screenDir.normalized * (Screen.height / 2f - screenEdgeBuffer);
+
+        radarIcon.position = edgePosition;
+
+        //Scale icon based on distance
+        float minScale = 0.3f;     // size when far away
+        float maxScale = 2.0f;     // size when very close
+        float maxDistance = 50f;  // distance where scaling stops shrinking
+
+        float t = Mathf.Clamp01(1f - (closestDistance / maxDistance));
+        float scale = Mathf.Lerp(minScale, maxScale, t);
+
+        radarIcon.localScale = Vector3.one * scale;
+    }
+
+    private GameObject ChooseAsteroidClassToSpawn()
+    {
+        int choice = Random.Range(1, 20);
+        
+        // Return an object from the Asteroid Prefabs list
+        switch (choice)
+        {
+            case 1: // If the choice lands on a 5%, return the healing asteroid
+                return asteroidPrefabs[1];
+                break;
+            // case 2: // Another 5% chance, return bomb asteroid
+            //     return asteroidPrefabs[2];
+            //     break;
+            default:
+                return asteroidPrefabs[0];
+                break;
         }
     }
 
-    if (nearest == null)
-    {
-        radarIcon.gameObject.SetActive(false);
-        return;
-    }
-
-    Vector3 viewportPos = playerCamera.WorldToViewportPoint(nearest.transform.position);
-
-    bool isVisible =
-        viewportPos.z > 0 &&
-        viewportPos.x > 0 && viewportPos.x < 1 &&
-        viewportPos.y > 0 && viewportPos.y < 1;
-
-    if (isVisible)
-    {
-        radarIcon.gameObject.SetActive(false);
-        return;
-    }
-
-    radarIcon.gameObject.SetActive(true);
-
-    Vector3 direction = (nearest.transform.position - spaceship.transform.position).normalized;
-    Vector3 screenDir = playerCamera.WorldToScreenPoint(spaceship.transform.position + direction) -
-                        playerCamera.WorldToScreenPoint(spaceship.transform.position);
-
-    float angle = Mathf.Atan2(screenDir.y, screenDir.x) * Mathf.Rad2Deg;
-    radarIcon.rotation = Quaternion.Euler(0, 0, angle - 90f);
-
-    Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
-    Vector3 edgePosition = screenCenter + screenDir.normalized * (Screen.height / 2f - screenEdgeBuffer);
-
-    radarIcon.position = edgePosition;
-
-    //Scale icon based on distance
-    float minScale = 0.3f;     // size when far away
-    float maxScale = 2.0f;     // size when very close
-    float maxDistance = 50f;  // distance where scaling stops shrinking
-
-    float t = Mathf.Clamp01(1f - (closestDistance / maxDistance));
-    float scale = Mathf.Lerp(minScale, maxScale, t);
-
-    radarIcon.localScale = Vector3.one * scale;
-}    
-    public void spawnAsteroidNoDirection(int amount)
+    public void SpawnAsteroidNoDirection(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject asteroid = Instantiate(prefab, transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
+            GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
             asteroids.Add(asteroid);
-            asteroid.GetComponent<asteroid>().Init(/*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                   /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                   /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                   /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                   /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
+            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                                                                /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
             
             // Apply saved colors to THIS newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();
@@ -140,7 +166,7 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
 
-    public void spawnAsteroidSpaceshipDirection(int amount)
+    public void SpawnAsteroidSpaceshipDirection(int amount)
     {
         Vector3 spawnPos;
         Vector3 direction;
@@ -148,13 +174,13 @@ public class AsteroidSpawner : MonoBehaviour
         {
             spawnPos = transform.position + (Random.onUnitSphere * 100.0f);
             direction = (spaceship.transform.position - spawnPos).normalized;
-            GameObject asteroid = Instantiate(prefab, spawnPos, Quaternion.identity);
+            GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), spawnPos, Quaternion.identity);
             asteroids.Add(asteroid);
-            asteroid.GetComponent<asteroid>().Init(/*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                   /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                   /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                   /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                   /*iMovementDirection =*/direction);
+            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                                                                /*iMovementDirection =*/direction);
             
             // Apply saved colors to THIS newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();

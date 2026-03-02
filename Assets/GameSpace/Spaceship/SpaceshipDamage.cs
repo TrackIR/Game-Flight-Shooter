@@ -5,7 +5,14 @@ using System.Collections;
 
 public class SpaceshipDamage : MonoBehaviour
 {
-    public int playerHealth = 5;
+    // Reworked health system for properites
+    private int _playerHealth = 3;
+    public int playerHealth
+    {
+        get { return _playerHealth; }
+        set { _playerHealth = Mathf.Clamp(value, 0, 3); }
+    }
+
     //private SpaceshipDeathAnimation deathAnimation;
     public GameObject gameOverMenu;
     public DamageFlashEffect damageFlash;
@@ -73,6 +80,11 @@ public class SpaceshipDamage : MonoBehaviour
         playerHealth -= 1;
 
         Debug.Log("Spaceship collided with asteroid! -1 Health");
+    }
+
+    public void GainHealth()
+    {
+        playerHealth += 1;
     }
 
     private void Die()

@@ -13,6 +13,11 @@ public class CameraModeController : MonoBehaviour
 
     private bool inFirstPerson;
 
+    public GameObject cockpitRadar;
+    public GameObject thirdPersonRadar;
+
+    public MonoBehaviour thirdPersonRadarScript;
+
     void Start()
     {
         if (PlayerPrefs.GetInt("povFrst") == 1)
@@ -42,9 +47,13 @@ public class CameraModeController : MonoBehaviour
     {
         inFirstPerson = !inFirstPerson;
 
-        // Show/hide models
         exteriorShipModel.SetActive(!inFirstPerson);
         cockpitModel.SetActive(inFirstPerson);
+
+        cockpitRadar.SetActive(inFirstPerson);
+
+        // disable arrow radar when in first person
+        //thirdPersonRadarScript.enabled = !inFirstPerson;
     }
 
     void UpdateCameraPosition()

@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Asteroid
   - Laser
-  - HealingAsteroid
   layers:
   - Default
   - TransparentFX

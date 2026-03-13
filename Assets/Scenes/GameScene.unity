@@ -320,15 +320,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceshipDamage
   playerHealth: 3
+  maxHealth: 3
   gameOverMenu: {fileID: 1617551419}
   damageFlash: {fileID: 728335390}
+  shipModelRenderer: {fileID: 519351342}
+  fadeScreenImage: {fileID: 2122161153}
   damageCooldown: 1
   damageBlinkDuration: 0.8
   damageBlinkTime: 0.1
   screenFadingDuration: 1
   screenIsBlackDuration: 1
-  shipModelRenderer: {fileID: 519351342}
-  fadeScreenImage: {fileID: 2122161153}
 --- !u!114 &60033877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2864,6 +2865,9 @@ MonoBehaviour:
   spaceship: {fileID: 60033867}
   prefab: {fileID: 2879669842489544092, guid: 080b9bed2700be24d93cb578d554a5a3, type: 3}
   asteroids: []
+  healingAsteroidPrefab: {fileID: 2879669842489544092, guid: f86847f606861684b877d14fb582ad32, type: 3}
+  healingSpawnInterval: 15
+  healingSpawnDistance: 100
   radarIconPrefab: {fileID: 840798862}
   playerCamera: {fileID: 330585545}
   screenEdgeBuffer: 40

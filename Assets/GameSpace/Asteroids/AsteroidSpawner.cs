@@ -16,12 +16,18 @@ public class AsteroidSpawner : MonoBehaviour
     public GameObject prefab;
     public List<GameObject> asteroids = new List<GameObject>();
 
+    [Header("Healing Asteroid")]
+    public GameObject healingAsteroidPrefab;
+    public float healingSpawnInterval = 20.0f;
+    public float healingSpawnDistance = 100.0f;
+    private float healingTimer = 0.0f;
+
     [Header("Radar")]
-    public RectTransform radarIconPrefab;   // Assign your UI icon prefab here
+    public RectTransform radarIconPrefab;
     public Camera playerCamera;
     public float screenEdgeBuffer = 40f;
-    public int maxRadarIcons = 5;           // How many asteroids to track
-    public float maxRadarDistance = 150f;   // Hide icons past this distance
+    public int maxRadarIcons = 5;
+    public float maxRadarDistance = 150f;
 
     private List<RectTransform> radarIcons = new List<RectTransform>();
 
@@ -29,7 +35,7 @@ public class AsteroidSpawner : MonoBehaviour
     private float m_TotalTime;
     private float m_Timer = 0.0f;
     private float m_SpawnTime = 10.0f;
-    
+
     // Asteroid variables
     private AsteroidType m_SpawnType = AsteroidType.Random;
     private float m_AsteroidMinSize = 2.0f;
@@ -45,6 +51,7 @@ public class AsteroidSpawner : MonoBehaviour
     {
         m_Timer += Time.deltaTime;
         m_TotalTime += Time.deltaTime;
+        healingTimer += Time.deltaTime;
 
         if (m_Timer >= m_SpawnTime)
         {
@@ -52,16 +59,21 @@ public class AsteroidSpawner : MonoBehaviour
                 spawnAsteroidNoDirection(10);
             else if (m_SpawnType == AsteroidType.Directional)
                 spawnAsteroidSpaceshipDirection(10);
+
             m_Timer = 0.0f;
             UpdateSpawnTime();
             UpdateSpawnType();
-            Debug.Log("Debug in AsteroidSpawner.cs:28 : Asteroids Spawned");
+            Debug.Log("Asteroids Spawned");
+        }
+
+        if (healingAsteroidPrefab != null && healingTimer >= healingSpawnInterval)
+        {
+            SpawnHealingAsteroid();
+            healingTimer = 0.0f;
         }
 
         UpdateRadar();
     }
-
-    // ---------------- RADAR SYSTEM ----------------
 
     private void EnsureRadarIcons()
     {
@@ -92,10 +104,10 @@ public class AsteroidSpawner : MonoBehaviour
 
         List<GameObject> validAsteroids = new List<GameObject>();
 
-        foreach (GameObject asteroid in asteroids)
+        foreach (GameObject asteroidObj in asteroids)
         {
-            if (asteroid != null)
-                validAsteroids.Add(asteroid);
+            if (asteroidObj != null)
+                validAsteroids.Add(asteroidObj);
         }
 
         validAsteroids.Sort((a, b) =>
@@ -159,77 +171,108 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
 
-    // ---------------- ORIGINAL SPAWN LOGIC (UNCHANGED) ----------------
-
     public void spawnAsteroidNoDirection(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject asteroid = Instantiate(prefab, transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
-            asteroids.Add(asteroid);
-            asteroid.GetComponent<asteroid>().Init(/*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                   /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                   /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                   /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                   /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
-            
-            // Apply saved colors to THIS newly spawned asteroid
-            var apply = asteroid.GetComponent<ApplySavedColors>();
+            GameObject asteroidObj = Instantiate(
+                prefab,
+                transform.position + (Random.onUnitSphere * 100.0f),
+                Quaternion.identity
+            );
+
+            asteroids.Add(asteroidObj);
+
+            asteroid asteroidScript = asteroidObj.GetComponent<asteroid>();
+            if (asteroidScript != null)
+            {
+                asteroidScript.Init(
+                    Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                    Random.Range(1.0f, 100.0f),
+                    new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                    Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                    new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized
+                );
+            }
+
+            var apply = asteroidObj.GetComponent<ApplySavedColors>();
             if (apply != null) apply.ApplyNow();
-            // If ApplySavedColors is on a child instead, use:
-            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
         }
     }
 
-     public void spawnAsteroidSpaceshipDirection(int amount)
+    public void spawnAsteroidSpaceshipDirection(int amount)
     {
         Vector3 spawnPos;
         Vector3 direction;
+
         for (int i = 0; i < amount; i++)
         {
             spawnPos = transform.position + (Random.onUnitSphere * 100.0f);
             direction = (spaceship.transform.position - spawnPos).normalized;
-            GameObject asteroid = Instantiate(prefab, spawnPos, Quaternion.identity);
-            asteroids.Add(asteroid);
-            asteroid.GetComponent<asteroid>().Init(/*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                   /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                   /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                   /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                   /*iMovementDirection =*/direction);
-            
-            // Apply saved colors to THIS newly spawned asteroid
-            var apply = asteroid.GetComponent<ApplySavedColors>();
+
+            GameObject asteroidObj = Instantiate(prefab, spawnPos, Quaternion.identity);
+            asteroids.Add(asteroidObj);
+
+            asteroid asteroidScript = asteroidObj.GetComponent<asteroid>();
+            if (asteroidScript != null)
+            {
+                asteroidScript.Init(
+                    Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                    Random.Range(1.0f, 100.0f),
+                    new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                    Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                    direction
+                );
+            }
+
+            var apply = asteroidObj.GetComponent<ApplySavedColors>();
             if (apply != null) apply.ApplyNow();
-            // If ApplySavedColors is on a child instead, use:
-            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
         }
+    }
+
+    private void SpawnHealingAsteroid()
+    {
+        Vector3 spawnPos = transform.position + (Random.onUnitSphere * healingSpawnDistance);
+
+        GameObject healingObj = Instantiate(healingAsteroidPrefab, spawnPos, Quaternion.identity);
+        asteroids.Add(healingObj);
+
+        asteroid asteroidScript = healingObj.GetComponent<asteroid>();
+        if (asteroidScript != null)
+        {
+            asteroidScript.Init(
+                Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                Random.Range(1.0f, 100.0f),
+                new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 2.0f),
+                new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized
+            );
+        }
+
+        Debug.Log("Healing asteroid spawned!");
     }
 
     private void UpdateSpawnTime()
     {
-        Debug.Log("Debug in AsteroidSpawner.cs:44 : Total Time = " + SecToMin(m_TotalTime));
+        Debug.Log("Total Time = " + SecToMin(m_TotalTime));
 
         switch (MinAsInt(SecToMin(m_TotalTime)))
         {
             case 1:
                 m_SpawnTime = 5.0f;
                 m_AsteroidSpeedFloor = 8.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:54 : m_SpawnTime = 5.0f");
                 break;
             case 2:
                 m_SpawnTime = 2.5f;
                 m_AsteroidSpeedFloor = 12.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:58 : m_SpawnTime = 2.5f");
                 break;
             case 3:
                 m_SpawnTime = 1.0f;
                 m_AsteroidSpeedFloor = 16.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:62 : m_SpawnTime = 1.0f");
                 break;
             default:
                 m_SpawnTime = 10.0f;
                 m_AsteroidSpeedFloor = 4.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:66 : m_SpawnTime = 10.0f");
                 break;
         }
     }
@@ -238,7 +281,6 @@ public class AsteroidSpawner : MonoBehaviour
     {
         if (MinAsInt(SecToMin(m_TotalTime)) >= 1)
             m_SpawnType = AsteroidType.Directional;
-
         else
             m_SpawnType = AsteroidType.Random;
     }
@@ -250,12 +292,6 @@ public class AsteroidSpawner : MonoBehaviour
 
     private int MinAsInt(float minutes)
     {
-        return (int)minutes;
-    }
-
-    private string FormatMin(float minutes)
-    {
-        // TODO
-        return "";
+        return Mathf.FloorToInt(minutes);
     }
 }

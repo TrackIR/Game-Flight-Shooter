@@ -59,7 +59,7 @@ public class asteroid : MonoBehaviour
 
     public void Split()
     {
-        if (size - 1 == 0)
+        if (size - 1 <= 0)
             return;
 
         // Spawn child asteroids
@@ -67,10 +67,10 @@ public class asteroid : MonoBehaviour
         {
             GameObject asteroid = Instantiate(asteroidPrefab, transform.position, Quaternion.identity);
             children.Add(asteroid);
-            asteroid.GetComponent<asteroid>().Init(/*iSize = */gameObject.GetComponent<asteroid>().size - 1,
+            asteroid.GetComponent<asteroid>().Init(/*iSize = */gameObject.GetComponent<asteroid>().size - 10,
                                                    /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
                                                    /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                   /*iMovementSpeed =*/Random.Range(4.0f, 5.0f),
+                                                   /*iMovementSpeed =*/Random.Range(8.0f, 10.0f),
                                                    /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
         }
     }

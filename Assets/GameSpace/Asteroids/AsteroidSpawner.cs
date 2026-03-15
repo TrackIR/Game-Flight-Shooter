@@ -13,7 +13,7 @@ public class AsteroidSpawner : MonoBehaviour
     [Header("References")]
     public GameObject spaceship;
     public List<GameObject> asteroidPrefabs = new List<GameObject>();
-    public List<GameObject> asteroids = new List<GameObject>();
+    public List<GameObject> asteroidsList = new List<GameObject>();
     /* IMPORTANT */
     // Until I figure out a better system, I'm doing this a stupid way
     // the `asteroidPrefabs` list is going to be set up in a very specific way:
@@ -37,6 +37,7 @@ public class AsteroidSpawner : MonoBehaviour
     private float m_AsteroidMinSize = 3.0f;
     private float m_AsteroidMaxSize = 5.99f;
     private float m_AsteroidSpeedFloor = 5.0f;
+    private int   m_IncrementingAsteroidID = 0;
 
     void Start()
     {
@@ -45,23 +46,172 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Update()
     {
+        // Update the time variables
         m_Timer += Time.deltaTime;
         m_TotalTime += Time.deltaTime;
 
+        // If we have reached the current spawn timer countdown 
         if (m_Timer >= m_SpawnTime)
         {
+            // Check the current asteroid spawn type and spawn an asteroid of that type
             if (m_SpawnType == AsteroidType.Random)
                 SpawnAsteroidNoDirection(10);
             else if (m_SpawnType == AsteroidType.Directional)
                 SpawnAsteroidSpaceshipDirection(10);
-            m_Timer = 0.0f;
+
+            // Update the game state based on time passed in game
             UpdateSpawnTime();
             UpdateSpawnType();
+            
             Debug.Log("Debug in AsteroidSpawner.cs:28 : Asteroids Spawned");
+            
+            // Reset the timer
+            m_Timer = 0.0f;
         }
 
         UpdateRadar();
     }
+
+    /*================================================================*/
+    //* Methods for Changing Game State *//
+
+    private void UpdateSpawnTime()
+    {
+        Debug.Log("Debug in AsteroidSpawner.cs:44 : Total Time = " + SecToMin(m_TotalTime));
+
+        switch (MinAsInt(SecToMin(m_TotalTime)))
+        {
+            case 1:
+                m_SpawnTime = 5.0f;
+                m_AsteroidSpeedFloor = 8.0f;
+                Debug.Log("Debug in AsteroidSpawner.cs:54 : m_SpawnTime = 5.0f");
+                break;
+            case 2:
+                m_SpawnTime = 2.5f;
+                m_AsteroidSpeedFloor = 12.0f;
+                Debug.Log("Debug in AsteroidSpawner.cs:58 : m_SpawnTime = 2.5f");
+                break;
+            case 3:
+                m_SpawnTime = 1.0f;
+                m_AsteroidSpeedFloor = 16.0f;
+                Debug.Log("Debug in AsteroidSpawner.cs:62 : m_SpawnTime = 1.0f");
+                break;
+            default:
+                m_SpawnTime = 10.0f;
+                m_AsteroidSpeedFloor = 4.0f;
+                Debug.Log("Debug in AsteroidSpawner.cs:66 : m_SpawnTime = 10.0f");
+                break;
+        }
+    }
+
+    private void UpdateSpawnType()
+    {
+        if (MinAsInt(SecToMin(m_TotalTime)) >= 1)
+            m_SpawnType = AsteroidType.Directional;
+
+        else
+            m_SpawnType = AsteroidType.Random;
+    }
+    
+    /*================================================================*/
+    //* Methods for Spawning Asteroids *//
+
+    private GameObject ChooseAsteroidClassToSpawn()
+    {
+        int choice = Random.Range(1, 20);
+        
+        // Return an object from the Asteroid Prefabs list
+        switch (choice)
+        {
+            case 1: // If the choice lands on a 5%, return the healing asteroid
+                return asteroidPrefabs[1];
+            case 2: // Another 5% chance, return bomb asteroid
+                return asteroidPrefabs[2];
+            default:
+                return asteroidPrefabs[0];
+        }
+    }
+
+    private void GenerateAsteroidID(GameObject asteroid)
+    {
+        asteroid.GetComponent<AsteroidParentClass>().SetAsteroidID(m_IncrementingAsteroidID);
+        m_IncrementingAsteroidID += 1;
+    }
+
+    public void SpawnAsteroidNoDirection(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
+            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                                                                /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
+            
+            // Set the asteroids ID
+            GenerateAsteroidID(asteroid);
+
+            // Apply saved colors to THIS newly spawned asteroid
+            var apply = asteroid.GetComponent<ApplySavedColors>();
+            if (apply != null) apply.ApplyNow();
+            // If ApplySavedColors is on a child instead, use:
+            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
+
+            // Set the asteroids parent to the asteroid spawner game object
+            asteroid.transform.parent = this.gameObject.transform;
+
+            // Add asteroid to asteroids list
+            AddAsteroidToList(asteroid);
+        }
+    }
+
+    public void SpawnAsteroidSpaceshipDirection(int amount)
+    {
+        Vector3 spawnPos;
+        Vector3 direction;
+        for (int i = 0; i < amount; i++)
+        {
+            spawnPos = transform.position + (Random.onUnitSphere * 100.0f);
+            direction = (spaceship.transform.position - spawnPos).normalized;
+            GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), spawnPos, Quaternion.identity);
+            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                                                                /*iMovementDirection =*/direction);
+            
+            // Set the asteroids ID
+            GenerateAsteroidID(asteroid);
+
+            // Apply saved colors to THIS newly spawned asteroid
+            var apply = asteroid.GetComponent<ApplySavedColors>();
+            if (apply != null) apply.ApplyNow();
+            // If ApplySavedColors is on a child instead, use:
+            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
+
+            // Set the asteroids parent to the asteroid spawner game object
+            asteroid.transform.parent = this.gameObject.transform;
+            
+            // Add asteroid to asteroids list
+            AddAsteroidToList(asteroid);
+        }
+    }
+
+    public void AddAsteroidToList(GameObject asteroid)
+    {
+        asteroidsList.Add(asteroid);
+    }
+
+    public void RemoveAsteroidFromList(GameObject asteroid)
+    {
+        int findAsteroidID = asteroid.GetComponent<AsteroidParentClass>().GetAsteroidID();
+        int findAsteroidIndex = asteroidsList.FindIndex(x => x.GetComponent<AsteroidParentClass>().GetAsteroidID() == findAsteroidID);
+        asteroidsList.RemoveAt(findAsteroidIndex);
+    }
+
+    /*================================================================*/
+    //* Methods for Radar System *//
 
     private void UpdateRadar()
     {
@@ -71,7 +221,7 @@ public class AsteroidSpawner : MonoBehaviour
         GameObject nearest = null;
         float closestDistance = float.MaxValue;
 
-        foreach (GameObject asteroid in asteroids)
+        foreach (GameObject asteroid in asteroidsList)
         {
             if (asteroid == null) continue;
 
@@ -127,106 +277,8 @@ public class AsteroidSpawner : MonoBehaviour
         radarIcon.localScale = Vector3.one * scale;
     }
 
-    private GameObject ChooseAsteroidClassToSpawn()
-    {
-        int choice = Random.Range(1, 20);
-        
-        // Return an object from the Asteroid Prefabs list
-        switch (choice)
-        {
-            case 1: // If the choice lands on a 5%, return the healing asteroid
-                return asteroidPrefabs[1];
-                break;
-            // case 2: // Another 5% chance, return bomb asteroid
-            //     return asteroidPrefabs[2];
-            //     break;
-            default:
-                return asteroidPrefabs[0];
-                break;
-        }
-    }
-
-    public void SpawnAsteroidNoDirection(int amount)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
-            asteroids.Add(asteroid);
-            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                                /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
-            
-            // Apply saved colors to THIS newly spawned asteroid
-            var apply = asteroid.GetComponent<ApplySavedColors>();
-            if (apply != null) apply.ApplyNow();
-            // If ApplySavedColors is on a child instead, use:
-            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
-        }
-    }
-
-    public void SpawnAsteroidSpaceshipDirection(int amount)
-    {
-        Vector3 spawnPos;
-        Vector3 direction;
-        for (int i = 0; i < amount; i++)
-        {
-            spawnPos = transform.position + (Random.onUnitSphere * 100.0f);
-            direction = (spaceship.transform.position - spawnPos).normalized;
-            GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), spawnPos, Quaternion.identity);
-            asteroids.Add(asteroid);
-            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                                /*iMovementDirection =*/direction);
-            
-            // Apply saved colors to THIS newly spawned asteroid
-            var apply = asteroid.GetComponent<ApplySavedColors>();
-            if (apply != null) apply.ApplyNow();
-            // If ApplySavedColors is on a child instead, use:
-            // var apply = asteroidInstance.GetComponentInChildren<ApplySavedColors>();
-        }
-    }
-
-    private void UpdateSpawnTime()
-    {
-        Debug.Log("Debug in AsteroidSpawner.cs:44 : Total Time = " + SecToMin(m_TotalTime));
-
-        switch (MinAsInt(SecToMin(m_TotalTime)))
-        {
-            case 1:
-                m_SpawnTime = 5.0f;
-                m_AsteroidSpeedFloor = 8.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:54 : m_SpawnTime = 5.0f");
-                break;
-            case 2:
-                m_SpawnTime = 2.5f;
-                m_AsteroidSpeedFloor = 12.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:58 : m_SpawnTime = 2.5f");
-                break;
-            case 3:
-                m_SpawnTime = 1.0f;
-                m_AsteroidSpeedFloor = 16.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:62 : m_SpawnTime = 1.0f");
-                break;
-            default:
-                m_SpawnTime = 10.0f;
-                m_AsteroidSpeedFloor = 4.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:66 : m_SpawnTime = 10.0f");
-                break;
-        }
-    }
-
-    private void UpdateSpawnType()
-    {
-        if (MinAsInt(SecToMin(m_TotalTime)) >= 1)
-            m_SpawnType = AsteroidType.Directional;
-
-        else
-            m_SpawnType = AsteroidType.Random;
-    }
+    /*================================================================*/
+    //* Methods for Formatting Time *//
 
     private float SecToMin(float seconds)
     {

@@ -10,6 +10,10 @@ public class AsteroidParentClass : MonoBehaviour
         Bomb
     }
 
+    // For identification of unique asteroids when necessary
+    private int _asteroidID;
+    public int asteroidID { get { return _asteroidID; } set { _asteroidID = value; } }
+
     // Asteroid Stats
     [SerializeField] protected AsteroidInheritanceType asteroidType;
     public int size;
@@ -56,6 +60,16 @@ public class AsteroidParentClass : MonoBehaviour
     public AsteroidInheritanceType GetAsteroidType()
     {
         return asteroidType;
+    }
+
+    public void SetAsteroidID(int newID)
+    {
+        asteroidID = newID;
+    }
+
+    public int GetAsteroidID()
+    {
+        return asteroidID;
     }
 
     /*=== Asteroid specific logic ===*/

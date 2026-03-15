@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class BasicAsteroid : AsteroidParentClass
 {
+    // * Key:
+    // * this.gameObject.transform.parent = AsteroidSpawner game object
+
     public override void Die()
     {
         Debug.Log("Asteroid Shot!");
         Split();
         ScoreManager.Instance.AddScore(1);
-        ExplosionParticleVFX explosion = Instantiate(explosionVFX);
-        explosion.transform.position = gameObject.transform.position;
-        SoundManager.PlaySound(SoundType.EXPLOSION);
+        PlayDeathEffects();
+        RemoveSelfFromAsteroidsList();
         Destroy(gameObject);
     }
 
@@ -25,9 +27,42 @@ public class BasicAsteroid : AsteroidParentClass
             children.Add(asteroid);
             asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */gameObject.GetComponent<AsteroidParentClass>().size - 1,
                                                                 /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                                /*iRotationDirection =*/GenerateRandomDirection(0.5f, 1.0f).normalized,
                                                                 /*iMovementSpeed =*/Random.Range(4.0f, 5.0f),
-                                                                /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
+                                                                /*iMovementDirection =*/GenerateRandomDirection(0.5f, 1.0f).normalized);
+            
+            // Set the split asteroids parent to the current asteroids parent
+            Transform asteroidSpawner = this.gameObject.transform.parent;
+            asteroidSpawner.GetComponent<AsteroidSpawner>().AddAsteroidToList(asteroid);
+            asteroid.transform.parent = asteroidSpawner;
         }
+    }
+
+    private void PlayDeathEffects()
+    {
+        ExplosionParticleVFX explosion = Instantiate(explosionVFX);
+        explosion.transform.position = gameObject.transform.position;
+        SoundManager.PlaySound(SoundType.EXPLOSION);
+    }
+
+    private void RemoveSelfFromAsteroidsList()
+    {
+        this.gameObject.transform.parent.GetComponent<AsteroidSpawner>().RemoveAsteroidFromList(this.gameObject);
+    }
+
+    // A method to generate a random vector that is between -1 and 1 exluding 0
+    // Min and Max must be positive non-zero floats to work properly
+    private Vector3 GenerateRandomDirection(float min, float max)
+    {
+        float[] axes = new float[3];
+        
+        for (int i = 0; i < 3; i++)
+        {
+            axes[i] = Random.Range(min, max);
+            if (Random.Range(0, 2) == 1)
+                axes[i] = -axes[i];
+        }
+
+        return new Vector3(axes[0], axes[1], axes[2]);
     }
 }

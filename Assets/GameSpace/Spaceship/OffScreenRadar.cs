@@ -1,83 +1,130 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OffscreenRadar : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
     public List<Transform> asteroids;
-    public RectTransform radarIcon;
+    public RectTransform radarIconPrefab;   // prefab now
+
+    [Header("UI Sliders")]
+    public Slider distanceSlider;
+    public Slider asteroidCountSlider;
 
     [Header("Settings")]
     public float screenEdgeMargin = 50f;
+    public float maxDistance = 100f;
+
+    private List<RectTransform> radarIcons = new List<RectTransform>();
+
+    void Start()
+    {
+        // Distance slider
+        if (distanceSlider != null)
+        {
+            distanceSlider.value = maxDistance;
+            distanceSlider.onValueChanged.AddListener(UpdateDistance);
+        }
+
+        // Asteroid amount slider
+        if (asteroidCountSlider != null)
+        {
+            asteroidCountSlider.value = asteroids.Count;
+            asteroidCountSlider.onValueChanged.AddListener(UpdateAsteroidAmount);
+        }
+
+        CreateRadarIcons();
+    }
 
     void Update()
     {
-        Transform nearest = GetNearestOffscreenAsteroid();
+        for (int i = 0; i < asteroids.Count; i++)
+        {
+            if (asteroids[i] == null) continue;
 
-        if (nearest != null)
-        {
-            radarIcon.gameObject.SetActive(true);
-            UpdateRadar(nearest);
-        }
-        else
-        {
-            radarIcon.gameObject.SetActive(false);
+            UpdateRadarForAsteroid(asteroids[i], radarIcons[i]);
         }
     }
 
-    Transform GetNearestOffscreenAsteroid()
+    void UpdateDistance(float value)
     {
-        Transform nearest = null;
-        float minDist = Mathf.Infinity;
+        maxDistance = value;
+    }
 
+    void UpdateAsteroidAmount(float value)
+    {
+        int targetCount = Mathf.RoundToInt(value);
+
+        while (asteroids.Count > targetCount)
+        {
+            asteroids.RemoveAt(asteroids.Count - 1);
+        }
+
+        CreateRadarIcons();
+    }
+
+    void CreateRadarIcons()
+    {
+        // Clear old icons
+        foreach (var icon in radarIcons)
+        {
+            if (icon != null)
+                Destroy(icon.gameObject);
+        }
+
+        radarIcons.Clear();
+
+        // Create one icon per asteroid
         foreach (var asteroid in asteroids)
         {
-            if (asteroid == null) continue;
-
-            Vector3 viewportPoint = Camera.main.WorldToViewportPoint(asteroid.position);
-
-            bool isVisible =
-                viewportPoint.z > 0 &&
-                viewportPoint.x > 0 && viewportPoint.x < 1 &&
-                viewportPoint.y > 0 && viewportPoint.y < 1;
-
-            if (!isVisible)
-            {
-                float dist = Vector3.Distance(player.position, asteroid.position);
-
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    nearest = asteroid;
-                }
-            }
+            RectTransform icon = Instantiate(radarIconPrefab, radarIconPrefab.parent);
+            radarIcons.Add(icon);
         }
-
-        return nearest;
     }
 
-    void UpdateRadar(Transform target)
+    void UpdateRadarForAsteroid(Transform asteroid, RectTransform icon)
     {
-        Vector3 screenPoint = Camera.main.WorldToScreenPoint(target.position);
+        float distance = Vector3.Distance(player.position, asteroid.position);
 
-        // If behind camera, flip direction
+        if (distance > maxDistance)
+        {
+            icon.gameObject.SetActive(false);
+            return;
+        }
+
+        Vector3 viewportPoint = Camera.main.WorldToViewportPoint(asteroid.position);
+
+        bool isVisible =
+            viewportPoint.z > 0 &&
+            viewportPoint.x > 0 && viewportPoint.x < 1 &&
+            viewportPoint.y > 0 && viewportPoint.y < 1;
+
+        if (isVisible)
+        {
+            icon.gameObject.SetActive(false);
+            return;
+        }
+
+        icon.gameObject.SetActive(true);
+
+        Vector3 screenPoint = Camera.main.WorldToScreenPoint(asteroid.position);
+
         if (screenPoint.z < 0)
         {
             screenPoint *= -1;
         }
 
-        // Clamp to screen edge
         screenPoint.x = Mathf.Clamp(screenPoint.x, screenEdgeMargin, Screen.width - screenEdgeMargin);
         screenPoint.y = Mathf.Clamp(screenPoint.y, screenEdgeMargin, Screen.height - screenEdgeMargin);
 
-        radarIcon.position = screenPoint;
+        icon.position = screenPoint;
 
-        // Rotate to face asteroid direction
         Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
         Vector3 direction = (screenPoint - screenCenter).normalized;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        radarIcon.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        icon.rotation = Quaternion.Euler(0, 0, angle - 90f);
     }
 }

@@ -23,9 +23,13 @@ public class AsteroidSpawner : MonoBehaviour
     // When accessing this list for instantiation or other purposes, please remember this order
 
     [Header("Radar")]
-    public RectTransform radarIcon;   // Assign your UI icon here
+    public RectTransform radarIconPrefab;   // Assign your UI icon prefab here
     public Camera playerCamera;
     public float screenEdgeBuffer = 40f;
+    public int maxRadarIcons = 5;           // How many asteroids to track
+    public float maxRadarDistance = 150f;   // Hide icons past this distance
+
+    private List<RectTransform> radarIcons = new List<RectTransform>();
 
     // Environtmental Timer
     private float m_TotalTime;
@@ -213,68 +217,100 @@ public class AsteroidSpawner : MonoBehaviour
     /*================================================================*/
     //* Methods for Radar System *//
 
-    private void UpdateRadar()
+    private void EnsureRadarIcons()
     {
-        if (radarIcon == null || playerCamera == null || spaceship == null)
+        if (radarIcons.Count == maxRadarIcons)
             return;
 
-        GameObject nearest = null;
-        float closestDistance = float.MaxValue;
+        foreach (var icon in radarIcons)
+        {
+            if (icon != null)
+                Destroy(icon.gameObject);
+        }
+
+        radarIcons.Clear();
+
+        for (int i = 0; i < maxRadarIcons; i++)
+        {
+            RectTransform icon = Instantiate(radarIconPrefab, radarIconPrefab.parent);
+            radarIcons.Add(icon);
+        }
+    }
+
+    private void UpdateRadar()
+    {
+        if (radarIconPrefab == null || playerCamera == null || spaceship == null)
+            return;
+
+        EnsureRadarIcons();
+
+        List<GameObject> validAsteroids = new List<GameObject>();
 
         foreach (GameObject asteroid in asteroidsList)
         {
-            if (asteroid == null) continue;
+            if (asteroid != null)
+                validAsteroids.Add(asteroid);
+        }
 
-            float distance = Vector3.Distance(spaceship.transform.position, asteroid.transform.position);
-            if (distance < closestDistance)
+        validAsteroids.Sort((a, b) =>
+            Vector3.Distance(spaceship.transform.position, a.transform.position)
+            .CompareTo(
+            Vector3.Distance(spaceship.transform.position, b.transform.position)));
+
+        for (int i = 0; i < radarIcons.Count; i++)
+        {
+            if (i >= validAsteroids.Count)
             {
-                closestDistance = distance;
-                nearest = asteroid;
+                radarIcons[i].gameObject.SetActive(false);
+                continue;
             }
+
+            GameObject target = validAsteroids[i];
+            float distance = Vector3.Distance(spaceship.transform.position, target.transform.position);
+
+            if (distance > maxRadarDistance)
+            {
+                radarIcons[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            Vector3 viewportPos = playerCamera.WorldToViewportPoint(target.transform.position);
+
+            bool isVisible =
+                viewportPos.z > 0 &&
+                viewportPos.x > 0 && viewportPos.x < 1 &&
+                viewportPos.y > 0 && viewportPos.y < 1;
+
+            if (isVisible)
+            {
+                radarIcons[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            radarIcons[i].gameObject.SetActive(true);
+
+            Vector3 direction = (target.transform.position - spaceship.transform.position).normalized;
+            Vector3 screenDir = playerCamera.WorldToScreenPoint(spaceship.transform.position + direction) -
+                                playerCamera.WorldToScreenPoint(spaceship.transform.position);
+
+            float angle = Mathf.Atan2(screenDir.y, screenDir.x) * Mathf.Rad2Deg;
+            radarIcons[i].rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+            Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+            Vector3 edgePosition = screenCenter + screenDir.normalized * (Screen.height / 2f - screenEdgeBuffer);
+
+            radarIcons[i].position = edgePosition;
+
+            // Scale icon based on distance
+            float minScale = 0.3f;
+            float maxScale = 2.0f;
+            float scaleMaxDistance = 50f;
+
+            float t = Mathf.Clamp01(1f - (distance / scaleMaxDistance));
+            float scale = Mathf.Lerp(minScale, maxScale, t);
+
+            radarIcons[i].localScale = Vector3.one * scale;
         }
-
-        if (nearest == null)
-        {
-            radarIcon.gameObject.SetActive(false);
-            return;
-        }
-
-        Vector3 viewportPos = playerCamera.WorldToViewportPoint(nearest.transform.position);
-
-        bool isVisible =
-            viewportPos.z > 0 &&
-            viewportPos.x > 0 && viewportPos.x < 1 &&
-            viewportPos.y > 0 && viewportPos.y < 1;
-
-        if (isVisible)
-        {
-            radarIcon.gameObject.SetActive(false);
-            return;
-        }
-
-        radarIcon.gameObject.SetActive(true);
-
-        Vector3 direction = (nearest.transform.position - spaceship.transform.position).normalized;
-        Vector3 screenDir = playerCamera.WorldToScreenPoint(spaceship.transform.position + direction) -
-                            playerCamera.WorldToScreenPoint(spaceship.transform.position);
-
-        float angle = Mathf.Atan2(screenDir.y, screenDir.x) * Mathf.Rad2Deg;
-        radarIcon.rotation = Quaternion.Euler(0, 0, angle - 90f);
-
-        Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
-        Vector3 edgePosition = screenCenter + screenDir.normalized * (Screen.height / 2f - screenEdgeBuffer);
-
-        radarIcon.position = edgePosition;
-
-        //Scale icon based on distance
-        float minScale = 0.3f;     // size when far away
-        float maxScale = 2.0f;     // size when very close
-        float maxDistance = 50f;  // distance where scaling stops shrinking
-
-        float t = Mathf.Clamp01(1f - (closestDistance / maxDistance));
-        float scale = Mathf.Lerp(minScale, maxScale, t);
-
-        radarIcon.localScale = Vector3.one * scale;
     }
 
     /*================================================================*/

@@ -152,9 +152,6 @@ public class AsteroidSpawner : MonoBehaviour
                                                                 /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
                                                                 /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
                                                                 /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
-            
-            // Set the asteroids ID
-            GenerateAsteroidID(asteroid);
 
             // Apply saved colors to THIS newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();
@@ -184,9 +181,6 @@ public class AsteroidSpawner : MonoBehaviour
                                                                 /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
                                                                 /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
                                                                 /*iMovementDirection =*/direction);
-            
-            // Set the asteroids ID
-            GenerateAsteroidID(asteroid);
 
             // Apply saved colors to THIS newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();
@@ -202,15 +196,19 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
 
+    // Gives the asteroid an ID and adds it to the asteroid list
     public void AddAsteroidToList(GameObject asteroid)
     {
+        GenerateAsteroidID(asteroid);
         asteroidsList.Add(asteroid);
     }
 
     public void RemoveAsteroidFromList(GameObject asteroid)
     {
         int findAsteroidID = asteroid.GetComponent<AsteroidParentClass>().GetAsteroidID();
+        Debug.Log($"[Debug in AsteroidSpawner.cs] {asteroid} ID is {findAsteroidID}");
         int findAsteroidIndex = asteroidsList.FindIndex(x => x.GetComponent<AsteroidParentClass>().GetAsteroidID() == findAsteroidID);
+        Debug.Log($"[Debug in AsteroidSpawner.cs] {asteroid} with ID {findAsteroidID} is at index {findAsteroidIndex}");
         asteroidsList.RemoveAt(findAsteroidIndex);
     }
 

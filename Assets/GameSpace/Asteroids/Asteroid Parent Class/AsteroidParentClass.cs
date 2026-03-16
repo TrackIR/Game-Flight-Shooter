@@ -11,7 +11,7 @@ public class AsteroidParentClass : MonoBehaviour
     }
 
     // For identification of unique asteroids when necessary
-    private int _asteroidID;
+    [SerializeField] private int _asteroidID;
     public int asteroidID { get { return _asteroidID; } set { _asteroidID = value; } }
 
     // Asteroid Stats

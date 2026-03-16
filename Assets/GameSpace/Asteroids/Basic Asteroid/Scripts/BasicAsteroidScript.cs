@@ -2,13 +2,26 @@ using UnityEngine;
 
 public class BasicAsteroid : AsteroidParentClass
 {
-    // * Key:
-    // * this.gameObject.transform.parent = AsteroidSpawner game object
+    GameObject asteroidSpawner;
+
+    private void Start()
+    {
+        asteroidSpawner = this.gameObject.transform.parent.gameObject;
+    }
 
     public override void Die()
     {
         Debug.Log("Asteroid Shot!");
         Split();
+        ScoreManager.Instance.AddScore(1);
+        PlayDeathEffects();
+        RemoveSelfFromAsteroidsList();
+        Destroy(gameObject);
+    }
+
+    public void DieNoSplit()
+    {
+        Debug.Log("Asteroid exploded with bomb!");
         ScoreManager.Instance.AddScore(1);
         PlayDeathEffects();
         RemoveSelfFromAsteroidsList();
@@ -32,9 +45,8 @@ public class BasicAsteroid : AsteroidParentClass
                                                                 /*iMovementDirection =*/GenerateRandomDirection(0.5f, 1.0f).normalized);
             
             // Set the split asteroids parent to the current asteroids parent
-            Transform asteroidSpawner = this.gameObject.transform.parent;
             asteroidSpawner.GetComponent<AsteroidSpawner>().AddAsteroidToList(asteroid);
-            asteroid.transform.parent = asteroidSpawner;
+            asteroid.transform.parent = asteroidSpawner.transform;
         }
     }
 
@@ -47,7 +59,7 @@ public class BasicAsteroid : AsteroidParentClass
 
     private void RemoveSelfFromAsteroidsList()
     {
-        this.gameObject.transform.parent.GetComponent<AsteroidSpawner>().RemoveAsteroidFromList(this.gameObject);
+        asteroidSpawner.GetComponent<AsteroidSpawner>().RemoveAsteroidFromList(this.gameObject);
     }
 
     // A method to generate a random vector that is between -1 and 1 exluding 0

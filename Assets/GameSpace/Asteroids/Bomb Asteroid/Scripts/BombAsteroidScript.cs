@@ -19,27 +19,24 @@ public class BombAsteroid : AsteroidParentClass
     {
         foreach (GameObject asteroid in surroundingAsteroids)
         {
-            if (asteroid != null)
+            Debug.Log($"[Debug in BombAsteroidScript.cs] {asteroid.name} is of type {asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType()}");
+            
+            switch (asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType())
             {
-                switch (asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType())
-                {
-                    case AsteroidParentClass.AsteroidInheritanceType.Basic:
-                        asteroid.GetComponent<BasicAsteroid>().Die();
-                        break;
-                    case AsteroidParentClass.AsteroidInheritanceType.Healing:
-                        asteroid.GetComponent<HealingAsteroid>().Die();
-                        break;
-                    case AsteroidParentClass.AsteroidInheritanceType.Bomb:
-                        asteroid.GetComponent<BombAsteroid>().Die();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            else
-            {
-                surroundingAsteroids.Remove(asteroid);
+                case AsteroidParentClass.AsteroidInheritanceType.Basic:
+                    RemoveFromSurroundingAsteroids(asteroid);
+                    asteroid.GetComponent<BasicAsteroid>().DieNoSplit();
+                    break;
+                case AsteroidParentClass.AsteroidInheritanceType.Healing:
+                    RemoveFromSurroundingAsteroids(asteroid);
+                    asteroid.GetComponent<HealingAsteroid>().Die();
+                    break;
+                case AsteroidParentClass.AsteroidInheritanceType.Bomb:
+                    RemoveFromSurroundingAsteroids(asteroid);
+                    asteroid.GetComponent<BombAsteroid>().Die();
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -49,29 +46,30 @@ public class BombAsteroid : AsteroidParentClass
         if (other.gameObject.layer == LayerMask.NameToLayer("Asteroids") & other.tag == "Asteroid")
         {
             surroundingAsteroids.Add(other.gameObject);
-            Debug.Log("new asteroid added to layer");
+            Debug.Log($"[Debug in BombAsteroidScript.cs] {other.gameObject.name} added to SurroundingAsteroids");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Asteroids") & other.tag == "Asteroid")
+        if (other.gameObject.layer == LayerMask.NameToLayer("Asteroids") && other.tag == "Asteroid")
         {
+            GameObject asteroid = other.gameObject;
+            
             // DEBUG: Null checks for a null error
             if (other == null)
             {
-                Debug.LogError("'Other' collider is null");
+                Debug.LogError($"Collider is null on {asteroid.name}");
                 return;
             }
             
-            GameObject asteroid = other.gameObject;
             if (asteroid == null)
             {
-                Debug.LogError("Asteorid is null");
+                Debug.LogError($"{asteroid.name} is null");
                 return;
             }
 
-            Debug.Log($"{asteroid.GetComponent<Collider>().tag} tag on {asteroid.name}");
+            Debug.Log($"[Debug in BombAsteroidScript.cs] {other.tag} tag on {asteroid.name}");
 
             AsteroidParentClass asteroidComp = asteroid.GetComponent<AsteroidParentClass>();
             if (asteroidComp == null)
@@ -81,13 +79,19 @@ public class BombAsteroid : AsteroidParentClass
             }
         }
 
-        // if (other.gameObject.layer == LayerMask.NameToLayer("Asteroids"))
-        // {
-        //     GameObject asteroid = other.gameObject;
-        //     int findAsteroidID = asteroid.GetComponent<AsteroidParentClass>().GetAsteroidID();
-        //     int findAsteroidIndex = surroundingAsteroids.FindIndex(x => x.GetComponent<AsteroidParentClass>().GetAsteroidID() == findAsteroidID);
-        //     surroundingAsteroids.RemoveAt(findAsteroidIndex);
-        // }
+        if (other.gameObject.layer == LayerMask.NameToLayer("Asteroids") && other.tag == "Asteroid")
+        {
+            GameObject asteroid = other.gameObject;
+
+            // Null check the asteroid, because this will trigger if it dies from the explosion and thus perform this logic twice
+            if (asteroid == null)
+            {
+                Debug.LogError($"[Debug in BombAsteroidScript.cs] {asteroid} is null! We have a problem!");
+                return;
+            }
+
+            RemoveFromSurroundingAsteroids(asteroid);
+        }
     }
 
     private void PlayDeathEffects()
@@ -100,6 +104,14 @@ public class BombAsteroid : AsteroidParentClass
     private void RemoveSelfFromAsteroidsList()
     {
         this.gameObject.transform.parent.GetComponent<AsteroidSpawner>().RemoveAsteroidFromList(this.gameObject);
+    }
+
+    private void RemoveFromSurroundingAsteroids(GameObject asteroid)
+    {
+        int findAsteroidID = asteroid.GetComponent<AsteroidParentClass>().GetAsteroidID();
+        int findAsteroidIndex = surroundingAsteroids.FindIndex(x => x.GetComponent<AsteroidParentClass>().GetAsteroidID() == findAsteroidID);
+        surroundingAsteroids.RemoveAt(findAsteroidIndex);
+        Debug.Log($"[Debug in BombAsteroidScript.cs] {asteroid.name} removed from SurroundingAsteroids");
     }
 }
 

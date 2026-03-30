@@ -32,13 +32,15 @@ public class AsteroidSpawner : MonoBehaviour
     
     // Asteroid variables
     private AsteroidType m_SpawnType = AsteroidType.Random;
-    private float m_AsteroidMinSize = 2.0f;
-    private float m_AsteroidMaxSize = 4.99f;
-    private float m_AsteroidSpeedFloor = 5.0f;
+    private float m_AsteroidMinSize = 20.0f;
+    private float m_AsteroidMaxSize = 49.99f;
+    private float m_AsteroidSpeedFloor = 15.0f;
+
+    public int m_AsteroidStartAmount = 10;
 
     void Start()
     {
-        spawnAsteroidNoDirection(100);
+        spawnAsteroidNoDirection(m_AsteroidStartAmount);
     }
 
     void Update()
@@ -49,9 +51,9 @@ public class AsteroidSpawner : MonoBehaviour
         if (m_Timer >= m_SpawnTime)
         {
             if (m_SpawnType == AsteroidType.Random)
-                spawnAsteroidNoDirection(10);
+                spawnAsteroidNoDirection(5);
             else if (m_SpawnType == AsteroidType.Directional)
-                spawnAsteroidSpaceshipDirection(10);
+                spawnAsteroidSpaceshipDirection(5);
             m_Timer = 0.0f;
             UpdateSpawnTime();
             UpdateSpawnType();

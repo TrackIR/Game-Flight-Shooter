@@ -22,6 +22,10 @@ public class Boundary : MonoBehaviour
 
     void Start()
     {
+        if (PlayerPrefs.GetInt("ts") == 1)
+        {
+            boxSize = new Vector3(200f, 200f, 200f);
+        }
         halfSize = boxSize * 0.5f;
         rb = GetComponent<Rigidbody>();
     }

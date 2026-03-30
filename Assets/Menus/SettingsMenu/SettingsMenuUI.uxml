@@ -48,6 +48,12 @@
                         <ui:Button text="Third" name="pointofView" class="SmallNeonButton" style="width: 200px;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
+                <ui:VisualElement name="TradeShow" class="SettingRow">
+                    <ui:Label text="Trade Show" name="TradeShowLabel" class="SettingName"/>
+                    <ui:VisualElement class="SettingControl ToggleControl" style="justify-content: center;">
+                        <ui:Button text="ON" name="TradeShowButton" class="SmallNeonButton" style="width: 200px;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:VisualElement name="NavButtons" style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 18px;">
                     <ui:Button name="backButton" class="MainMenuButton" style="width: 225px; margin-right: 36px;">
                         <ui:VisualElement class="ButtonFill"/>

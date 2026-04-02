@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Menus/MenuStyle.uss?fileID=7433441132597879392&amp;guid=1bda5f1b0a660b842850d9bec8f30d82&amp;type=3#MenuStyle"/>
     <ui:VisualElement name="MenuContainer" style="flex-grow: 1; align-content: center; justify-content: center; align-self: auto; align-items: stretch;">
-        <ui:VisualElement name="root" class="SettingsPanel" style="width: 45%;">
-            <ui:VisualElement name="header" style="width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; padding-bottom: 10px;">
-                <ui:Label text="SETTINGS" name="Label" class="SettingsTitle"/>
+        <ui:VisualElement name="root" class="SettingsPanel" style="width: 45%; height: 80%;">
+            <ui:VisualElement name="header" style="width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; padding-bottom: 35px; align-content: flex-start;">
+                <ui:Label text="SETTINGS" name="Label" class="SettingsTitle" style="align-content: flex-start; align-self: center; justify-content: flex-start; align-items: center; margin-top: 0; padding-top: 0; margin-right: 2px; padding-right: 1px; padding-bottom: 0; margin-bottom: 0; -unity-text-align: middle-left;"/>
             </ui:VisualElement>
             <ui:VisualElement name="settingsArea" class="SettingsArea">
                 <ui:VisualElement name="AnugularMomentum" class="SettingRow">

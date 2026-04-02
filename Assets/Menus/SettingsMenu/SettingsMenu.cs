@@ -73,7 +73,7 @@ public class SettingsMenu : MonoBehaviour
         backButton.clicked += LeaveMenu;
         defaultsButton.clicked += RestoreDefaults;
         audioButton.clicked += ToAudioMenu;
-        tsButton.clicked += tsToggle;
+        tsButton.clicked += TSToggle;
     }
 
     private void GetSettingsPrefs()
@@ -82,6 +82,8 @@ public class SettingsMenu : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("angMoment") == 1)
                 angularMomentum.text = "ON";
+            else
+                angularMomentum.text = "OFF";
         }
         else
             angularMomentum.text = "OFF";
@@ -108,6 +110,11 @@ public class SettingsMenu : MonoBehaviour
                 fullScreen.text = "ON";
                 Screen.fullScreen = true;
             }
+            else
+            {
+                fullScreen.text = "OFF";
+                Screen.fullScreen = false;
+            }
         }
         else
         {
@@ -122,12 +129,18 @@ public class SettingsMenu : MonoBehaviour
                 pov.text = "First";
                 CameraSwitcher.isFirstPerson = true;
             }
+            else
+            {
+                pov.text = "Third";
+                CameraSwitcher.isFirstPerson = false;
+            }
         }
         else
         {
             pov.text = "Third";
             CameraSwitcher.isFirstPerson = false;
         }
+
         if (PlayerPrefs.HasKey("ts"))
         {
             if (PlayerPrefs.GetInt("ts") == 1)
@@ -137,7 +150,6 @@ public class SettingsMenu : MonoBehaviour
         }
         else
             tsButton.text = "OFF";
-
     }
     private void OnDisable()
     {
@@ -168,7 +180,7 @@ public class SettingsMenu : MonoBehaviour
         backButton.clicked -= LeaveMenu;
         defaultsButton.clicked -= RestoreDefaults;
         audioButton.clicked -= ToAudioMenu;
-        tsButton.clicked -= tsToggle;
+        tsButton.clicked -= TSToggle;
 
     }
 
@@ -245,7 +257,7 @@ public class SettingsMenu : MonoBehaviour
         tsButton.text = "ON";
     }
 
-    private void tsToggle()
+    private void TSToggle()
     {
         if (tsButton.text == "OFF")
             tsButton.text = "ON";

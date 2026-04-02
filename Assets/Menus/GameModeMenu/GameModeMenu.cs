@@ -1,0 +1,60 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
+
+public class GameModeMenu : MonoBehaviour
+{
+    [SerializeField] UIDocument gameModeMenuDocument;
+
+    public static int gameModeSetting = 0;
+
+    public GameObject gameModeMenu;
+    public GameObject mainMenu;
+
+
+    private Button endlessButton;
+    private Button waveButton;
+    private Button backButton;
+
+
+    private void OnEnable()
+    {
+        VisualElement root = gameModeMenuDocument.rootVisualElement;
+
+        endlessButton = root.Q<Button>("endlessButton");
+        waveButton = root.Q<Button>("waveButton");
+        backButton = root.Q<Button>("backButton");
+
+
+        endlessButton.clicked += EndlessMode;
+        waveButton.clicked += WaveMode;
+        backButton.clicked += MenuBack;
+    }
+
+    private void OnDisable()
+    {
+        endlessButton.clicked -= EndlessMode;
+        waveButton.clicked -= WaveMode;
+        backButton.clicked -= MenuBack;
+    }
+
+    private void EndlessMode()
+    {
+        // set variable for the GameScene to look at
+        gameModeSetting = 1;        // 1 for endless
+        SceneManager.LoadScene("GameScene");
+    }
+
+    private void WaveMode()
+    {
+        // set variable for the GameScene to look at
+        gameModeSetting = 2;        // 2 for waves
+        SceneManager.LoadScene("GameScene");
+    }
+
+    private void MenuBack()
+    {
+        gameModeMenu.SetActive(false);
+        mainMenu.SetActive(true);
+    }
+}

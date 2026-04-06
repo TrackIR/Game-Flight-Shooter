@@ -16,12 +16,6 @@ public class SpaceshipShoot : MonoBehaviour
         shootAction.Enable();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnDestroy()
     {
         shootAction.Disable();
@@ -70,11 +64,11 @@ public class SpaceshipShoot : MonoBehaviour
         laserRight.GetComponent<Laser>().forwardDirection = transform.forward;
 
         /* Put a third laser in the middle to hopefully help with collision detection */
-        Vector3 middleLocal = new Vector3(0.0f, 0.0f, 0.0f);
-        Vector3 middleWorldPos = transform.TransformPoint(middleLocal);
-        GameObject laserMiddle = Instantiate(laserObject, middleWorldPos, spawnRotation);
-        laserMiddle.GetComponent<Laser>().forwardDirection = transform.forward;
-        laserMiddle.GetComponent<MeshRenderer>().enabled = false;
+        // Vector3 middleLocal = new Vector3(0.0f, 0.0f, 0.0f);
+        // Vector3 middleWorldPos = transform.TransformPoint(middleLocal);
+        // GameObject laserMiddle = Instantiate(laserObject, middleWorldPos, spawnRotation);
+        // laserMiddle.GetComponent<Laser>().forwardDirection = transform.forward;
+        // laserMiddle.GetComponent<MeshRenderer>().enabled = false;
 
         // Shake da camera oh yeah shake shake shake
         StartCoroutine(cameraShake.Shake(.1f, .01f));

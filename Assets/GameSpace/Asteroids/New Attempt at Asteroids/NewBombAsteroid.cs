@@ -1,0 +1,50 @@
+using UnityEngine;
+
+public class NewBombAsteroid : AsteroidClass
+{
+    // Radius of field to check for asteroids when exploding
+    [SerializeField] private int explosionRadius = 5;
+
+    // Set the type of the asteroid
+    public override void InitType(InheritanceType t)
+    {
+        type = t;
+    }
+
+    // Override the die method to fit the asteroid type (bomb)
+    public override void Die(bool diedByBomb)
+    {
+        Debug.Log("Bomb Asteroid Hit!");
+        ScoreManager.Instance.AddScore(1);
+        PlayDeathFX();
+
+        // Don't explode other astroids if this asteroid was exploded
+        if (!diedByBomb)
+            Explode();
+
+        Destroy(gameObject);
+    }
+
+    // Override the fx method to fit the asteroid type (bomb)
+    public override void PlayDeathFX()
+    {
+        ExplosionParticleVFX explosion = Instantiate(explosionVFX);
+        explosion.transform.position = gameObject.transform.position;
+        SoundManager.PlaySound(SoundType.EXPLOSION);
+    }
+
+    // Explode asteroids in a radius around itself when destroyed
+    private void Explode()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        int i = 0;
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.tag != "Asteroid") continue;
+            Debug.Log("DEBUG: Hit collider " + i  + ": " + hitCollider);
+            if (hitCollider.gameObject == this.gameObject) continue;
+            hitCollider.GetComponent<AsteroidClass>().Die(true); // diedByBomb = true
+            i++;
+        }
+    }
+}

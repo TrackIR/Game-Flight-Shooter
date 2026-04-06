@@ -39,30 +39,16 @@ public class Laser : MonoBehaviour
         // Declare the container for hit data
         RaycastHit hitData;
 
-        if (Physics.SphereCast(transform.position, raycastSize, forwardDirection, out hitData, 1.0f, layerMask) && hitData.collider.tag == "Asteroid")
+
+        if (Physics.SphereCast(transform.position, raycastSize, forwardDirection, out hitData, 1.0f, layerMask) && hitData.transform.tag == "Asteroid")
         {
+            Debug.Log(hitData.transform.gameObject);
+
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;
-
             Debug.Log("Asteroid hit!");
-
-            // Now we need to check what type of asteroid it is
-            Debug.Log("Hit asteroid is of type " + asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType().ToString());
-            
-            switch (asteroid.GetComponent<AsteroidParentClass>().GetAsteroidType())
-            {
-                case AsteroidParentClass.AsteroidInheritanceType.Basic:
-                    asteroid.GetComponent<BasicAsteroid>().Die();
-                    break;
-                case AsteroidParentClass.AsteroidInheritanceType.Healing:
-                    asteroid.GetComponent<HealingAsteroid>().Die();
-                    break;
-                case AsteroidParentClass.AsteroidInheritanceType.Bomb:
-                    asteroid.GetComponent<BombAsteroid>().Die();
-                    break;
-                default:
-                    break;
-            }
+            asteroid.GetComponent<AsteroidClass>().Die(false); // diedByBomb = false
+            asteroid.GetComponent<AsteroidClass>().hitByLaser = true;
 
             Destroy(gameObject);
         }

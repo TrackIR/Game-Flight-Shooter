@@ -4,15 +4,26 @@ public class BasicAsteroid : AsteroidParentClass
 {
     GameObject asteroidSpawner;
 
+    private bool isDead = false;
+
     private void Start()
     {
         asteroidSpawner = this.gameObject.transform.parent.gameObject;
+        if (asteroidSpawner == null)
+            Debug.Log("asteroid spawner not found");
     }
 
     public override void Die()
     {
-        Debug.Log("Asteroid Shot!");
+        // Debug.Log("Asteroid Shot!");
+
+        if(isDead)
+            return;
+
+        isDead = true;
+
         Split();
+
         ScoreManager.Instance.AddScore(1);
         PlayDeathEffects();
         RemoveSelfFromAsteroidsList();
@@ -22,6 +33,12 @@ public class BasicAsteroid : AsteroidParentClass
     public void DieNoSplit()
     {
         Debug.Log("Asteroid exploded with bomb!");
+
+        if(isDead)
+            return;
+
+        isDead = true;
+        
         ScoreManager.Instance.AddScore(1);
         PlayDeathEffects();
         RemoveSelfFromAsteroidsList();
@@ -30,7 +47,7 @@ public class BasicAsteroid : AsteroidParentClass
 
     public override void Split()
     {
-        if (size - 1 == 0)
+        if (size <= 10)
             return;
 
         // Spawn child asteroids
@@ -38,7 +55,7 @@ public class BasicAsteroid : AsteroidParentClass
         {
             GameObject asteroid = Instantiate(asteroidPrefab, transform.position, Quaternion.identity);
             children.Add(asteroid);
-            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */gameObject.GetComponent<AsteroidParentClass>().size - 1,
+            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */gameObject.GetComponent<AsteroidParentClass>().size / 2,
                                                                 /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
                                                                 /*iRotationDirection =*/GenerateRandomDirection(0.5f, 1.0f).normalized,
                                                                 /*iMovementSpeed =*/Random.Range(4.0f, 5.0f),
@@ -59,7 +76,11 @@ public class BasicAsteroid : AsteroidParentClass
 
     private void RemoveSelfFromAsteroidsList()
     {
-        asteroidSpawner.GetComponent<AsteroidSpawner>().RemoveAsteroidFromList(this.gameObject);
+        asteroidSpawner
+            .GetComponent<AsteroidSpawner>()
+            .RemoveAsteroidFromList
+            (this
+            .gameObject);
     }
 
     // A method to generate a random vector that is between -1 and 1 exluding 0

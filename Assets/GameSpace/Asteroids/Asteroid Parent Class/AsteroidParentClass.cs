@@ -14,6 +14,7 @@ public class AsteroidParentClass : MonoBehaviour
     [SerializeField] private int _asteroidID;
     public int asteroidID { get { return _asteroidID; } set { _asteroidID = value; } }
 
+    
     // Asteroid Stats
     [SerializeField] protected AsteroidInheritanceType asteroidType;
     public int size;
@@ -32,7 +33,7 @@ public class AsteroidParentClass : MonoBehaviour
 
     /*=== Common asteroid logic ===*/
 
-    public void Init(int iSize, 
+    public AsteroidParentClass Init(int iSize, 
                      float iRotationSpeed, 
                      Vector3 iRotationDirection, 
                      float iMovementSpeed,
@@ -45,12 +46,10 @@ public class AsteroidParentClass : MonoBehaviour
         movementDirection = iMovementDirection;
         
         transform.localScale = new Vector3(size, size, size);
+
+        return this;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() {}
-
-    // Update is called once per frame
     void Update()
     {
         transform.Rotate(rotationDirection * rotationSpeed * Time.deltaTime);

@@ -9,7 +9,7 @@
                 <ui:Button name="playButton" selectable="false" focusable="false" parse-escape-sequences="false" enabled="true" class="MainMenuButton">
                     <ui:VisualElement class="ButtonFill"/>
                     <ui:VisualElement class="ButtonSheen"/>
-                    <ui:Label text="Game Modes" name="playLabel" class="ButtonText" style="font-size: 60px;"/>
+                    <ui:Label text="Play" name="playLabel" class="ButtonText" style="font-size: 60px;"/>
                 </ui:Button>
                 <ui:Button name="settingButton" class="MainMenuButton">
                     <ui:VisualElement class="ButtonFill"/>

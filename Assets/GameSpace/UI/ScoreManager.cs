@@ -17,7 +17,7 @@ public class ScoreManager : MonoBehaviour
     {
         score += amount + count;
         count++;
-        Debug.Log("Score: " + score);
+        // Debug.Log("Score: " + score);
     }
 
     public int GetScore() => score;

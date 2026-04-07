@@ -43,10 +43,18 @@ public class AsteroidSpawner : MonoBehaviour
     private float m_AsteroidSpeedFloor = 15.0f;
     private int   m_IncrementingAsteroidID = 0;
 
-    public int m_AsteroidStartAmount = 10;
+    public int m_AsteroidStartAmount = 2;
+    
+    private int waveNumber = 1;
+
+    private int gameModeSetting = GameModeMenu.gameModeSetting;
+
 
     void Start()
     {
+        if (gameModeSetting == null || gameModeSetting == 0)
+            gameModeSetting = 2;    // for testing scene directly, endless set to 1, wave set to 2
+
         SpawnAsteroidNoDirection(m_AsteroidStartAmount);
     }
 
@@ -56,6 +64,19 @@ public class AsteroidSpawner : MonoBehaviour
         m_Timer += Time.deltaTime;
         m_TotalTime += Time.deltaTime;
 
+        Debug.Log(gameModeSetting);
+
+        if (gameModeSetting == 1)
+            EndlessModeAsteroids();
+
+        else if (gameModeSetting == 2)
+            WaveModeAsteroids();
+
+        UpdateRadar();
+    }
+
+    void EndlessModeAsteroids()
+    {
         // If we have reached the current spawn timer countdown 
         if (m_Timer >= m_SpawnTime)
         {
@@ -69,13 +90,31 @@ public class AsteroidSpawner : MonoBehaviour
             UpdateSpawnTime();
             UpdateSpawnType();
             
-            Debug.Log("Debug in AsteroidSpawner.cs:28 : Asteroids Spawned");
+            // Debug.Log("Debug in AsteroidSpawner.cs:28 : Asteroids Spawned");
             
             // Reset the timer
             m_Timer = 0.0f;
         }
+    }
 
-        UpdateRadar();
+    void WaveModeAsteroids()
+    {
+        //check if there are any asteroids
+        if (asteroidsList.Count == 0)
+        {
+            if (waveNumber == 5)
+            {
+                //finish game
+                //time is score
+                Debug.Log("Finshed wave mode");
+            }
+            else{
+                Debug.Log($"New wave: wave {waveNumber}");
+
+                SpawnAsteroidNoDirection(5 * waveNumber);
+                waveNumber++;
+            }
+        }
     }
 
     /*================================================================*/
@@ -83,29 +122,29 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void UpdateSpawnTime()
     {
-        Debug.Log("Debug in AsteroidSpawner.cs:44 : Total Time = " + SecToMin(m_TotalTime));
+        // Debug.Log("Debug in AsteroidSpawner.cs:44 : Total Time = " + SecToMin(m_TotalTime));
 
         switch (MinAsInt(SecToMin(m_TotalTime)))
         {
             case 1:
                 m_SpawnTime = 5.0f;
                 m_AsteroidSpeedFloor = 8.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:54 : m_SpawnTime = 5.0f");
+                // Debug.Log("Debug in AsteroidSpawner.cs:54 : m_SpawnTime = 5.0f");
                 break;
             case 2:
                 m_SpawnTime = 2.5f;
                 m_AsteroidSpeedFloor = 12.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:58 : m_SpawnTime = 2.5f");
+                // Debug.Log("Debug in AsteroidSpawner.cs:58 : m_SpawnTime = 2.5f");
                 break;
             case 3:
                 m_SpawnTime = 1.0f;
                 m_AsteroidSpeedFloor = 16.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:62 : m_SpawnTime = 1.0f");
+                // Debug.Log("Debug in AsteroidSpawner.cs:62 : m_SpawnTime = 1.0f");
                 break;
             default:
                 m_SpawnTime = 10.0f;
                 m_AsteroidSpeedFloor = 4.0f;
-                Debug.Log("Debug in AsteroidSpawner.cs:66 : m_SpawnTime = 10.0f");
+                // Debug.Log("Debug in AsteroidSpawner.cs:66 : m_SpawnTime = 10.0f");
                 break;
         }
     }
@@ -149,11 +188,12 @@ public class AsteroidSpawner : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), transform.position + (Random.onUnitSphere * 100.0f), Quaternion.identity);
-            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                                /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
+            asteroid.GetComponent<AsteroidParentClass>()
+                                                .Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                                                        /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                        /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                        /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                                                        /*iMovementDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized);
 
             // Apply saved colors to THIS newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();
@@ -177,12 +217,15 @@ public class AsteroidSpawner : MonoBehaviour
         {
             spawnPos = transform.position + (Random.onUnitSphere * 100.0f);
             direction = (spaceship.transform.position - spawnPos).normalized;
+
             GameObject asteroid = Instantiate(ChooseAsteroidClassToSpawn(), spawnPos, Quaternion.identity);
-            asteroid.GetComponent<AsteroidParentClass>().Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
-                                                                /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
-                                                                /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
-                                                                /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
-                                                                /*iMovementDirection =*/direction);
+
+            asteroid.GetComponent<AsteroidParentClass>()
+                                                .Init(  /*iSize = */Mathf.FloorToInt(Random.Range(m_AsteroidMinSize, m_AsteroidMaxSize)),
+                                                        /*iRotationSpeed = */Random.Range(1.0f, 100.0f),
+                                                        /*iRotationDirection =*/new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized,
+                                                        /*iMovementSpeed =*/Random.Range(m_AsteroidSpeedFloor, m_AsteroidSpeedFloor + 4.0f),
+                                                        /*iMovementDirection =*/direction);
 
             // Apply saved colors to THIS newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();
@@ -208,11 +251,20 @@ public class AsteroidSpawner : MonoBehaviour
     public void RemoveAsteroidFromList(GameObject asteroid)
     {
         int findAsteroidID = asteroid.GetComponent<AsteroidParentClass>().GetAsteroidID();
-        Debug.Log($"[Debug in AsteroidSpawner.cs] {asteroid} ID is {findAsteroidID}");
+        // Debug.Log($"[Debug in AsteroidSpawner.cs] {asteroid} ID is {findAsteroidID}");
         int findAsteroidIndex = asteroidsList.FindIndex(x => x.GetComponent<AsteroidParentClass>().GetAsteroidID() == findAsteroidID);
-        Debug.Log($"[Debug in AsteroidSpawner.cs] {asteroid} with ID {findAsteroidID} is at index {findAsteroidIndex}");
-        asteroidsList.RemoveAt(findAsteroidIndex);
+        // Debug.Log($"[Debug in AsteroidSpawner.cs] {asteroid} with ID {findAsteroidID} is at index {findAsteroidIndex}");
+
+        if (findAsteroidIndex >= 0)
+        {
+            asteroidsList.RemoveAt(findAsteroidIndex);
+        }
+        else
+        {
+            Debug.LogWarning($"Asteroid {asteroid} with ID {findAsteroidID} not found in asteroidsList");
+        }
     }
+
 
     /*================================================================*/
     //* Methods for Radar System *//

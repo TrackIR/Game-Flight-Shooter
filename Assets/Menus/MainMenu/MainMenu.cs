@@ -67,14 +67,21 @@ public class MainMenu : MonoBehaviour
 
     private void PlayGame()
     {
-        if (PlayerPrefs.HasKey("ts"))
+        if (!PlayerPrefs.HasKey("ts"))
         {
             if (PlayerPrefs.GetInt("ts") == 1)
                 SceneManager.LoadScene("GameScene");
+            else
+            {
+                mainMenu.SetActive(false);
+                gameModeMenu.SetActive(true);
+            }
         }
-        
-        mainMenu.SetActive(false);
-        gameModeMenu.SetActive(true);
+        else
+        {
+            mainMenu.SetActive(false);
+            gameModeMenu.SetActive(true);
+        }
     }
 
     private void DisplaySettingMenu()

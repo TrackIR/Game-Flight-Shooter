@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewBasicAsteroid : AsteroidClass
+public class BasicAsteroid : AsteroidClass
 {
     // Asteroid prefab for splitting
     [SerializeField] private GameObject asteroidPrefab;
@@ -71,7 +71,7 @@ public class NewBasicAsteroid : AsteroidClass
             asteroid.GetComponent<AsteroidClass>().Init(newSize, randomMoveSpeed, randomRotSpeed, randomMoveDir, randomRotDir);
 
             // Reduce the split number of the asteroid
-            asteroid.GetComponent<NewBasicAsteroid>().curSplitNum -= 1;
+            asteroid.GetComponent<BasicAsteroid>().curSplitNum -= 1;
 
             // Apply the saved color scheme to the newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();

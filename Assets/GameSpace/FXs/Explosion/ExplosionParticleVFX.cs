@@ -23,10 +23,10 @@ public class ExplosionParticleVFX : MonoBehaviour
 
     private void Update()
     {
-        float flashDuration = flashVFX.duration + flashVFX.startLifetime;
-        float sparksDuration = sparksVFX.duration + sparksVFX.startLifetime;
-        float fireDuration = fireVFX.duration + fireVFX.startLifetime;
-        float smokeDuration = smokeVFX.duration + smokeVFX.startLifetime;
+        float flashDuration = flashVFX.main.duration + flashVFX.main.startLifetime.Evaluate(1);
+        float sparksDuration = sparksVFX.main.duration + sparksVFX.main.startLifetime.Evaluate(1);
+        float fireDuration = fireVFX.main.duration + fireVFX.main.startLifetime.Evaluate(1);
+        float smokeDuration = smokeVFX.main.duration + smokeVFX.main.startLifetime.Evaluate(1);
 
         Destroy(flashVFX, flashDuration);
         Destroy(sparksVFX, sparksDuration);

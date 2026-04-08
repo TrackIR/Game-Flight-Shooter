@@ -1781,6 +1781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessGamemode
   asteroidSpawner: {fileID: 456537966}
+  spawnNumber: 3
   spawnTimer: 10
 --- !u!4 &485049512
 Transform:
@@ -3050,61 +3051,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1692036989
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1692036990}
-  - component: {fileID: 1692036991}
-  m_Layer: 0
-  m_Name: AsteroidSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1692036990
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692036989}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 93.7106, y: 0, z: 9.166803}
-  m_LocalScale: {x: 10, y: 10, z: 10}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1692036991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692036989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25714963ba9f3cf428adf5717bc99b62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AsteroidSpawner
-  spaceship: {fileID: 60033867}
-  asteroidPrefabs:
-  - {fileID: 2879669842489544092, guid: 080b9bed2700be24d93cb578d554a5a3, type: 3}
-  - {fileID: 4521327996272954076, guid: d9bb50cda903f6744a9198209c63ce44, type: 3}
-  - {fileID: 6803167386767640557, guid: e272085d4aca8cb4ca812fd231e71feb, type: 3}
-  asteroidsList: []
-  radarIconPrefab: {fileID: 840798862}
-  playerCamera: {fileID: 330585545}
-  screenEdgeBuffer: 40
-  maxRadarIcons: 5
-  maxRadarDistance: 150
 --- !u!1 &1780026797
 GameObject:
   m_ObjectHideFlags: 0
@@ -3734,7 +3680,6 @@ SceneRoots:
   - {fileID: 1580774562}
   - {fileID: 1780026801}
   - {fileID: 1198387378}
-  - {fileID: 1692036990}
   - {fileID: 60033868}
   - {fileID: 708000484}
   - {fileID: 367284544}

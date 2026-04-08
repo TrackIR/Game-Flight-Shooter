@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EndlessGamemode : MonoBehaviour
 {
-    [SerializeField] private AsteroidSpawner2 asteroidSpawner;
+    [SerializeField] private AsteroidSpawner asteroidSpawner;
 
     [SerializeField] private int spawnNumber = 3;
 

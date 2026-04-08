@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 3090465002017071069}
   - component: {fileID: -1854093367213875424}
   - component: {fileID: 1335870249678665103}
+  - component: {fileID: 675305367671045526}
   m_Layer: 3
-  m_Name: NewBasicAsteroid
+  m_Name: BasicAsteroid
   m_TagString: Asteroid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,8 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewBasicAsteroid
   explosionVFX: {fileID: 5333558933292897161, guid: bad5b1ece507efa4c9be534747f28554, type: 3}
+  hitByLaser: 0
   asteroidPrefab: {fileID: 8123916397191553103}
-  splitNum: 3
+  splitTotal: 3
+  curSplitNum: 3
   splitSize: 2
 --- !u!135 &1335870249678665103
 SphereCollider:
@@ -71,6 +74,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &675305367671045526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8123916397191553103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb0a10539241964293ad07af1bd91b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ApplySavedColors
+  target: {fileID: 0}
+  renderers: []
+  materialNameContains: 
+  useSharedMaterial: 1
+  applySpaceshipColor: 0
+  applyAsteroidColor: 0
 --- !u!1001 &519535639084456999
 PrefabInstance:
   m_ObjectHideFlags: 0

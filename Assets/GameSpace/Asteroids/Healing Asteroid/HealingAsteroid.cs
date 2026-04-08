@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewHealingAsteroid : AsteroidClass
+public class HealingAsteroid : AsteroidClass
 {
     // Health item that drops when the asteroid is destroyed
     [SerializeField] private GameObject healthPickupItemPrefab;

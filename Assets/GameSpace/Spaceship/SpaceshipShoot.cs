@@ -35,7 +35,7 @@ public class SpaceshipShoot : MonoBehaviour
         {
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;
-            asteroid.GetComponent<AsteroidParentClass>().Die();
+            asteroid.GetComponent<AsteroidClass>().Die(false);
         }
     }
 

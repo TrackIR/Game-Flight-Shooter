@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewBombAsteroid : AsteroidClass
+public class BombAsteroid : AsteroidClass
 {
     // Radius of field to check for asteroids when exploding
     [SerializeField] private int explosionRadius = 5;

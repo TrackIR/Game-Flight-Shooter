@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2556643104002727770}
   - component: {fileID: 5905301156678069875}
   - component: {fileID: 2015916412418609099}
+  - component: {fileID: -3886307289692343133}
   m_Layer: 3
   m_Name: BasicAsteroidPrefab
   m_TagString: Asteroid
@@ -149,3 +150,18 @@ MonoBehaviour:
   useSharedMaterial: 1
   applySpaceshipColor: 0
   applyAsteroidColor: 1
+--- !u!114 &-3886307289692343133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2879669842489544092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c596d87cb13637d479b7bf2765edc930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Boundary
+  boxSize: {x: 600, y: 600, z: 600}
+  boundaryMode: 0
+  bounceDamping: 0.9

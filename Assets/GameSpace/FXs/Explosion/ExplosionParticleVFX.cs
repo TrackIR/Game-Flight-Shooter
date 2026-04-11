@@ -8,20 +8,9 @@ public class ExplosionParticleVFX : MonoBehaviour
     [SerializeField] private ParticleSystem fireVFX;
     [SerializeField] private ParticleSystem smokeVFX;
 
-    private void Awake()
+    private void Start()
     {
-        SetStopActionDestroy(flashVFX);
-        SetStopActionDestroy(sparksVFX);
-        SetStopActionDestroy(fireVFX);
-        SetStopActionDestroy(smokeVFX);
 
-        PlayVFX();
-    }
-    
-    private static void SetStopActionDestroy(ParticleSystem ps)
-    {
-        var main = ps.main;
-        main.stopAction = ParticleSystemStopAction.Destroy;
     }
 
     public void PlayVFX()
@@ -38,5 +27,21 @@ public class ExplosionParticleVFX : MonoBehaviour
                             smokeVFX.main.duration);
 
         Destroy(gameObject, life + 0.2f);
+    }
+
+    private void Update()
+    {
+        float flashDuration = flashVFX.main.duration + flashVFX.main.startLifetime.Evaluate(1);
+        float sparksDuration = sparksVFX.main.duration + sparksVFX.main.startLifetime.Evaluate(1);
+        float fireDuration = fireVFX.main.duration + fireVFX.main.startLifetime.Evaluate(1);
+        float smokeDuration = smokeVFX.main.duration + smokeVFX.main.startLifetime.Evaluate(1);
+
+        Destroy(flashVFX, flashDuration);
+        Destroy(sparksVFX, sparksDuration);
+        Destroy(fireVFX, fireDuration);
+        Destroy(smokeVFX, smokeDuration);
+
+        if (!flashVFX && !sparksVFX && !fireVFX && !smokeVFX)
+            Destroy(gameObject);
     }
 }

@@ -1,0 +1,59 @@
+using UnityEngine;
+
+public class AsteroidClass : MonoBehaviour
+{
+    public enum InheritanceType
+    {
+        Basic,
+        Healing,
+        Bomb
+    }
+
+    // Explosions will be used on all asteroid types, so they can be set up here
+    [SerializeField] protected ExplosionParticleVFX explosionVFX;
+    
+    protected InheritanceType type;
+    protected int size;
+    protected float moveSpeed;
+    protected float rotSpeed;
+    protected Vector3 moveDir;
+    protected Vector3 rotDir;
+
+    public bool hitByLaser = false;
+
+    public void Init(int iSize, 
+                     float iMoveSpeed, 
+                     float iRotSpeed, 
+                     Vector3 iMoveDir, 
+                     Vector3 iRotDir)
+    {
+        size = iSize;
+        moveSpeed = iMoveSpeed;
+        rotSpeed = iRotSpeed;
+        moveDir = iMoveDir;
+        rotDir = iRotDir;
+
+        transform.localScale = new Vector3(size, size, size);        
+    }
+
+    // Move the asteroid each frame while accounting for framerate
+    private void Update()
+    {
+        transform.Rotate(rotDir * rotSpeed * Time.deltaTime);
+        transform.position += moveDir * moveSpeed * Time.deltaTime;
+
+        // DEBUG
+        if (moveSpeed <= 0.0f || rotSpeed <= 0.0f || moveDir == Vector3.zero || rotDir == Vector3.zero)
+            Debug.Log("dud asteroid");
+    }
+
+    public InheritanceType GetAsteroidType()
+    {
+        return type;
+    }
+
+    /*=== Virtual functions for inheritence ===*/
+    public virtual void InitType(InheritanceType t) {}
+    public virtual void Die(bool diedByBomb) {}
+    public virtual void PlayDeathFX() {}
+}

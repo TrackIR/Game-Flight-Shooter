@@ -650,8 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1a8ad1d6939d14e8731e4d9f6d6fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreUI
-  scoreText: {fileID: 213431647}
-  zeroPad: 6
 --- !u!114 &213431647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1695,7 +1693,8 @@ MonoBehaviour:
   asteroidSpawner: {fileID: 456537966}
   spawnTimerMin: 3
   reachSpawnTimerMin: 60
-  initialSpawnTimer: 10
+  initSpawnTimer: 10
+  initSpawnAmount: 10
 --- !u!4 &485049512
 Transform:
   m_ObjectHideFlags: 0
@@ -2479,6 +2478,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e214f7e2163ac74293196885fa6b6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TradeShowMode
+  asteroidSpawner: {fileID: 456537966}
+  spawnTimerMin: 2
+  reachSpawnTimerMin: 30
+  initSpawnTimer: 7
+  initSpawnAmount: 8
 --- !u!4 &1151369644
 Transform:
   m_ObjectHideFlags: 0
@@ -2821,14 +2825,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c2f84b87bd35914cb720585226694b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthUI
-  player: {fileID: 60033876}
-  maxLives: 3
-  segmentsParent: {fileID: 0}
-  segmentPrefab: {fileID: 0}
-  healthyColor: {r: 1, g: 0.65, b: 0, a: 1}
-  dangerColor: {r: 1, g: 0, b: 0, a: 1}
-  emptyColor: {r: 1, g: 1, b: 1, a: 0.15}
-  livesText: {fileID: 0}
 --- !u!1 &1580774559
 GameObject:
   m_ObjectHideFlags: 0

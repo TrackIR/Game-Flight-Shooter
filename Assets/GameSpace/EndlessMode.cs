@@ -10,19 +10,19 @@ public class EndlessMode : MonoBehaviour
     [Header("Spawner Settings")]
     [SerializeField] float spawnTimerMin = 3;
     [SerializeField] float reachSpawnTimerMin = 60;
-    [SerializeField] float initialSpawnTimer = 10;
+    [SerializeField] float initSpawnTimer = 10;
+    [SerializeField] int initSpawnAmount = 10;
 
     private float spawnTimer = 0;
     private float curTime = 0.0f;
 
     private float spawnEquationM;
 
-
     void Start()
     {
-        spawnEquationM = (spawnTimerMin - initialSpawnTimer) / reachSpawnTimerMin;
+        spawnEquationM = (spawnTimerMin - initSpawnTimer) / reachSpawnTimerMin;
 
-        asteroidSpawner.SpawnXAsteroids(10 - spawnNumber);
+        asteroidSpawner.SpawnXAsteroids(initSpawnAmount - spawnNumber);
     }
 
     void Update()
@@ -32,10 +32,10 @@ public class EndlessMode : MonoBehaviour
 
         if (spawnTimer <= 0.0f)
         {
-            Debug.Log("Timer reached 0, spawning an asteroid");
+            // Debug.Log("Timer reached 0, spawning an asteroid");
 
             // Reset Spawn timer based on the equation
-            spawnTimer = (spawnEquationM * curTime) + initialSpawnTimer;
+            spawnTimer = (spawnEquationM * curTime) + initSpawnTimer;
 
             if (spawnTimer < spawnTimerMin)
                 spawnTimer = spawnTimerMin;

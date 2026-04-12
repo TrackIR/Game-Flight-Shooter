@@ -108,7 +108,7 @@ public class SpaceshipDamage : MonoBehaviour
 
         yield return StartCoroutine(BlinkShipModel());
 
-        /**== Not In Use ==**/
+        /**== Not In Use ==**/ //resets spaceship to center
         // yield return StartCoroutine(FadeToBlack());
 
         // // Move, stop, and reorient spaceship

@@ -473,11 +473,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f591e4545a759442a081cc5228d2e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  soundList:
-  - {fileID: 8300000, guid: cdac1e9deb8b0ef4e8a18bdc07c49290, type: 3}
-  - {fileID: 8300000, guid: 7d52d6b3e9bc7bd4fad1e24223888d3b, type: 3}
-  - {fileID: 8300000, guid: ce18fec764b1b0c47a99ddf03f24a5e0, type: 3}
-  - {fileID: 8300000, guid: 9059c13c6d8963b42935410439064407, type: 3}
+  sounds:
+  - sound: 0
+    clip: {fileID: 8300000, guid: 6c1e34e14d9354a4db863341c020c43d, type: 3}
+    volume: 0.25
+  - sound: 1
+    clip: {fileID: 8300000, guid: 4362c4a3535a7684f9e0ee98fbcb5c71, type: 3}
+    volume: 0.85
+  - sound: 2
+    clip: {fileID: 8300000, guid: b192ee979bacc0b4893db457f20013f0, type: 3}
+    volume: 0.25
+  - sound: 3
+    clip: {fileID: 8300000, guid: 9059c13c6d8963b42935410439064407, type: 3}
+    volume: 0.5
 --- !u!1 &115963254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 17b4583417a828f4a94dd97df97fc516, type: 3}

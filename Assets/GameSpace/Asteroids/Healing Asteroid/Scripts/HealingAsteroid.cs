@@ -16,6 +16,7 @@ public class HealingAsteroid : AsteroidClass
     {
         Debug.Log("Healing Asteroid Hit!");
         ScoreManager.Instance.AddScore(1);
+        AsteroidSpawner.asteroidCount--;
         PlayDeathFX();
 
         SpawnHealItem();

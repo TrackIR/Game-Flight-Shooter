@@ -100,7 +100,8 @@ public class SpaceshipMovement : MonoBehaviour
         if (PlayerPrefs.HasKey("yawScl"))
             YawScaler = PlayerPrefs.GetFloat("yawScl");
 
-        if (PlayerPrefs.GetInt("ts") == 1)
+        // trade show mode speed settings
+        if (GameModeMenu.gameModeSetting == 0)  // Trade show mode
         {
             float speedMultiplier = 1.75f;
             float accelMultiplier = 1.75f;
@@ -115,7 +116,6 @@ public class SpaceshipMovement : MonoBehaviour
             rb.linearDamping = LinearDamping;
             rb.angularDamping = AngularDamping;
         }
-
     }
 
     // Update is called once per frame

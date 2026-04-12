@@ -307,6 +307,9 @@ MonoBehaviour:
   exteriorShipModel: {fileID: 344812445}
   cockpitModel: {fileID: 115963254}
   cameraHolder: {fileID: 1954084522}
+  cockpitRadar: {fileID: 0}
+  thirdPersonRadar: {fileID: 0}
+  thirdPersonRadarScript: {fileID: 0}
 --- !u!114 &60033876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c596d87cb13637d479b7bf2765edc930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Boundary
-  boxSize: {x: 600, y: 600, z: 600}
+  boxSize: {x: 400, y: 400, z: 400}
   boundaryMode: 0
   bounceDamping: 0.9
 --- !u!82 &60033878
@@ -555,7 +558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoundaryWarningFade
   player: {fileID: 60033868}
   whiteOverlay: {fileID: 153945043}
-  boxSize: {x: 600, y: 600, z: 600}
+  boxSize: {x: 400, y: 400, z: 400}
   warningDistance: 20
   maxAlpha: 0.4
   fadeSpeed: 5
@@ -647,8 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1a8ad1d6939d14e8731e4d9f6d6fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreUI
-  scoreText: {fileID: 213431647}
-  zeroPad: 6
 --- !u!114 &213431647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1610,7 +1611,7 @@ GameObject:
   - component: {fileID: 456537967}
   - component: {fileID: 456537966}
   m_Layer: 0
-  m_Name: AsteroidSpawner2
+  m_Name: AsteroidSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1633,12 +1634,15 @@ MonoBehaviour:
   basicAsteroidPrefab: {fileID: 8123916397191553103, guid: eb756b8de8b16434198104bcd327b734, type: 3}
   healingAsteroidPrefab: {fileID: 2250062479149318844, guid: 562e9238a44e6974ea620344b446bc12, type: 3}
   bombAsteroidPrefab: {fileID: 5300011350229775121, guid: d7f7b5ebad8306541822aedf7360c344, type: 3}
-  minAsteroidSize: 3
-  maxAsteroidSize: 9
-  minAsteroidMoveSpeed: 5
+  minAsteroidSize: 20
+  maxAsteroidSize: 50
+  minAsteroidMoveSpeed: 7
   maxAsteroidMoveSpeed: 10
   minAsteroidRotSpeed: 1
   maxAsteroidRotSpeed: 100
+  TradeShowMode: {fileID: 1151369642}
+  EndlessMode: {fileID: 485049510}
+  WaveMode: {fileID: 1764617318}
 --- !u!4 &456537967
 Transform:
   m_ObjectHideFlags: 0
@@ -1648,11 +1652,14 @@ Transform:
   m_GameObject: {fileID: 456537965}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.05343002, y: 0, z: 1.36882}
+  m_LocalPosition: {x: -0.61855, y: 0, z: 2.48122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 485049512}
+  m_Children:
+  - {fileID: 1151369644}
+  - {fileID: 485049512}
+  - {fileID: 1764617320}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &485049510
 GameObject:
@@ -1665,12 +1672,12 @@ GameObject:
   - component: {fileID: 485049512}
   - component: {fileID: 485049511}
   m_Layer: 0
-  m_Name: EndlessGamemode
+  m_Name: EndlessMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &485049511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1684,8 +1691,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessGamemode
   asteroidSpawner: {fileID: 456537966}
-  spawnNumber: 3
-  spawnTimer: 10
+  spawnTimerMin: 3
+  reachSpawnTimerMin: 60
+  initSpawnTimer: 10
+  initSpawnAmount: 10
 --- !u!4 &485049512
 Transform:
   m_ObjectHideFlags: 0
@@ -1694,13 +1703,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 485049510}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.56512, y: 0, z: 1.1124}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.05343002, y: 0, z: -1.36882}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 456537967}
-  m_Father: {fileID: 0}
+  m_Children: []
+  m_Father: {fileID: 456537967}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &519351340
 PrefabInstance:
@@ -1882,7 +1890,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -2441,6 +2449,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c6276bf3852cf24790436571c087e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrailColor
+--- !u!1 &1151369642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1151369644}
+  - component: {fileID: 1151369643}
+  m_Layer: 0
+  m_Name: TradeShowMode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1151369643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151369642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e214f7e2163ac74293196885fa6b6d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TradeShowMode
+  asteroidSpawner: {fileID: 456537966}
+  spawnTimerMin: 2
+  reachSpawnTimerMin: 30
+  initSpawnTimer: 7
+  initSpawnAmount: 8
+--- !u!4 &1151369644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151369642}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.6185501, y: 1, z: -2.48122}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 456537967}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1189478138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2768,14 +2825,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c2f84b87bd35914cb720585226694b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthUI
-  player: {fileID: 60033876}
-  maxLives: 3
-  segmentsParent: {fileID: 0}
-  segmentPrefab: {fileID: 0}
-  healthyColor: {r: 1, g: 0.65, b: 0, a: 1}
-  dangerColor: {r: 1, g: 0, b: 0, a: 1}
-  emptyColor: {r: 1, g: 1, b: 1, a: 0.15}
-  livesText: {fileID: 0}
 --- !u!1 &1580774559
 GameObject:
   m_ObjectHideFlags: 0
@@ -2918,6 +2967,55 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1764617318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1764617320}
+  - component: {fileID: 1764617319}
+  m_Layer: 0
+  m_Name: WaveMode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1764617319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1764617318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb25a6b0952c1d41bc97a25e9708f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaveMode
+  gameOverMenu: {fileID: 1617551419}
+  asteroidSpawner: {fileID: 456537966}
+  initWaveAmount: 1
+  incWaveAmount: 3
+  waves: 1
+--- !u!4 &1764617320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1764617318}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.6185501, y: 1, z: -2.48122}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 456537967}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1780026797
 GameObject:
@@ -3558,4 +3656,4 @@ SceneRoots:
   - {fileID: 1805313565}
   - {fileID: 1617551422}
   - {fileID: 354861986}
-  - {fileID: 485049512}
+  - {fileID: 456537967}

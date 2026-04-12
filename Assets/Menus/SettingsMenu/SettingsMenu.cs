@@ -23,7 +23,6 @@ public class SettingsMenu : MonoBehaviour
     private Button backButton;
     private Button defaultsButton;
     private Button audioButton;
-    private Button tsButton;
 
     private void OnEnable()
     {
@@ -50,7 +49,6 @@ public class SettingsMenu : MonoBehaviour
         backButton = root.Q<Button>("backButton");
         defaultsButton = root.Q<Button>("defaultsButton");
         audioButton = root.Q<Button>("audioButton");
-        tsButton = root.Q<Button>("TradeShowButton");
 
         // get the current values
         GetSettingsPrefs();
@@ -73,7 +71,6 @@ public class SettingsMenu : MonoBehaviour
         backButton.clicked += LeaveMenu;
         defaultsButton.clicked += RestoreDefaults;
         audioButton.clicked += ToAudioMenu;
-        tsButton.clicked += tsToggle;
     }
 
     private void GetSettingsPrefs()
@@ -82,6 +79,8 @@ public class SettingsMenu : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("angMoment") == 1)
                 angularMomentum.text = "ON";
+            else
+                angularMomentum.text = "OFF";
         }
         else
             angularMomentum.text = "OFF";
@@ -108,6 +107,11 @@ public class SettingsMenu : MonoBehaviour
                 fullScreen.text = "ON";
                 Screen.fullScreen = true;
             }
+            else
+            {
+                fullScreen.text = "OFF";
+                Screen.fullScreen = false;
+            }
         }
         else
         {
@@ -122,22 +126,19 @@ public class SettingsMenu : MonoBehaviour
                 pov.text = "First";
                 CameraSwitcher.isFirstPerson = true;
             }
+            else
+            {
+                pov.text = "Third";
+                CameraSwitcher.isFirstPerson = false;
+            }
         }
         else
         {
             pov.text = "Third";
             CameraSwitcher.isFirstPerson = false;
         }
-        if (PlayerPrefs.HasKey("ts"))
-        {
-            if (PlayerPrefs.GetInt("ts") == 1)
-                tsButton.text = "ON";
-            else
-                tsButton.text = "OFF";
-        }
-        else
-            tsButton.text = "OFF";
 
+        
     }
     private void OnDisable()
     {
@@ -148,7 +149,6 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetFloat("yawScl", yawScale.value);
         PlayerPrefs.SetInt("fullScrn", fullScreen.text == "ON" ? 1 : 0);
         PlayerPrefs.SetInt("povFrst", pov.text == "First" ? 1 : 0);
-        PlayerPrefs.SetInt("ts", tsButton.text == "ON" ? 1 : 0);
         PlayerPrefs.Save();
 
         angularMomentum.clicked -= AMToggle;
@@ -168,8 +168,6 @@ public class SettingsMenu : MonoBehaviour
         backButton.clicked -= LeaveMenu;
         defaultsButton.clicked -= RestoreDefaults;
         audioButton.clicked -= ToAudioMenu;
-        tsButton.clicked -= tsToggle;
-
     }
 
     private void AMToggle()
@@ -242,15 +240,6 @@ public class SettingsMenu : MonoBehaviour
         yawScale.value =  1.5f;
         fullScreen.text = "ON";
         pov.text = "Third";
-        tsButton.text = "ON";
-    }
-
-    private void tsToggle()
-    {
-        if (tsButton.text == "OFF")
-            tsButton.text = "ON";
-        else
-            tsButton.text = "OFF";
     }
 
     private void LeaveMenu()

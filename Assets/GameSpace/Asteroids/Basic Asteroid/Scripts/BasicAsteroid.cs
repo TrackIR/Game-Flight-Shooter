@@ -24,8 +24,9 @@ public class BasicAsteroid : AsteroidClass
         if (hitByLaser)
             return;
         
-        Debug.Log("Basic Asteroid Hit!");
+        // Debug.Log("Basic Asteroid Hit!");
         ScoreManager.Instance.AddScore(1);
+        AsteroidSpawner.asteroidCount--;
         PlayDeathFX();
 
         // Don't split if the asteroid was exploded by a bomb asteroid
@@ -54,21 +55,25 @@ public class BasicAsteroid : AsteroidClass
         for (int i = 0; i < splitSize; i++)
         {
             // Prepare for child asteroid instantiation
-            int newSize = size - ((size / 3) * (curSplitNum - (curSplitNum - 1))); // Size will be reduced for each split
+            // int newSize = size - ((size / 3) * (curSplitNum - (curSplitNum - 1))); // Size will be reduced for each split
+            int newSize = size * 2 / 3;     // the previous line simplified
             // int newSize = size * ((curSplitNum - 1) / splitTotal);
-            float randomMoveSpeed = Random.Range(4.0f, 5.0f);
+
+            float randomMoveSpeed = Random.Range(16.0f, 24.0f);
             float randomRotSpeed = Random.Range(1.0f, 100.0f);
             Vector3 randomMoveDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 randomRotDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 leftPosition = new Vector3(this.transform.position.x - size, this.transform.position.y, this.transform.position.z);
             Vector3 rightPosition = new Vector3(this.transform.position.x + size, this.transform.position.y, this.transform.position.z);
 
-
             // Spawn child asteroid at the parent like we do in the asteroid spawner script, setting its parent to this objects parent
             GameObject asteroid = Instantiate(asteroidPrefab, leftPosition, Quaternion.identity, this.transform.parent);
 
             // Initialize child asteroid
             asteroid.GetComponent<AsteroidClass>().Init(newSize, randomMoveSpeed, randomRotSpeed, randomMoveDir, randomRotDir);
+
+            // Increment asteroid counter
+            AsteroidSpawner.asteroidCount++;
 
             // Reduce the split number of the asteroid
             asteroid.GetComponent<BasicAsteroid>().curSplitNum -= 1;

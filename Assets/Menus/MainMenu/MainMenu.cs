@@ -41,14 +41,6 @@ public class MainMenu : MonoBehaviour
         {
             colorsButton.clicked += DisplayColorsMenu;
         }
-
-        if (PlayerPrefs.HasKey("ts"))
-        {
-            if (PlayerPrefs.GetInt("ts") == 1)
-                playLabel.text = "Play";
-        }
-        else
-            playLabel.text = "Game Modes";
     }
 
     private void OnDisable()
@@ -67,21 +59,8 @@ public class MainMenu : MonoBehaviour
 
     private void PlayGame()
     {
-        if (!PlayerPrefs.HasKey("ts"))
-        {
-            if (PlayerPrefs.GetInt("ts") == 1)
-                SceneManager.LoadScene("GameScene");
-            else
-            {
-                mainMenu.SetActive(false);
-                gameModeMenu.SetActive(true);
-            }
-        }
-        else
-        {
-            mainMenu.SetActive(false);
-            gameModeMenu.SetActive(true);
-        }
+        mainMenu.SetActive(false);
+        gameModeMenu.SetActive(true);
     }
 
     private void DisplaySettingMenu()
@@ -105,7 +84,7 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
 
-        print("game is exiting");
+        Debug.Log("game is exiting");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

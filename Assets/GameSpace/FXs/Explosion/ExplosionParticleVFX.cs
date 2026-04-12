@@ -8,11 +8,6 @@ public class ExplosionParticleVFX : MonoBehaviour
     [SerializeField] private ParticleSystem fireVFX;
     [SerializeField] private ParticleSystem smokeVFX;
 
-    private void Start()
-    {
-
-    }
-
     public void PlayVFX()
     {
         flashVFX.Play();

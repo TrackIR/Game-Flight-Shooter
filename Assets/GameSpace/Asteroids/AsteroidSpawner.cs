@@ -2,34 +2,78 @@ using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
 {
-    [Header("Spawn Position")]
-    // Parent of all asteroids spawned
+    [Header("Spawn Position")]    // Parent of all asteroids spawned
     [SerializeField] private Transform parentOfAsteroids;
+    [SerializeField] private int spawnRadius = 100;    // Radius of perimiter where asteroids can spawn
 
-    // Radius of perimiter where asteroids can spawn
-    [SerializeField] private int spawnRadius = 100;
 
-    [Header("Asteroid Types")]
-    // Different types of asteroids to spawn
+    [Header("Asteroid Types")]    // Different types of asteroids to spawn
     [SerializeField] private GameObject basicAsteroidPrefab;
     [SerializeField] private GameObject healingAsteroidPrefab;
     [SerializeField] private GameObject bombAsteroidPrefab;
 
-    [Header("Asteroid Size")]
-    // Size range of asteroids
-    [SerializeField] private int minAsteroidSize = 1;
-    [SerializeField] private int maxAsteroidSize = 3;
 
-    [Header("Asteroid Move Speed")]
-    // Move speed range of asteroids
-    [SerializeField] private float minAsteroidMoveSpeed = 5.0f;
-    [SerializeField] private float maxAsteroidMoveSpeed = 10.0f;
+    [Header("Asteroid Size")]    // Size range of asteroids
+    [SerializeField] private float minAsteroidSize = 20f;
+    [SerializeField] private float maxAsteroidSize = 50f;
+
+
+    [Header("Asteroid Move Speed")]    // Move speed range of asteroids
+    [SerializeField] private float minAsteroidMoveSpeed = 14.0f;
+    [SerializeField] private float maxAsteroidMoveSpeed = 20.0f;
  
-    [Header("Asteroid Rotation Speed")]
-    // Rotation speed range of asteroids
+
+    [Header("Asteroid Rotation Speed")]    // Rotation speed range of asteroids
     [SerializeField] private float minAsteroidRotSpeed = 1.0f;
     [SerializeField] private float maxAsteroidRotSpeed = 100.0f;
 
+
+    [Header("Game Mode Scripts")]
+    public GameObject TradeShowMode;
+    public GameObject EndlessMode;
+    public GameObject WaveMode;
+    
+    // keeps a count of how many asteroids there are
+    // incs in SpawnXAsteroids function and Basic Asteroid's Split function, decs in each Asteroid's Die function
+    public static int asteroidCount = 0;
+    
+    private int gameModeSetting = GameModeMenu.gameModeSetting;
+
+    void Start()
+    {
+        // for testing different game modes in scene
+        // gameModeSetting = 2;
+
+        switch (gameModeSetting)
+        {
+            case 0:
+                TradeShowModeOn();
+                break;
+            
+            case 1:
+                EndlessModeOn();
+                break;
+
+            case 2:
+                WaveModeOn();
+                break;
+        }
+    }
+
+    private void TradeShowModeOn()
+    {
+        TradeShowMode.SetActive(true);
+    }
+
+    private void EndlessModeOn()
+    {
+        EndlessMode.SetActive(true);
+    }
+
+    private void WaveModeOn()
+    {
+        WaveMode.SetActive(true);
+    }
 
     // Spawns X amount of asteroids in the spawn radius
     public void SpawnXAsteroids(int x)
@@ -38,15 +82,18 @@ public class AsteroidSpawner : MonoBehaviour
         {
             // Prepare asteroid to be instantiated
             GameObject asteroid = null;
-            int randomSize = Random.Range(minAsteroidSize, maxAsteroidSize);
-            float randomMoveSpeed = Random.Range(minAsteroidMoveSpeed, maxAsteroidMoveSpeed);
-            float randomRotSpeed = Random.Range(minAsteroidRotSpeed, maxAsteroidRotSpeed);
-            Vector3 randomMoveDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
-            Vector3 randomRotDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
-            Vector3 randomPosition = parentOfAsteroids.position + (Random.onUnitSphere * spawnRadius);
+            int randomSize = (int)UnityEngine.Random.Range(minAsteroidSize, maxAsteroidSize);
+            float randomMoveSpeed = UnityEngine.Random.Range(minAsteroidMoveSpeed, maxAsteroidMoveSpeed);
+            float randomRotSpeed = UnityEngine.Random.Range(minAsteroidRotSpeed, maxAsteroidRotSpeed);
+            Vector3 randomMoveDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
+            Vector3 randomRotDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
+            // Vector3 randomPosition = parentOfAsteroids.position + (UnityEngine.Random.onUnitSphere * spawnRadius);
+            Vector3 randomPosition = new Vector3(UnityEngine.Random.Range(-170f, 170f), UnityEngine.Random.Range(-170f, 170f), UnityEngine.Random.Range(-170f, 170f));
+            if (GameModeMenu.gameModeSetting == 0)
+                randomPosition /= 2;
 
-            // Generate a random number and use that number for chance calculations
-            int randChance = Random.Range(1, 20);
+            // Generate a random number [0-20) and use that number for chance calculations
+            int randChance = UnityEngine.Random.Range(0, 20);
 
             // Spawn asteroids based on chance variable, set their position and rotation, and add them as a child of the chosen parent
             switch (randChance)
@@ -81,7 +128,9 @@ public class AsteroidSpawner : MonoBehaviour
             else
                 Debug.LogError("Cannot find ApplySavedColors component on " + asteroid);
             
-            print(asteroid.GetComponent<AsteroidClass>().GetAsteroidType());
+            // Debug.Log(asteroid.GetComponent<AsteroidClass>().GetAsteroidType());
+
+            asteroidCount++;
         }
     }
 }

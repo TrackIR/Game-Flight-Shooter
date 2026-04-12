@@ -8,7 +8,7 @@ public class BoundaryWarningFade : MonoBehaviour
     public Image whiteOverlay;
 
     [Header("Boundary Settings")]
-    public Vector3 boxSize = new Vector3(300f, 300f, 300f);
+    public Vector3 boxSize = new Vector3(400f, 400f, 400f);
     public float warningDistance = 20f;
 
     [Header("Fade Settings")]
@@ -19,7 +19,7 @@ public class BoundaryWarningFade : MonoBehaviour
 
     void Start()
     {
-        if (PlayerPrefs.GetInt("ts") == 1)
+        if (GameModeMenu.gameModeSetting == 0)  // Trade show mode
         {
             boxSize = new Vector3(200f, 200f, 200f);
         }

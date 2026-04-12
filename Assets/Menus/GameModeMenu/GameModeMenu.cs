@@ -12,6 +12,7 @@ public class GameModeMenu : MonoBehaviour
     public GameObject mainMenu;
 
 
+    private Button tradeShowButton;
     private Button endlessButton;
     private Button waveButton;
     private Button backButton;
@@ -21,11 +22,13 @@ public class GameModeMenu : MonoBehaviour
     {
         VisualElement root = gameModeMenuDocument.rootVisualElement;
 
+        tradeShowButton = root.Q<Button>("tradeShowButton");
         endlessButton = root.Q<Button>("endlessButton");
         waveButton = root.Q<Button>("waveButton");
         backButton = root.Q<Button>("backButton");
 
 
+        tradeShowButton.clicked += TradeShowMode;
         endlessButton.clicked += EndlessMode;
         waveButton.clicked += WaveMode;
         backButton.clicked += MenuBack;
@@ -33,21 +36,26 @@ public class GameModeMenu : MonoBehaviour
 
     private void OnDisable()
     {
+        tradeShowButton.clicked -= TradeShowMode;
         endlessButton.clicked -= EndlessMode;
         waveButton.clicked -= WaveMode;
         backButton.clicked -= MenuBack;
     }
 
+    private void TradeShowMode()
+    {
+        gameModeSetting = 0;        // 0 for trade show
+        SceneManager.LoadScene("GameScene");
+    }
+    
     private void EndlessMode()
     {
-        // set variable for the GameScene to look at
         gameModeSetting = 1;        // 1 for endless
         SceneManager.LoadScene("GameScene");
     }
 
     private void WaveMode()
     {
-        // set variable for the GameScene to look at
         gameModeSetting = 2;        // 2 for waves
         SceneManager.LoadScene("GameScene");
     }

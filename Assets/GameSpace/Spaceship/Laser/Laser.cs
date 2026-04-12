@@ -16,13 +16,6 @@ public class Laser : MonoBehaviour
         layerMask = LayerMask.GetMask("Asteroids");
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         ForceRaycast();
@@ -46,7 +39,8 @@ public class Laser : MonoBehaviour
 
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;
-            Debug.Log("Asteroid hit!");
+            // Debug.Log("Asteroid hit!");
+
             asteroid.GetComponent<AsteroidClass>().Die(false); // diedByBomb = false
             asteroid.GetComponent<AsteroidClass>().hitByLaser = true;
 

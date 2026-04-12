@@ -14,8 +14,9 @@ public class BombAsteroid : AsteroidClass
     // Override the die method to fit the asteroid type (bomb)
     public override void Die(bool diedByBomb)
     {
-        Debug.Log("Bomb Asteroid Hit!");
+        // Debug.Log("Bomb Asteroid Hit!");
         ScoreManager.Instance.AddScore(1);
+        AsteroidSpawner.asteroidCount--;
         PlayDeathFX();
 
         // Don't explode other astroids if this asteroid was exploded

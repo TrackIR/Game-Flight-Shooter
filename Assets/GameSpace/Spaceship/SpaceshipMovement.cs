@@ -98,7 +98,23 @@ public class SpaceshipMovement : MonoBehaviour
             RollScaler = PlayerPrefs.GetFloat("rollScl");
 
         if (PlayerPrefs.HasKey("yawScl"))
-            YawScaler = PlayerPrefs.GetFloat("yawScl");        
+            YawScaler = PlayerPrefs.GetFloat("yawScl");
+
+        if (PlayerPrefs.GetInt("ts") == 1)
+        {
+            float speedMultiplier = 1.75f;
+            float accelMultiplier = 1.75f;
+            float dampingMultiplier = 0.3f;
+
+            MaxSpeed *= speedMultiplier;
+            ThrustScaler *= accelMultiplier;
+
+            LinearDamping *= dampingMultiplier;
+            AngularDamping *= dampingMultiplier;
+
+            rb.linearDamping = LinearDamping;
+            rb.angularDamping = AngularDamping;
+        }
 
     }
 

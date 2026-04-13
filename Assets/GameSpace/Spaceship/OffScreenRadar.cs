@@ -6,8 +6,8 @@ public class OffscreenRadar : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
-    public List<Transform> asteroids;
-    public RectTransform radarIconPrefab;   // prefab now
+    public Transform asteroidParent;
+    public RectTransform radarIconPrefab;
 
     [Header("UI Sliders")]
     public Slider distanceSlider;
@@ -16,35 +16,50 @@ public class OffscreenRadar : MonoBehaviour
     [Header("Settings")]
     public float screenEdgeMargin = 50f;
     public float maxDistance = 100f;
+    public int maxAsteroidsToShow = 10;
 
-    private List<RectTransform> radarIcons = new List<RectTransform>();
+    private readonly List<Transform> asteroids = new List<Transform>();
+    private readonly List<RectTransform> radarIcons = new List<RectTransform>();
+
+    private Camera mainCam;
 
     void Start()
     {
-        // Distance slider
+        mainCam = Camera.main;
+
         if (distanceSlider != null)
         {
             distanceSlider.value = maxDistance;
             distanceSlider.onValueChanged.AddListener(UpdateDistance);
         }
 
-        // Asteroid amount slider
         if (asteroidCountSlider != null)
         {
-            asteroidCountSlider.value = asteroids.Count;
+            asteroidCountSlider.value = maxAsteroidsToShow;
             asteroidCountSlider.onValueChanged.AddListener(UpdateAsteroidAmount);
         }
-
-        CreateRadarIcons();
     }
 
     void Update()
     {
-        for (int i = 0; i < asteroids.Count; i++)
-        {
-            if (asteroids[i] == null) continue;
+        if (player == null || asteroidParent == null || radarIconPrefab == null)
+            return;
 
-            UpdateRadarForAsteroid(asteroids[i], radarIcons[i]);
+        if (mainCam == null)
+            mainCam = Camera.main;
+
+        RefreshAsteroidList();
+        UpdateClosestAsteroids();
+    }
+
+    void RefreshAsteroidList()
+    {
+        asteroids.Clear();
+
+        foreach (Transform child in asteroidParent)
+        {
+            if (child != null)
+                asteroids.Add(child);
         }
     }
 
@@ -55,37 +70,57 @@ public class OffscreenRadar : MonoBehaviour
 
     void UpdateAsteroidAmount(float value)
     {
-        int targetCount = Mathf.RoundToInt(value);
-
-        while (asteroids.Count > targetCount)
-        {
-            asteroids.RemoveAt(asteroids.Count - 1);
-        }
-
-        CreateRadarIcons();
+        maxAsteroidsToShow = Mathf.RoundToInt(value);
     }
 
-    void CreateRadarIcons()
+    void UpdateClosestAsteroids()
     {
-        // Clear old icons
-        foreach (var icon in radarIcons)
+        asteroids.Sort((a, b) =>
         {
-            if (icon != null)
-                Destroy(icon.gameObject);
+            float distA = Vector3.SqrMagnitude(player.position - a.position);
+            float distB = Vector3.SqrMagnitude(player.position - b.position);
+            return distA.CompareTo(distB);
+        });
+
+        int count = Mathf.Min(maxAsteroidsToShow, asteroids.Count);
+
+        EnsureRadarIconCount(count);
+
+        for (int i = 0; i < count; i++)
+        {
+            UpdateRadarForAsteroid(asteroids[i], radarIcons[i]);
         }
 
-        radarIcons.Clear();
+        for (int i = count; i < radarIcons.Count; i++)
+        {
+            radarIcons[i].gameObject.SetActive(false);
+        }
+    }
 
-        // Create one icon per asteroid
-        foreach (var asteroid in asteroids)
+    void EnsureRadarIconCount(int count)
+    {
+        while (radarIcons.Count < count)
         {
             RectTransform icon = Instantiate(radarIconPrefab, radarIconPrefab.parent);
+            icon.gameObject.SetActive(false);
             radarIcons.Add(icon);
+        }
+
+        while (radarIcons.Count > count)
+        {
+            RectTransform icon = radarIcons[radarIcons.Count - 1];
+            radarIcons.RemoveAt(radarIcons.Count - 1);
+
+            if (icon != null)
+                Destroy(icon.gameObject);
         }
     }
 
     void UpdateRadarForAsteroid(Transform asteroid, RectTransform icon)
     {
+        if (asteroid == null || icon == null || mainCam == null)
+            return;
+
         float distance = Vector3.Distance(player.position, asteroid.position);
 
         if (distance > maxDistance)
@@ -94,12 +129,12 @@ public class OffscreenRadar : MonoBehaviour
             return;
         }
 
-        Vector3 viewportPoint = Camera.main.WorldToViewportPoint(asteroid.position);
+        Vector3 viewportPoint = mainCam.WorldToViewportPoint(asteroid.position);
 
         bool isVisible =
-            viewportPoint.z > 0 &&
-            viewportPoint.x > 0 && viewportPoint.x < 1 &&
-            viewportPoint.y > 0 && viewportPoint.y < 1;
+            viewportPoint.z > 0f &&
+            viewportPoint.x > 0f && viewportPoint.x < 1f &&
+            viewportPoint.y > 0f && viewportPoint.y < 1f;
 
         if (isVisible)
         {
@@ -109,22 +144,46 @@ public class OffscreenRadar : MonoBehaviour
 
         icon.gameObject.SetActive(true);
 
-        Vector3 screenPoint = Camera.main.WorldToScreenPoint(asteroid.position);
+        Vector3 screenPoint = mainCam.WorldToScreenPoint(asteroid.position);
 
-        if (screenPoint.z < 0)
+        if (screenPoint.z < 0f)
         {
-            screenPoint *= -1;
+            screenPoint.x = Screen.width - screenPoint.x;
+            screenPoint.y = Screen.height - screenPoint.y;
         }
 
-        screenPoint.x = Mathf.Clamp(screenPoint.x, screenEdgeMargin, Screen.width - screenEdgeMargin);
-        screenPoint.y = Mathf.Clamp(screenPoint.y, screenEdgeMargin, Screen.height - screenEdgeMargin);
+        Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+        Vector3 direction = (new Vector3(screenPoint.x, screenPoint.y, 0f) - screenCenter).normalized;
 
-        icon.position = screenPoint;
+        float halfWidth = (Screen.width * 0.5f) - screenEdgeMargin;
+        float halfHeight = (Screen.height * 0.5f) - screenEdgeMargin;
 
-        Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
-        Vector3 direction = (screenPoint - screenCenter).normalized;
+        float scaleX = direction.x != 0f ? halfWidth / Mathf.Abs(direction.x) : float.MaxValue;
+        float scaleY = direction.y != 0f ? halfHeight / Mathf.Abs(direction.y) : float.MaxValue;
+        float scale = Mathf.Min(scaleX, scaleY);
+
+        Vector3 edgePosition = screenCenter + direction * scale;
+        icon.position = edgePosition;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        icon.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        icon.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+    }
+
+    public void InitializeRadar(
+        Transform playerTransform,
+        Transform asteroidContainer,
+        RectTransform iconPrefab,
+        Slider maxDistanceSlider = null,
+        Slider maxCountSlider = null,
+        float distanceLimit = 100f,
+        int asteroidLimit = 10)
+    {
+        player = playerTransform;
+        asteroidParent = asteroidContainer;
+        radarIconPrefab = iconPrefab;
+        distanceSlider = maxDistanceSlider;
+        asteroidCountSlider = maxCountSlider;
+        maxDistance = distanceLimit;
+        maxAsteroidsToShow = asteroidLimit;
     }
 }

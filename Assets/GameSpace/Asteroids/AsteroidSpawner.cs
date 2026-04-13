@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AsteroidSpawner : MonoBehaviour
 {
@@ -32,6 +33,16 @@ public class AsteroidSpawner : MonoBehaviour
     public GameObject TradeShowMode;
     public GameObject EndlessMode;
     public GameObject WaveMode;
+
+
+    [Header("Radar Setup")]    // References used to initialize the radar UI
+    [SerializeField] private OffscreenRadar radar;
+    [SerializeField] private Transform player;
+    [SerializeField] private RectTransform radarIconPrefab;
+    [SerializeField] private Slider radarDistanceSlider;
+    [SerializeField] private Slider radarAsteroidCountSlider;
+    [SerializeField] private float radarMaxDistance = 100f;
+    [SerializeField] private int radarMaxTargets = 10;
     
     // keeps a count of how many asteroids there are
     // incs in SpawnXAsteroids function and Basic Asteroid's Split function, decs in each Asteroid's Die function
@@ -41,6 +52,9 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Start()
     {
+        // Initialize radar references safely
+        SetupRadar();
+
         // for testing different game modes in scene
         // gameModeSetting = 2;
 
@@ -58,6 +72,24 @@ public class AsteroidSpawner : MonoBehaviour
                 WaveModeOn();
                 break;
         }
+    }
+
+    private void SetupRadar()
+    {
+        if (radar == null)
+        {
+            Debug.LogWarning("AsteroidSpawner: Radar reference is missing.");
+            return;
+        }
+
+        // Assign references to radar without changing its internal logic
+        radar.player = player;
+        radar.asteroidParent = parentOfAsteroids;
+        radar.radarIconPrefab = radarIconPrefab;
+        radar.distanceSlider = radarDistanceSlider;
+        radar.asteroidCountSlider = radarAsteroidCountSlider;
+        radar.maxDistance = radarMaxDistance;
+        radar.maxAsteroidsToShow = radarMaxTargets;
     }
 
     private void TradeShowModeOn()

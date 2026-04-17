@@ -486,6 +486,8 @@ MonoBehaviour:
   - sound: 3
     clip: {fileID: 8300000, guid: 9059c13c6d8963b42935410439064407, type: 3}
     volume: 0.5
+  gameplayMusic: {fileID: 8300000, guid: f3221a7a17eadce4a85008fc10dd2451, type: 3}
+  gameplayMusicVolume: 0.5
 --- !u!1 &115963254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 17b4583417a828f4a94dd97df97fc516, type: 3}

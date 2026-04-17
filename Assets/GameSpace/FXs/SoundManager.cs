@@ -22,29 +22,53 @@ public class SoundEntry
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundEntry[] sounds;
+    [SerializeField] private AudioClip gameplayMusic;
+    [SerializeField, Range(0f, 1f)] private float gameplayMusicVolume = 1f;
 
     private static SoundManager instance;
-    private AudioSource audioSource;
+    private AudioSource sfxAudioSource;
+    private AudioSource musicAudioSource;
 
     private void Awake()
     {
         instance = this;
+
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        sfxAudioSource = audioSources.Length > 0 ? audioSources[0] : gameObject.AddComponent<AudioSource>();
+
+        if (audioSources.Length > 1)
+        {
+            musicAudioSource = audioSources[1];
+        }
+        else
+        {
+            musicAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        musicAudioSource.playOnAwake = false;
+        musicAudioSource.loop = true;
+        musicAudioSource.spatialBlend = 0f;
     }
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        PlayGameplayMusic();
+    }
+
+    private void Update()
+    {
+        RefreshGameplayMusicVolume();
     }
 
     public static void PlaySound(SoundType sound)
     {
-        if (instance == null || instance.audioSource == null) return;
+        if (instance == null || instance.sfxAudioSource == null) return;
 
         foreach (SoundEntry entry in instance.sounds)
         {
             if (entry.sound == sound && entry.clip != null)
             {
-                instance.audioSource.PlayOneShot(entry.clip, entry.volume);
+                instance.sfxAudioSource.PlayOneShot(entry.clip, entry.volume);
                 return;
             }
         }
@@ -52,16 +76,43 @@ public class SoundManager : MonoBehaviour
 
     public static void PlaySound(SoundType sound, float volumeMultiplier)
     {
-        if (instance == null || instance.audioSource == null) return;
+        if (instance == null || instance.sfxAudioSource == null) return;
 
         foreach (SoundEntry entry in instance.sounds)
         {
             if (entry.sound == sound && entry.clip != null)
             {
                 float finalVolume = Mathf.Clamp01(entry.volume * volumeMultiplier);
-                instance.audioSource.PlayOneShot(entry.clip, finalVolume);
+                instance.sfxAudioSource.PlayOneShot(entry.clip, finalVolume);
                 return;
             }
         }
+    }
+
+    private void PlayGameplayMusic()
+    {
+        if (musicAudioSource == null || gameplayMusic == null)
+        {
+            return;
+        }
+
+        musicAudioSource.clip = gameplayMusic;
+        RefreshGameplayMusicVolume();
+        musicAudioSource.Play();
+    }
+
+    private void RefreshGameplayMusicVolume()
+    {
+        if (musicAudioSource == null)
+        {
+            return;
+        }
+
+        musicAudioSource.mute = AudioSettingsPrefs.IsMuted();
+        musicAudioSource.volume = gameplayMusicVolume
+            * AudioSettingsPrefs.GetSavedVolumeNormalized(AudioSettingsPrefs.MasterVolumeKey)
+            * AudioSettingsPrefs.GetSavedVolumeNormalized(
+                AudioSettingsPrefs.GameplayMusicVolumeKey,
+                fallbackToLegacyMusic: true);
     }
 }

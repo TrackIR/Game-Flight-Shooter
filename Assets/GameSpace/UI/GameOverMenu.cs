@@ -10,6 +10,9 @@ public class GameOverMenu : MonoBehaviour
 
     public GameObject gameOverMenu;
 
+    [SerializeField] private readonly float spacebarDelay = 1.5f;
+    private float menuEnableTime;
+
     private IntegerField scoreField;
     private TextField nameField;
     private Button backButton;
@@ -19,8 +22,8 @@ public class GameOverMenu : MonoBehaviour
     {
         if (menuEnabled && Input.GetKeyDown(KeyCode.Space))
         {
-            //include other button press effects, if any
-            ToMainMenu();
+            if (Time.unscaledTime > menuEnableTime + spacebarDelay)         // add a delay so the player doesn't accidentally click through the menu
+                ToMainMenu();
         }
     }
 
@@ -37,10 +40,9 @@ public class GameOverMenu : MonoBehaviour
         scoreField.value = ScoreManager.Instance.GetScore();
 
         menuEnabled = true;
-
+        menuEnableTime = Time.unscaledTime;
 
         StartCoroutine(FocusNameField());
-
     }
 
 

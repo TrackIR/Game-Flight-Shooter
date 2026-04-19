@@ -58,7 +58,7 @@ public class GameOverMenu : MonoBehaviour
 
     private void ToMainMenu()
     {
-        LeaderboardManager.Instance.AddScore(nameField.value, ScoreManager.Instance.GetScore());
+        LeaderboardManager.Instance.AddScore(nameField.value, ScoreManager.Instance.GetScore(), GameModeMenu.gameModeSetting);
 
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");

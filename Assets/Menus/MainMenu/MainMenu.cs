@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     public GameObject gameModeMenu;
     public GameObject settingsMenu;
     public GameObject colorsMenu;
+    public GameObject leaderboardMenu;
 
 
     private Button playButton;
@@ -18,7 +19,6 @@ public class MainMenu : MonoBehaviour
     private Button exitButton;
     private Button colorsButton;
 
-    private Label playLabel;
 
     private void OnEnable()
     {
@@ -29,8 +29,6 @@ public class MainMenu : MonoBehaviour
         leaderboardButton = root.Q<Button>("leaderboardButton");
         exitButton = root.Q<Button>("exitButton");
         colorsButton = root.Q<Button>("colorsButton");
-
-        playLabel = root.Q<Label>("playLabel");
 
         playButton.clicked += PlayGame;
         settingsButton.clicked += DisplaySettingMenu;
@@ -77,7 +75,8 @@ public class MainMenu : MonoBehaviour
 
     private void DisplayLeaderBoard()
     {
-        SceneManager.LoadScene("Leaderboard");
+        mainMenu.SetActive(false);
+        leaderboardMenu.SetActive(true);
     }
 
     private void ExitGame()

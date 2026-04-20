@@ -700,6 +700,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuUI
   mainMenuDocument: {fileID: 987804716}
+  mainMenuMusic: {fileID: 8300000, guid: f3221a7a17eadce4a85008fc10dd2451, type: 3}
+  mainMenuMusicVolume: 0.5
   mainMenu: {fileID: 987804715}
   gameModeMenu: {fileID: 1068592067}
   settingsMenu: {fileID: 541567679}

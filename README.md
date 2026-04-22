@@ -52,7 +52,7 @@ The project includes a trade show-focused gameplay mode intended for quick publi
 
 ### Polished Visual Interface
 
-The game includes a custom neon space-themed interface, including menus, HUD elements, score display, hull/health status, and visual feedback designed to make the demo feel more like a finished product.
+The game includes a custom neon space-themed interface, including menus, HUD elements, score display, hull/health status, and visual feedback designed to make the demo feel like a finished product.
 
 <!-- ![Main menu and HUD interface]() picture demonstrating this??? -->
 
@@ -87,7 +87,7 @@ Because the project is still in development, some features, setup steps, and dem
 
 ## Demo
 
-A public demo build or video will be linked here when available.
+A public demo build will be linked here when available.
 
 **View the project on GitHub:**  
 [TrackIR: 3D Asteroids Game Repository](https://github.com/TrackIR/Game-Flight-Shooter)
@@ -102,7 +102,26 @@ A public video demo will be linked here when available.
 
 This project is built in **Unity** and uses **TrackIR** hardware for the intended gameplay experience.
 
-### Requirements
+### Running the Project as an Executable
+
+#### Requirements
+
+- [TrackIR hardware and TrackIR software](https://www.trackir.com)
+- Keyboard or button input for firing/selecting actions
+- Windows PC recommended
+
+#### Steps
+1. Set up the TrackIR hardware and start the TrackIR app
+   
+2. Download the public demo above
+   
+3. Unzip the folder
+   
+4. Run the .exe file titled something like `Build-vx.x.exe`
+
+### Opening the Project in Unity
+
+#### Requirements
 
 - Unity Editor
 - [TrackIR hardware and TrackIR software](https://www.trackir.com/)
@@ -110,7 +129,7 @@ This project is built in **Unity** and uses **TrackIR** hardware for the intende
 - Keyboard or button input for firing/selecting actions
 - Repository access through GitHub
 
-### Running Locally
+### Steps
 
 1. Clone the repository:
 
@@ -118,13 +137,17 @@ This project is built in **Unity** and uses **TrackIR** hardware for the intende
    git clone https://github.com/TrackIR/Game-Flight-Shooter
    ```
 
-2. Open the project in Unity.
+2. Open Unity Hub and navigate to Projects
 
-3. Make sure TrackIR hardware and TrackIR software are connected and running.
+3. Click `Add` -> `Add project from disk`
 
-4. Open the main game scene.
+4. Navigate to the cloned repository and `Open` it in the file explorer
 
-5. Press Play in the Unity Editor or run a packaged build if one is available.
+5. Open the project from the Unity Hub project's menu
+
+6. Set up the TrackIR hardware and start the TrackIR app
+
+7. Run the game in the editor or make changes
 
 ---
 

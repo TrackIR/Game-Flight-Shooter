@@ -58,6 +58,33 @@ The game includes a custom neon space-themed interface, including menus, HUD ele
 
 ---
 
+## Intended Audience
+
+This project is intended for:
+
+- OptiTrack / NaturalPoint demo environments
+- Trade show visitors
+- Users interested in head-tracking interaction
+- Developers exploring alternative input systems
+
+---
+
+## Current Status
+
+The project is currently under active development as part of the **Oregon State University Senior Software Engineering Capstone** sequence.
+
+Current work focuses on:
+
+- Improving the feel and reliability of TrackIR-based gameplay
+- Refining asteroid spawning, movement, collision, and splitting behavior
+- Polishing menus, HUD elements, and score display
+- Testing the game in builds, not only inside the Unity Editor
+- Preparing the project for public demonstration, partner feedback, and portfolio use
+
+Because the project is still in development, some features, setup steps, and demo materials may continue to change as the team receives feedback and improves the experience.
+
+---
+
 ## Demo
 
 A public demo build or video will be linked here when available.
@@ -67,7 +94,7 @@ A public demo build or video will be linked here when available.
 
 **Watch the gameplay demo:**
 
-A public video demo will be linked here wwhen available.
+A public video demo will be linked here when available.
 
 ---
 
@@ -78,8 +105,8 @@ This project is built in **Unity** and uses **TrackIR** hardware for the intende
 ### Requirements
 
 - Unity Editor
-- TrackIR hardware and TrackIR software (link here?)
-- Windows PC recommended ???
+- [TrackIR hardware and TrackIR software](https://www.trackir.com/)
+- Windows PC recommended
 - Keyboard or button input for firing/selecting actions
 - Repository access through GitHub
 
@@ -90,6 +117,16 @@ This project is built in **Unity** and uses **TrackIR** hardware for the intende
    ```sh
    git clone https://github.com/TrackIR/Game-Flight-Shooter
    ```
+
+2. Open the project in Unity.
+
+3. Make sure TrackIR hardware and TrackIR software are connected and running.
+
+4. Open the main game scene.
+
+5. Press Play in the Unity Editor or run a packaged build if one is available.
+
+---
 
 ## Team
 
@@ -104,6 +141,8 @@ The team collaborated across gameplay systems, TrackIR integration, UI polish, t
 | Hunter Simpson  | [@itsautummn](https://github.com/itsautummn)         | simpsohu@oregonstate.edu |
 | Jakob Jensen    | [@jensjako](https://github.com/jensjako)             | jensjako@oregonstate.edu |
 | Leo Yudelson    | [@yudelsol](https://github.com/yudelsol)             | yudelsol@oregonstate.edu |
+
+---
 
 ## Project Partner
 

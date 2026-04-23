@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] UIDocument mainMenuDocument;
+    [SerializeField] private AudioClip mainMenuMusic;
+    [SerializeField, Range(0f, 1f)] private float mainMenuMusicVolume = 1f;
 
     public GameObject mainMenu;
     public GameObject gameModeMenu;
@@ -22,6 +24,8 @@ public class MainMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        MainMenuMusicController.Play(mainMenuMusic, mainMenuMusicVolume);
+
         VisualElement root = mainMenuDocument.rootVisualElement;
 
         playButton = root.Q<Button>("playButton");

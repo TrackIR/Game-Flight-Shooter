@@ -20,12 +20,20 @@
                         <ui:Button text="+" name="masterInc" class="SmallNeonButton" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="Music" class="SettingRow">
-                    <ui:Label text="Music Volume" name="musicLabel" class="SettingName" />
+                <ui:VisualElement name="MainMenuMusic" class="SettingRow">
+                    <ui:Label text="Main Menu Music" name="mainMenuMusicLabel" class="SettingName" />
                     <ui:VisualElement class="SettingControl">
-                        <ui:Button text="-" name="musicDec" class="SmallNeonButton" />
-                        <ui:IntegerField value="42" name="musicVol" password="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(67, 79, 84);" />
-                        <ui:Button text="+" name="musicInc" class="SmallNeonButton" />
+                        <ui:Button text="-" name="mainMenuMusicDec" class="SmallNeonButton" />
+                        <ui:IntegerField value="42" name="mainMenuMusicVol" password="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(67, 79, 84);" />
+                        <ui:Button text="+" name="mainMenuMusicInc" class="SmallNeonButton" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="GameplayMusic" class="SettingRow">
+                    <ui:Label text="Gameplay Music" name="gameplayMusicLabel" class="SettingName" />
+                    <ui:VisualElement class="SettingControl">
+                        <ui:Button text="-" name="gameplayMusicDec" class="SmallNeonButton" />
+                        <ui:IntegerField value="42" name="gameplayMusicVol" password="false" class="SettingsLabel NumberField" style="-unity-text-align: middle-center; color: rgb(67, 79, 84);" />
+                        <ui:Button text="+" name="gameplayMusicInc" class="SmallNeonButton" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="SFX" class="SettingRow">

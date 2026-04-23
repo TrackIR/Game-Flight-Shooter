@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-using System;
-
 public class AudioMenu : MonoBehaviour
 {
     [SerializeField] UIDocument audioMenuDocument;
@@ -14,8 +12,10 @@ public class AudioMenu : MonoBehaviour
     private Button muteBut;
     private IntegerField masterVol;
     private Button masterDec, masterInc;
-    private IntegerField musicVol;
-    private Button musicDec, musicInc;
+    private IntegerField mainMenuMusicVol;
+    private Button mainMenuMusicDec, mainMenuMusicInc;
+    private IntegerField gameplayMusicVol;
+    private Button gameplayMusicDec, gameplayMusicInc;
     private IntegerField sfxVol;
     private Button sfxDec, sfxInc;
     private Button backButton;
@@ -32,9 +32,13 @@ public class AudioMenu : MonoBehaviour
         masterInc = root.Q<Button>("masterInc");
         masterDec = root.Q<Button>("masterDec");
 
-        musicVol = root.Q<IntegerField>("musicVol");
-        musicDec = root.Q<Button>("musicDec");
-        musicInc = root.Q<Button>("musicInc");
+        mainMenuMusicVol = root.Q<IntegerField>("mainMenuMusicVol");
+        mainMenuMusicDec = root.Q<Button>("mainMenuMusicDec");
+        mainMenuMusicInc = root.Q<Button>("mainMenuMusicInc");
+
+        gameplayMusicVol = root.Q<IntegerField>("gameplayMusicVol");
+        gameplayMusicDec = root.Q<Button>("gameplayMusicDec");
+        gameplayMusicInc = root.Q<Button>("gameplayMusicInc");
 
         sfxVol = root.Q<IntegerField>("sfxVol");
         sfxDec = root.Q<Button>("sfxDec");
@@ -52,11 +56,19 @@ public class AudioMenu : MonoBehaviour
         masterDec.clicked += DecMaster;
         masterInc.clicked += IncMaster;
 
-        musicDec.clicked += DecMusic;
-        musicInc.clicked += IncMusic;
+        mainMenuMusicDec.clicked += DecMainMenuMusic;
+        mainMenuMusicInc.clicked += IncMainMenuMusic;
+
+        gameplayMusicDec.clicked += DecGameplayMusic;
+        gameplayMusicInc.clicked += IncGameplayMusic;
 
         sfxDec.clicked += DecSFX;
         sfxInc.clicked += IncSFX;
+
+        masterVol.RegisterValueChangedCallback(OnMasterVolumeChanged);
+        mainMenuMusicVol.RegisterValueChangedCallback(OnMainMenuMusicVolumeChanged);
+        gameplayMusicVol.RegisterValueChangedCallback(OnGameplayMusicVolumeChanged);
+        sfxVol.RegisterValueChangedCallback(OnSfxVolumeChanged);
 
         backButton.clicked += LeaveMenu;
         settingsButton.clicked += ToSettingsMenu;
@@ -65,45 +77,39 @@ public class AudioMenu : MonoBehaviour
     // Gets the PlayerPrefs for the audio settings
     private void GetAudioPrefs()
     {
-        if (PlayerPrefs.HasKey("muteVol"))
-            muteBut.text = PlayerPrefs.GetInt("muteVol") == 1 ? "ON" : "OFF";
-        else
-            muteBut.text = "OFF";
-
-        if (PlayerPrefs.HasKey("mstrVol"))
-            masterVol.value = PlayerPrefs.GetInt("mstrVol");
-        else
-            masterVol.value = 50;
-
-        if (PlayerPrefs.HasKey("mscVol"))
-            musicVol.value = PlayerPrefs.GetInt("mscVol");
-        else
-            musicVol.value = 50;
-
-        if (PlayerPrefs.HasKey("sfxVol"))
-            sfxVol.value = PlayerPrefs.GetInt("sfxVol");
-        else
-            sfxVol.value = 50;
+        muteBut.text = AudioSettingsPrefs.IsMuted() ? "ON" : "OFF";
+        masterVol.value = AudioSettingsPrefs.GetSavedVolume(AudioSettingsPrefs.MasterVolumeKey);
+        mainMenuMusicVol.value = AudioSettingsPrefs.GetSavedVolume(
+            AudioSettingsPrefs.MainMenuMusicVolumeKey,
+            fallbackToLegacyMusic: true);
+        gameplayMusicVol.value = AudioSettingsPrefs.GetSavedVolume(
+            AudioSettingsPrefs.GameplayMusicVolumeKey,
+            fallbackToLegacyMusic: true);
+        sfxVol.value = AudioSettingsPrefs.GetSavedVolume(AudioSettingsPrefs.SfxVolumeKey);
     }
+
     private void OnDisable()
     {
-        //save the changes
-        PlayerPrefs.SetInt("muteVol", muteBut.text == "ON" ? 1 : 0);
-        PlayerPrefs.SetInt("mstrVol", masterVol.value);
-        PlayerPrefs.SetInt("mscVol", musicVol.value);
-        PlayerPrefs.SetInt("sfxVol", sfxVol.value);
-        PlayerPrefs.Save();
+        SaveAudioPrefs();
 
         muteBut.clicked -= muteToggle;
 
         masterDec.clicked -= DecMaster;
         masterInc.clicked -= IncMaster;
 
-        musicDec.clicked -= DecMusic;
-        musicInc.clicked -= IncMusic;
+        mainMenuMusicDec.clicked -= DecMainMenuMusic;
+        mainMenuMusicInc.clicked -= IncMainMenuMusic;
+
+        gameplayMusicDec.clicked -= DecGameplayMusic;
+        gameplayMusicInc.clicked -= IncGameplayMusic;
 
         sfxDec.clicked -= DecSFX;
         sfxInc.clicked -= IncSFX;
+
+        masterVol.UnregisterValueChangedCallback(OnMasterVolumeChanged);
+        mainMenuMusicVol.UnregisterValueChangedCallback(OnMainMenuMusicVolumeChanged);
+        gameplayMusicVol.UnregisterValueChangedCallback(OnGameplayMusicVolumeChanged);
+        sfxVol.UnregisterValueChangedCallback(OnSfxVolumeChanged);
 
         backButton.clicked -= LeaveMenu;
         settingsButton.clicked -= ToSettingsMenu;
@@ -123,6 +129,8 @@ public class AudioMenu : MonoBehaviour
 
             //un-grey out the vol settings values?
         }
+
+        SaveAudioPrefs();
     }
 
     private void DecMaster()
@@ -137,16 +145,28 @@ public class AudioMenu : MonoBehaviour
             masterVol.value += 1;
     }
 
-    private void DecMusic()
+    private void DecMainMenuMusic()
     {
-        if(musicVol.value > 0)
-            musicVol.value -= 1;
+        if(mainMenuMusicVol.value > 0)
+            mainMenuMusicVol.value -= 1;
     }
 
-    private void IncMusic()
+    private void IncMainMenuMusic()
     {
-        if(musicVol.value < 100)
-            musicVol.value += 1;
+        if(mainMenuMusicVol.value < 100)
+            mainMenuMusicVol.value += 1;
+    }
+
+    private void DecGameplayMusic()
+    {
+        if(gameplayMusicVol.value > 0)
+            gameplayMusicVol.value -= 1;
+    }
+
+    private void IncGameplayMusic()
+    {
+        if(gameplayMusicVol.value < 100)
+            gameplayMusicVol.value += 1;
     }
 
     private void DecSFX()
@@ -171,5 +191,49 @@ public class AudioMenu : MonoBehaviour
     {
         audioMenu.SetActive(false);
         settingsMenu.SetActive(true);
+    }
+
+    private void OnMasterVolumeChanged(ChangeEvent<int> evt)
+    {
+        masterVol.SetValueWithoutNotify(ClampVolume(evt.newValue));
+        SaveAudioPrefs();
+    }
+
+    private void OnMainMenuMusicVolumeChanged(ChangeEvent<int> evt)
+    {
+        mainMenuMusicVol.SetValueWithoutNotify(ClampVolume(evt.newValue));
+        SaveAudioPrefs();
+    }
+
+    private void OnGameplayMusicVolumeChanged(ChangeEvent<int> evt)
+    {
+        gameplayMusicVol.SetValueWithoutNotify(ClampVolume(evt.newValue));
+        SaveAudioPrefs();
+    }
+
+    private void OnSfxVolumeChanged(ChangeEvent<int> evt)
+    {
+        sfxVol.SetValueWithoutNotify(ClampVolume(evt.newValue));
+        SaveAudioPrefs();
+    }
+
+    private void SaveAudioPrefs()
+    {
+        if (muteBut == null)
+        {
+            return;
+        }
+
+        PlayerPrefs.SetInt(AudioSettingsPrefs.MuteKey, muteBut.text == "ON" ? 1 : 0);
+        PlayerPrefs.SetInt(AudioSettingsPrefs.MasterVolumeKey, ClampVolume(masterVol.value));
+        PlayerPrefs.SetInt(AudioSettingsPrefs.MainMenuMusicVolumeKey, ClampVolume(mainMenuMusicVol.value));
+        PlayerPrefs.SetInt(AudioSettingsPrefs.GameplayMusicVolumeKey, ClampVolume(gameplayMusicVol.value));
+        PlayerPrefs.SetInt(AudioSettingsPrefs.SfxVolumeKey, ClampVolume(sfxVol.value));
+        PlayerPrefs.Save();
+    }
+
+    private static int ClampVolume(int value)
+    {
+        return Mathf.Clamp(value, 0, 100);
     }
 }

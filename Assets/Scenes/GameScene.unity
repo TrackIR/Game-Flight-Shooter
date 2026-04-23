@@ -479,15 +479,15 @@ MonoBehaviour:
     volume: 0.25
   - sound: 1
     clip: {fileID: 8300000, guid: 4362c4a3535a7684f9e0ee98fbcb5c71, type: 3}
-    volume: 0.85
+    volume: 1
   - sound: 2
     clip: {fileID: 8300000, guid: b192ee979bacc0b4893db457f20013f0, type: 3}
-    volume: 0.25
+    volume: 0.15
   - sound: 3
     clip: {fileID: 8300000, guid: 9059c13c6d8963b42935410439064407, type: 3}
     volume: 0.5
-  gameplayMusic: {fileID: 8300000, guid: f3221a7a17eadce4a85008fc10dd2451, type: 3}
-  gameplayMusicVolume: 0.5
+  gameplayMusic: {fileID: 8300000, guid: c4c178453828bc64fb7ea99f4b57184d, type: 3}
+  gameplayMusicVolume: 0.2
 --- !u!1 &115963254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 17b4583417a828f4a94dd97df97fc516, type: 3}

@@ -6,7 +6,7 @@ public class GameModeMenu : MonoBehaviour
 {
     [SerializeField] UIDocument gameModeMenuDocument;
 
-    public static int gameModeSetting = 0;
+    public static int gameModeSetting = 2;
 
     public GameObject gameModeMenu;
     public GameObject mainMenu;

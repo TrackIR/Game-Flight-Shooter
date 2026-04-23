@@ -9,7 +9,7 @@ public class Laser : MonoBehaviour
 
     // Timer
     private float time = 0.0f;
-    private float timeout = 5.0f;
+    private float timeout = 1.0f;
 
     void Awake()
     {

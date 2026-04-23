@@ -128,7 +128,7 @@ public class SpaceshipDamage : MonoBehaviour
         for (float i = 0.0f; i < 1.0f; i += damageBlinkTime * (1/damageBlinkDuration))
         {
             shipModelRenderer.enabled = !shipModelRenderer.enabled;
-            Debug.Log(shipModelRenderer.enabled);
+            // Debug.Log(shipModelRenderer.enabled);
             yield return new WaitForSeconds(damageBlinkTime);
         }
     }

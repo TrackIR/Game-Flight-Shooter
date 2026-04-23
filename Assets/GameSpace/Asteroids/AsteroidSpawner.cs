@@ -42,7 +42,7 @@ public class AsteroidSpawner : MonoBehaviour
     void Start()
     {
         // for testing different game modes in scene
-        gameModeSetting = 2;
+        // gameModeSetting = 2;
 
         switch (gameModeSetting)
         {

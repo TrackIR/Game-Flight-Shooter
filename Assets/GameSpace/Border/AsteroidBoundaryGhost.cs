@@ -75,6 +75,7 @@ public class GhostBoundary : MonoBehaviour
 
                 MeshRenderer ghostMR = ghost.AddComponent<MeshRenderer>();
                 ghostMR.material = new Material(asteroidMaterial);
+                // ghostMR.material.color = Color.red;         // for testing ghosts
 
                 GhostData data = new GhostData { obj = ghost, direction = dir };
                 ghosts.Add(data);
@@ -149,5 +150,17 @@ public class GhostBoundary : MonoBehaviour
 
             ghost.obj.SetActive(distToEdge < renderDistance * 2f);
         }
+    }
+
+    void OnDestroy()
+    {
+        foreach (var ghost in ghosts)
+        {
+            if (ghost.obj != null)
+            {
+                Destroy(ghost.obj);
+            }
+        }
+        ghosts.Clear();
     }
 }

@@ -8,9 +8,9 @@ public class WaveMode : MonoBehaviour
 
     // // Spawn settings
     [Header("Spawner Settings")]
-    [SerializeField] int initWaveAmount = 5;
-    [SerializeField] int incWaveAmount = 3;
-    [SerializeField] int waves = 5;
+    [SerializeField] readonly int initWaveAmount = 5;
+    [SerializeField] readonly int incWaveAmount = 3;
+    [SerializeField] readonly int totalWaves = 5;
 
     private int waveNumber = 0;
 
@@ -18,18 +18,16 @@ public class WaveMode : MonoBehaviour
     {
         if (AsteroidSpawner.asteroidCount <= 0)
         {
-            if (AsteroidSpawner.asteroidCount < 0)
-                Debug.Log("Uhmm... how?");
 
-            if (waveNumber < waves)
+            if (waveNumber < totalWaves)
             {
-                Debug.Log($"New wave: wave {waveNumber}");
+                // Debug.Log($"New wave: wave {waveNumber}");
 
                 asteroidSpawner.SpawnXAsteroids((incWaveAmount * waveNumber) + initWaveAmount);
                 waveNumber++;
             }
             else{                //finish game mode
-                Debug.Log("Finshed wave mode");
+                // Debug.Log("Finshed wave mode");
 
                 Time.timeScale = 0f;
                 gameOverMenu.SetActive(true);

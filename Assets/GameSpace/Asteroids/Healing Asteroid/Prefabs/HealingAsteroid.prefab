@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7037687900023697965}
   - component: {fileID: 1221919321984502682}
   - component: {fileID: 5352207092161695775}
+  - component: {fileID: 9040931960655487761}
+  - component: {fileID: -5909780120932598358}
   m_Layer: 3
   m_Name: HealingAsteroid
   m_TagString: Asteroid
@@ -70,6 +72,35 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9040931960655487761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2250062479149318844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c596d87cb13637d479b7bf2765edc930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Boundary
+  boxSize: {x: 400, y: 400, z: 400}
+  boundaryMode: 0
+  bounceDamping: 0.9
+--- !u!114 &-5909780120932598358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2250062479149318844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b365ee1526411418f11b4037506757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostBoundary
+  ghostCount: 1
+  renderDistance: 125
 --- !u!1001 &4576514874198958947
 PrefabInstance:
   m_ObjectHideFlags: 0

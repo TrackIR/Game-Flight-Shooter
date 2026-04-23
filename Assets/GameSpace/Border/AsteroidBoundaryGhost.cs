@@ -5,7 +5,7 @@ public class GhostBoundary : MonoBehaviour
 {
     [Header("Ghost Settings")]
     public int ghostCount = 1;
-    public float renderDistance = 75f;
+    public float renderDistance = 125f;
     
     private Vector3 boxSize;
     private List<GhostData> ghosts = new List<GhostData>();
@@ -75,7 +75,6 @@ public class GhostBoundary : MonoBehaviour
 
                 MeshRenderer ghostMR = ghost.AddComponent<MeshRenderer>();
                 ghostMR.material = new Material(asteroidMaterial);
-                ghostMR.material.color = Color.red;
 
                 GhostData data = new GhostData { obj = ghost, direction = dir };
                 ghosts.Add(data);
@@ -90,11 +89,15 @@ public class GhostBoundary : MonoBehaviour
         Quaternion rot = transform.rotation;
         Vector3 scale = transform.localScale;
 
+        Quaternion rotationOffset = Quaternion.Euler(270, 0, 0);
+
         foreach (var ghost in ghosts)
         {
             Vector3 dir = ghost.direction;
 
-            ghost.obj.transform.rotation = rot;             // not quite right, need to flip the rotation or something
+            Quaternion adjustedRot = rot * rotationOffset;      // adjust ghost rotation to be accurate
+
+            ghost.obj.transform.rotation = adjustedRot;
             ghost.obj.transform.localScale = scale;
         
             // Calculate the ghost position

@@ -5,7 +5,7 @@ public class GhostBoundary : MonoBehaviour
 {
     [Header("Ghost Settings")]
     public int ghostCount = 1;
-    public float renderDistance = 125f;
+    public float renderDistance = 250f;
     
     private Vector3 boxSize;
     private List<GhostData> ghosts = new List<GhostData>();

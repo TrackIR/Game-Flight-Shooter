@@ -33,7 +33,7 @@ public class AsteroidClass : MonoBehaviour
         moveDir = iMoveDir;
         rotDir = iRotDir;
 
-        transform.localScale = new Vector3(size, size, size);        
+        transform.localScale = new Vector3(size, size, size);
     }
 
     // Move the asteroid each frame while accounting for framerate
@@ -50,6 +50,19 @@ public class AsteroidClass : MonoBehaviour
     public InheritanceType GetAsteroidType()
     {
         return type;
+    }
+
+    // Displays the asteroid hitbox when Gimozs are turned on
+    private void OnDrawGizmos()
+    {
+        SphereCollider collider = GetComponent<SphereCollider>();
+        if (collider == null)
+            return;
+
+        Gizmos.color = Color.green;
+        Vector3 worldCenter = transform.TransformPoint(collider.center);
+        float worldRadius = collider.radius * transform.lossyScale.x;
+        Gizmos.DrawWireSphere(worldCenter, worldRadius);
     }
 
     /*=== Virtual functions for inheritence ===*/

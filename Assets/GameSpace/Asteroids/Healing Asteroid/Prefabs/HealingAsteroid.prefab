@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostBoundary
   ghostCount: 1
-  renderDistance: 125
+  renderDistance: 250
 --- !u!1001 &4576514874198958947
 PrefabInstance:
   m_ObjectHideFlags: 0

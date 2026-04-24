@@ -87,7 +87,7 @@ Because the project is still in development, some features, setup steps, and dem
 
 ## Demo
 
-A public demo build will be linked here when available.
+[Latest Release](https://github.com/TrackIR/Game-Flight-Shooter/releases)
 
 **View the project on GitHub:**  
 [TrackIR: 3D Asteroids Game Repository](https://github.com/TrackIR/Game-Flight-Shooter)

@@ -6,8 +6,8 @@ public class CursorMovement : MonoBehaviour
     public RectTransform cursorTransform;
 
     private Vector2 cursorPos;
-    private float vertical;
-    private float horizontal;    
+    private float vertical = 0f;
+    private float horizontal = 0f;
 
     void Start()
     {
@@ -21,9 +21,6 @@ public class CursorMovement : MonoBehaviour
 
     void Update()
     {
-        float horizontal = 0f;
-        float vertical = 0f;
-
         if (TrackIRManager.Instance != null && TrackIRManager.Instance.IsTracking)
         {
             horizontal = TrackIRManager.Instance.HeadYaw;
@@ -36,7 +33,7 @@ public class CursorMovement : MonoBehaviour
         if (Mathf.Abs(vertical) < 0.075f)
             vertical = 0f;
 
-        cursorPos += new Vector2(horizontal, vertical) * Time.deltaTime * 1000;
+        cursorPos += new Vector2(horizontal, vertical) * Time.unscaledDeltaTime * 1000;
         
         RectTransform canvas = cursorTransform.root as RectTransform;
 

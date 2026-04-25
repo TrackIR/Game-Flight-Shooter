@@ -39,7 +39,7 @@ public class CursorInput : MonoBehaviour
         }
         else
         {
-            nullElementTimer -= Time.deltaTime;
+            nullElementTimer -= Time.unscaledDeltaTime;
             if (nullElementTimer <= 0f)
                 pickedElement = null;
         }

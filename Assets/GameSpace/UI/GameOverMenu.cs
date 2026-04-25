@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System.Collections;
+using System;
+using System.Collections.Generic;
+
 
 public class GameOverMenu : MonoBehaviour
 {
@@ -10,52 +12,66 @@ public class GameOverMenu : MonoBehaviour
 
     public GameObject gameOverMenu;
 
-    [SerializeField] private readonly float spacebarDelay = 1.5f;
-    private float menuEnableTime;
-
     private IntegerField scoreField;
     private TextField nameField;
     private Button backButton;
-    private bool menuEnabled = false;
+    private Button deleteButton;
 
-    void Update()
+    private readonly Dictionary<Button, Action> keyboardHandlers = new();
+
+    private static readonly string[] keyIds = new[]
     {
-        if (menuEnabled && Input.GetKeyDown(KeyCode.Space))
-        {
-            if (Time.unscaledTime > menuEnableTime + spacebarDelay)         // add a delay so the player doesn't accidentally click through the menu
-                ToMainMenu();
-        }
-    }
+        "1","2","3","4","5","6","7","8","9","0",
+        "Q","W","E","R","T","Y","U","I","O","P",
+        "A","S","D","F","G","H","J","K","L",
+        "Z","X","C","V","B","N","M"
+    };
+
 
     void OnEnable()
     {
         VisualElement root = gameOverMenuDocument.rootVisualElement;
 
         scoreField = root.Q<IntegerField>("ScoreField");
-        nameField = root.Q<TextField>("nameField");
+        nameField = root.Q<TextField>("NameField");
         backButton = root.Q<Button>("BackButton");
+        deleteButton = root.Q<Button>("Delete");
 
         backButton.clicked += ToMainMenu;
+        deleteButton.clicked += DeleteChar;
+
+        RegisterKeyboardButtons(root);        
 
         scoreField.value = ScoreManager.Instance.GetScore();
-
-        menuEnabled = true;
-        menuEnableTime = Time.unscaledTime;
-
-        StartCoroutine(FocusNameField());
-    }
-
-
-    private IEnumerator FocusNameField()
-    {
-        yield return null; // wait 1 frame
-        nameField.Focus();
-        nameField.SelectAll(); // optional: auto-select text
     }
 
     void OnDisable()
     {
         backButton.clicked -= ToMainMenu;
+        deleteButton.clicked -= DeleteChar;
+
+        foreach (var pair in keyboardHandlers)
+        {
+            pair.Key.clicked -= pair.Value;
+        }
+
+        keyboardHandlers.Clear();
+    }
+
+    private void RegisterKeyboardButtons(VisualElement root)
+    {
+        foreach (string keyId in keyIds)
+        {
+            var button = root.Q<Button>(keyId);
+            void Handler() => AppendCharacter(keyId);
+            button.clicked += Handler;
+            keyboardHandlers[button] = Handler;
+        }
+    }
+
+    private void AppendCharacter(string chara)
+    {
+        nameField.value = (nameField.value ?? string.Empty) + chara;
     }
 
     private void ToMainMenu()
@@ -64,5 +80,11 @@ public class GameOverMenu : MonoBehaviour
 
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    private void DeleteChar()
+    {
+        if (nameField.value != "")
+            nameField.value = nameField.value[..^1];
     }
 }

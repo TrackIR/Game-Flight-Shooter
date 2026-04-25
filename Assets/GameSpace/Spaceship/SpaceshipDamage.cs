@@ -15,6 +15,8 @@ public class SpaceshipDamage : MonoBehaviour
 
     //private SpaceshipDeathAnimation deathAnimation;
     public GameObject gameOverMenu;
+    public GameObject cursorCanvas;
+
     public DamageFlashEffect damageFlash;
     // private SpaceshipMovement spaceshipMovement; 
     // private SpaceshipShoot spaceshipShoot;
@@ -69,7 +71,7 @@ public class SpaceshipDamage : MonoBehaviour
 
         if (playerHealth <= 0)
         {
-            Die();
+            StartCoroutine(Die());
         }
     }
 
@@ -87,19 +89,25 @@ public class SpaceshipDamage : MonoBehaviour
         playerHealth += 1;
     }
 
-    private void Die()
+    IEnumerator Die()
     {
         SoundManager.PlaySound(SoundType.DEATH, 0.75f);
         GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
 
-        int highScore = PlayerPrefs.GetInt("HighScore", 0);
-        if (ScoreManager.Instance.GetScore() > highScore)
-        {
-            PlayerPrefs.SetInt("HighScore", ScoreManager.Instance.GetScore());
-            PlayerPrefs.Save();
-        }
+        // int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        // if (ScoreManager.Instance.GetScore() > highScore)
+        // {
+        //     PlayerPrefs.SetInt("HighScore", ScoreManager.Instance.GetScore());
+        //     PlayerPrefs.Save();
+        // }
+
+        Destroy(gameObject, 3f);
+
+        yield return new WaitForSeconds(1f);
+
         Time.timeScale = 0f;
         gameOverMenu.SetActive(true);
+        cursorCanvas.SetActive(true);
     }
 
     private IEnumerator TakeDamageReorientation()

@@ -23,6 +23,7 @@ The result is a lightweight arcade experience that makes head-tracking technolog
 Players control the spaceship using TrackIR head movement, allowing the game to demonstrate responsive head-tracking input in a way that feels natural and immediately understandable.
 
 <!-- ![Spaceship flying through asteroid field]() picture demonstrating this point -->
+<img width="852" height="477" alt="An image of a spaceship flying through an asteroid field." src="https://github.com/user-attachments/assets/ec5fc9a3-ac3b-4a8f-8401-ccae1f38df72" />
 
 ---
 
@@ -31,6 +32,7 @@ Players control the spaceship using TrackIR head movement, allowing the game to 
 The game is designed to be playable with TrackIR and a single button. This makes it easier for new users to try the demo quickly without learning a complicated control scheme.
 
 <!-- ![Player firing lasers at asteroids]() picture demonstrating this point-->
+<img width="852" height="477" alt="An image of a spaceship firing lasers at asteroids." src="https://github.com/user-attachments/assets/8a6242cd-6a67-4a7e-9003-0c56ea487b63" />
 
 ---
 
@@ -39,6 +41,7 @@ The game is designed to be playable with TrackIR and a single button. This makes
 Asteroids move through the 3D space environment, collide with the player, and can be destroyed with lasers. Larger asteroids split into smaller pieces, creating a more active and replayable arcade loop.
 
 <!-- ![Asteroid splitting after being hit]() picture demonstrating this -->
+<img width="852" height="477" alt="An image of an asteroid splitting in two." src="https://github.com/user-attachments/assets/ed7b2b8a-479a-4830-b932-9662ba9a4735" />
 
 ---
 
@@ -55,6 +58,7 @@ The project includes a trade show-focused gameplay mode intended for quick publi
 The game includes a custom neon space-themed interface, including menus, HUD elements, score display, hull/health status, and visual feedback designed to make the demo feel like a finished product.
 
 <!-- ![Main menu and HUD interface]() picture demonstrating this??? -->
+<img width="2545" height="1445" alt="An image of the game's main menu." src="https://github.com/user-attachments/assets/8857d5b2-6d5c-466d-b6a0-d3ac5f7459a6" />
 
 ---
 

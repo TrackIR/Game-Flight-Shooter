@@ -32,10 +32,10 @@ public class Laser : MonoBehaviour
         // Declare the container for hit data
         RaycastHit hitData;
 
-
-        if (Physics.SphereCast(transform.position, raycastSize, forwardDirection, out hitData, 1.0f, layerMask) && hitData.transform.tag == "Asteroid")
+        if (Physics.SphereCast(transform.position, raycastSize, forwardDirection, out hitData, 6.0f, layerMask)
+            && hitData.transform.CompareTag("Asteroid"))
         {
-            Debug.Log(hitData.transform.gameObject);
+            // Debug.Log(hitData.transform.gameObject);
 
             // The ray hit an asteroid!
             GameObject asteroid = hitData.transform.gameObject;

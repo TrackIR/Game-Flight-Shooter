@@ -58,7 +58,7 @@ The project includes a trade show-focused gameplay mode intended for quick publi
 The game includes a custom neon space-themed interface, including menus, HUD elements, score display, hull/health status, and visual feedback designed to make the demo feel like a finished product.
 
 <!-- ![Main menu and HUD interface]() picture demonstrating this??? -->
-<img width="2545" height="1445" alt="An image of the game's main menu." src="https://github.com/user-attachments/assets/8857d5b2-6d5c-466d-b6a0-d3ac5f7459a6" />
+<img width="852" height="477" alt="An image of the game's main menu." src="https://github.com/user-attachments/assets/8857d5b2-6d5c-466d-b6a0-d3ac5f7459a6" />
 
 ---
 

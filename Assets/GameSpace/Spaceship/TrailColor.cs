@@ -23,7 +23,7 @@ public class TrailColor : MonoBehaviour
         if(PlayerPrefs.HasKey("ShipColor_B"))
             ShipColor_B = PlayerPrefs.GetInt("ShipColor_B");
         
-        print($"Changing trail colour to: {ShipColor_R}, {ShipColor_G}, {ShipColor_B}\n");
+        // print($"Changing trail colour to: {ShipColor_R}, {ShipColor_G}, {ShipColor_B}\n");
 
 
         return new Color32((byte)Mathf.Clamp(ShipColor_R, 0, 255),

@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 public class ColorMenu : MonoBehaviour
 {
+    [Header("Spaceship Reference")]
+    [SerializeField] private GameObject spaceshipContainer;
+
     [Header("UI")]
     [SerializeField] private UIDocument uiDocument;
 
@@ -146,6 +149,8 @@ public class ColorMenu : MonoBehaviour
         // Just close without saving
         if (colorMenu != null) colorMenu.SetActive(false);
         if (mainMenu != null) mainMenu.SetActive(true);
+        
+        spaceshipContainer.GetComponent<SpaceshipMainMenuButtonHover>().EnableSpaceshipModel();
     }
 
     private void OnDone()
@@ -165,6 +170,8 @@ public class ColorMenu : MonoBehaviour
         // Close menu
         if (colorMenu != null) colorMenu.SetActive(false);
         if (mainMenu != null) mainMenu.SetActive(true);
+
+        spaceshipContainer.GetComponent<SpaceshipMainMenuButtonHover>().EnableSpaceshipModel();
     }
 
     private static void SaveColor32(string prefix, Color32 c)

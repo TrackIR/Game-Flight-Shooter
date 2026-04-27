@@ -5,6 +5,10 @@ using System;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [Header("Spaceship Reference")]
+    [SerializeField] private GameObject spaceshipContainer;
+
+    [Header("")]
     [SerializeField] UIDocument settingsMenuDocument;
 
     public GameObject settingsMenu;
@@ -246,6 +250,7 @@ public class SettingsMenu : MonoBehaviour
     {
         settingsMenu.SetActive(false);
         mainMenu.SetActive(true);
+        spaceshipContainer.GetComponent<SpaceshipMainMenuButtonHover>().EnableSpaceshipModel();
     }
 
     private void ToAudioMenu()

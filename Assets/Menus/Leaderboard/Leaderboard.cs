@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class Leaderboard : MonoBehaviour
 {
+    [Header("Spaceship Reference")]
+    [SerializeField] private GameObject spaceshipContainer;
+
+    [Header("")]
     public UIDocument leaderboardDocument;
     private Button mainMenuButton;
     private Button tradeShowButton;
@@ -133,6 +137,7 @@ public class Leaderboard : MonoBehaviour
     {
         leaderboardMenu.SetActive(false);
         mainMenu.SetActive(true);
+        spaceshipContainer.GetComponent<SpaceshipMainMenuButtonHover>().EnableSpaceshipModel();
     }
 
 

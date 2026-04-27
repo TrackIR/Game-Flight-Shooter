@@ -88,12 +88,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cb0a10539241964293ad07af1bd91b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ApplySavedColors
-  target: {fileID: 0}
+  target: {fileID: 8123916397191553103}
   renderers: []
   materialNameContains: 
   useSharedMaterial: 1
   applySpaceshipColor: 0
-  applyAsteroidColor: 0
+  applyAsteroidColor: 1
 --- !u!114 &6402413159391817270
 MonoBehaviour:
   m_ObjectHideFlags: 0

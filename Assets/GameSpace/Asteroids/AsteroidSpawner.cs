@@ -127,15 +127,12 @@ public class AsteroidSpawner : MonoBehaviour
             {
                 case 1: // Healing Asteroid, 5% of the time
                     asteroid = Instantiate(healingAsteroidPrefab, randomPosition, Quaternion.identity, parentOfAsteroids);
-                    asteroid.GetComponent<AsteroidClass>().InitType(AsteroidClass.InheritanceType.Healing);
                     break;
                 case 2: // Bomb asteroid, 5% of the time
                     asteroid = Instantiate(bombAsteroidPrefab, randomPosition, Quaternion.identity, parentOfAsteroids);
-                    asteroid.GetComponent<AsteroidClass>().InitType(AsteroidClass.InheritanceType.Bomb);
                     break;
                 default: // Basic asteroid, 90% of the time
                     asteroid = Instantiate(basicAsteroidPrefab, randomPosition, Quaternion.identity, parentOfAsteroids);
-                    asteroid.GetComponent<AsteroidClass>().InitType(AsteroidClass.InheritanceType.Basic);
                     break;
             }
 
@@ -150,7 +147,7 @@ public class AsteroidSpawner : MonoBehaviour
 
             // Apply the saved color scheme to the newly spawned asteroid
             var apply = asteroid.GetComponent<ApplySavedColors>();
-            if (apply != null)
+            if (apply != null && asteroid.GetComponent<AsteroidClass>().GetAsteroidType() == AsteroidClass.InheritanceType.Basic)
                 apply.ApplyNow();
             else
                 Debug.LogError("Cannot find ApplySavedColors component on " + asteroid);

@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 61f5278240536ce49b67993ab9698666, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &110633393 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+  m_PrefabInstance: {fileID: 895720264}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &169407709
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18b9325dd033314487b64cf35c37f86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsMenu
+  spaceshipContainer: {fileID: 926992810}
   settingsMenuDocument: {fileID: 541567682}
   settingsMenu: {fileID: 541567679}
   mainMenu: {fileID: 987804715}
@@ -304,6 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9958045d5ca5e24ba1d534895fc3b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioMenu
+  spaceshipContainer: {fileID: 926992810}
   audioMenuDocument: {fileID: 811622310}
   audioMenu: {fileID: 811622308}
   settingsMenu: {fileID: 541567679}
@@ -337,15 +344,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b86fdd5e36246614fbcc575008f1d907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuAsteroidSpawner
-  asteroidPrefab: {fileID: 8123916397191553103, guid: eb756b8de8b16434198104bcd327b734, type: 3}
-  numberOfAsteroids: 30
-  spawnRadius: 25
-  minMovementSpeed: 0.5
-  maxMovementSpeed: 2
-  minRotationSpeed: 10
-  maxRotationSpeed: 50
-  minSize: 1
-  maxSize: 1
+  parentOfAsteroids: {fileID: 837854502}
+  spawnHeightMin: -350
+  spawnHeightMax: 350
+  spawnPosXLeft: -750
+  spawnPosXRight: 750
+  spawnDepthMin: 100
+  spawnDepthMax: 200
+  basicAsteroidPrefab: {fileID: 8123916397191553103, guid: eb756b8de8b16434198104bcd327b734, type: 3}
+  healingAsteroidPrefab: {fileID: 2250062479149318844, guid: 562e9238a44e6974ea620344b446bc12, type: 3}
+  bombAsteroidPrefab: {fileID: 5300011350229775121, guid: d7f7b5ebad8306541822aedf7360c344, type: 3}
+  minAsteroidSize: 20
+  maxAsteroidSize: 50
+  minAsteroidMoveSpeed: 20
+  maxAsteroidMoveSpeed: 60
+  minAsteroidRotSpeed: 1
+  maxAsteroidRotSpeed: 100
+  spawnTime: 5
 --- !u!4 &837854502
 Transform:
   m_ObjectHideFlags: 0
@@ -355,7 +370,7 @@ Transform:
   m_GameObject: {fileID: 837854500}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45.15}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -399,7 +414,7 @@ Camera:
   m_GameObject: {fileID: 886789267}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -423,7 +438,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 97
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -450,7 +465,7 @@ Transform:
   m_GameObject: {fileID: 886789267}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45.15}
+  m_LocalPosition: {x: 0, y: 0, z: -650}
   m_LocalScale: {x: 1.1282, y: 1.1282, z: 1.1282}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -527,6 +542,130 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1001 &895720264
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 926992811}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d7aea70d2043acd4caecd0040a97f793, type: 2}
+    - target: {fileID: 919132149155446097, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+      propertyPath: m_Name
+      value: SpaceshipModel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+--- !u!4 &895720265 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b896a2fe6743f849a36c43a9c1786ad, type: 3}
+  m_PrefabInstance: {fileID: 895720264}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &926992810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 926992811}
+  - component: {fileID: 926992812}
+  m_Layer: 0
+  m_Name: SpaceshipButtonHover
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &926992811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926992810}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16, y: 0, z: -600}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 895720265}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &926992812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926992810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fa2be7e8bf54584cbafb65aa53212b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  spaceship: {fileID: 110633393}
+  animationTime: 0.25
+  playButtonPos: 2
+  settingsButtonPos: -2.9
+  leaderboardButtonPos: -7.8
+  colorsButtonPos: -12.7
+  exitButtonPos: -17
+  tradeShowButtonPos: 0.9
+  endlessButtonPos: -4.8
+  wavesButtonPos: -10.5
+  backButtonPos: -16.1
+  floatingAmplitude: 0.5
+  floatingSpeed: 1
 --- !u!1 &974449812
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,14 +838,90 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea8ee9f01083da4e817584c6bb49172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuUI
-  mainMenuDocument: {fileID: 987804716}
+  spaceshipContainer: {fileID: 926992810}
   mainMenuMusic: {fileID: 8300000, guid: 0e7ceaa75d5a5a14da704e54b681ef75, type: 3}
   mainMenuMusicVolume: 0.5
+  mainMenuDocument: {fileID: 987804716}
   mainMenu: {fileID: 987804715}
   gameModeMenu: {fileID: 1068592067}
   settingsMenu: {fileID: 541567679}
   colorsMenu: {fileID: 1122766568}
   leaderboardMenu: {fileID: 1702715533}
+  playButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverPlayButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  settingsButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverSettingsButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  leaderboardButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverLeaderboardButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  exitButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverExitButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  colorsButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverColorsButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1068592067
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +955,66 @@ MonoBehaviour:
   gameModeMenuDocument: {fileID: 1068592069}
   gameModeMenu: {fileID: 1068592067}
   mainMenu: {fileID: 987804715}
+  tradeShowButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverTradeShowButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  endlessButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverEndlessButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  waveButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverWavesButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  backButtonHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 926992812}
+        m_TargetAssemblyTypeName: SpaceshipMainMenuButtonHover, Assembly-CSharp
+        m_MethodName: HoverBackButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1068592069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,6 +1083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed383a7816aa9a4fbe5674485ff4001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColorMenu
+  spaceshipContainer: {fileID: 926992810}
   uiDocument: {fileID: 1122766570}
   colorMenu: {fileID: 1122766568}
   mainMenu: {fileID: 987804715}
@@ -1128,7 +1404,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LeaderboardManager
   maxEntries: 6
-  entries: []
+  tsEntries: []
+  endEntries: []
+  waveEntries: []
 --- !u!4 &1540150118
 Transform:
   m_ObjectHideFlags: 0
@@ -1212,6 +1490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec696dfcc6102a4db7957e0f76e4e93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Leaderboard
+  spaceshipContainer: {fileID: 926992810}
   leaderboardDocument: {fileID: 1702715534}
   leaderboardMenu: {fileID: 1702715533}
   mainMenu: {fileID: 987804715}
@@ -1363,3 +1642,4 @@ SceneRoots:
   - {fileID: 1122766571}
   - {fileID: 1422670532}
   - {fileID: 1702715535}
+  - {fileID: 926992811}

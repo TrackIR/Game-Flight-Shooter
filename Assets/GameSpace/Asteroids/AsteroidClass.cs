@@ -12,7 +12,7 @@ public class AsteroidClass : MonoBehaviour
     // Explosions will be used on all asteroid types, so they can be set up here
     [SerializeField] protected ExplosionParticleVFX explosionVFX;
     
-    protected InheritanceType type;
+    [SerializeField] protected InheritanceType type;
     protected int size;
     protected float moveSpeed;
     protected float rotSpeed;
@@ -41,10 +41,6 @@ public class AsteroidClass : MonoBehaviour
     {
         transform.Rotate(rotDir * rotSpeed * Time.deltaTime);
         transform.position += moveDir * moveSpeed * Time.deltaTime;
-
-        // DEBUG
-        if (moveSpeed <= 0.0f || rotSpeed <= 0.0f || moveDir == Vector3.zero || rotDir == Vector3.zero)
-            Debug.Log("dud asteroid");
     }
 
     public InheritanceType GetAsteroidType()

@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewBombAsteroid
   explosionVFX: {fileID: 5333558933292897161, guid: bad5b1ece507efa4c9be534747f28554, type: 3}
+  type: 2
   hitByLaser: 0
   explosionRadius: 25
 --- !u!135 &4064665722864672808

@@ -3,6 +3,10 @@ using UnityEngine.UIElements;
 
 public class AudioMenu : MonoBehaviour
 {
+    [Header("Spaceship Reference")]
+    [SerializeField] private GameObject spaceshipContainer;
+
+    [Header("")]
     [SerializeField] UIDocument audioMenuDocument;
 
     public GameObject audioMenu;
@@ -185,6 +189,7 @@ public class AudioMenu : MonoBehaviour
     {
         audioMenu.SetActive(false);
         mainMenu.SetActive(true);
+        spaceshipContainer.GetComponent<SpaceshipMainMenuButtonHover>().EnableSpaceshipModel();
     }
 
     private void ToSettingsMenu()

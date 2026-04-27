@@ -88,7 +88,34 @@ public class AsteroidSpawner : MonoBehaviour
             Vector3 randomMoveDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 randomRotDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             // Vector3 randomPosition = parentOfAsteroids.position + (UnityEngine.Random.onUnitSphere * spawnRadius);
-            Vector3 randomPosition = new Vector3(UnityEngine.Random.Range(-170f, 170f), UnityEngine.Random.Range(-170f, 170f), UnityEngine.Random.Range(-170f, 170f));
+            //Vector3 randomPosition = new Vector3(UnityEngine.Random.Range(-170f, 170f), UnityEngine.Random.Range(-170f, 170f), UnityEngine.Random.Range(-170f, 170f));
+            float half = 200f;
+
+            int face = UnityEngine.Random.Range(0, 6);
+            
+            Vector3 randomPosition = Vector3.zero;
+            
+            switch (face)
+            {
+                case 0: // +X face
+                    randomPosition = new Vector3(half, Random.Range(-half, half), Random.Range(-half, half));
+                    break;
+                case 1: // -X face
+                    randomPosition = new Vector3(-half, Random.Range(-half, half), Random.Range(-half, half));
+                    break;
+                case 2: // +Y face
+                    randomPosition = new Vector3(Random.Range(-half, half), half, Random.Range(-half, half));
+                    break;
+                case 3: // -Y face
+                    randomPosition = new Vector3(Random.Range(-half, half), -half, Random.Range(-half, half));
+                    break;
+                case 4: // +Z face
+                    randomPosition = new Vector3(Random.Range(-half, half), Random.Range(-half, half), half);
+                    break;
+                case 5: // -Z face
+                    randomPosition = new Vector3(Random.Range(-half, half), Random.Range(-half, half), -half);
+                    break;
+            }
             if (GameModeMenu.gameModeSetting == 0)
                 randomPosition /= 2;
 

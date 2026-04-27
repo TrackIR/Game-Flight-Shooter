@@ -20,8 +20,53 @@ public class AsteroidSpawner : MonoBehaviour
     public RectTransform radarIconPrefab;   // Assign your UI icon prefab here
     public Camera playerCamera;
     public float screenEdgeBuffer = 40f;
-    public int maxRadarIcons = 5;           // How many asteroids to track
+    public int maxRadarIcons = 3;           // How many asteroids to track
     public float maxRadarDistance = 150f;   // Hide icons past this distance
+
+    [Header("Radar Warning Visuals")]
+
+    public float minRadarScale = 0.3f;
+    // Size of icon when asteroid is far away
+    // Lower = smaller distant warning
+    // Higher = distant asteroids stay more noticeable
+
+    public float maxRadarScale = 1.3f;
+    // Size of icon when asteroid is very close
+    // Higher = stronger "danger" feeling
+    // Controls how dramatic the growth is
+
+    public float minRadarAlpha = 0.1f;
+    // Transparency when asteroid is far away
+    // Lower = very faint warning
+    // Higher = always visible even at distance
+
+    public float maxRadarAlpha = 1.0f;
+    // Transparency when asteroid is close
+    // Usually leave at 1.0 (fully visible)
+
+    public float radarVisualMaxDistance = 100f;
+    // Distance range used to scale size and transparency
+    // Larger = slower visual change
+    // Smaller = faster visual change
+
+    public float blinkStartDistance = 70f;
+    // Distance where blinking begins
+    // Larger = blinking starts earlier
+    // Smaller = blinking only when very close
+
+    public float slowBlinkSpeed = 1f;
+    // Blink speed when asteroid first enters danger range
+    // Lower = slow pulse
+    // Higher = faster blinking
+
+    public float fastBlinkSpeed = 15f;
+    // Blink speed when asteroid is extremely close
+    // Creates aggressive warning behavior
+
+    public float blinkMinAlphaMultiplier = 0.05f;
+    // How dim the icon gets during blink
+    // Lower = stronger flash
+    // Higher = softer blink
 
     private List<RectTransform> radarIcons = new List<RectTransform>();
 
@@ -148,14 +193,32 @@ public class AsteroidSpawner : MonoBehaviour
             radarIcons[i].position = edgePosition;
 
             // Scale icon based on distance
-            float minScale = 0.3f;
-            float maxScale = 2.0f;
-            float scaleMaxDistance = 50f;
-
-            float t = Mathf.Clamp01(1f - (distance / scaleMaxDistance));
-            float scale = Mathf.Lerp(minScale, maxScale, t);
+            float t = Mathf.Clamp01(1f - (distance / radarVisualMaxDistance));
+            float scale = Mathf.Lerp(minRadarScale, maxRadarScale, t);
 
             radarIcons[i].localScale = Vector3.one * scale;
+
+            // Change icon transparency based on distance
+            Graphic radarGraphic = radarIcons[i].GetComponent<Graphic>();
+
+            if (radarGraphic != null)
+            {
+                float alpha = Mathf.Lerp(minRadarAlpha, maxRadarAlpha, t);
+
+                // Blink icon when asteroid is very close
+                if (distance <= blinkStartDistance)
+                {
+                    float blinkT = Mathf.Clamp01(1f - (distance / blinkStartDistance));
+                    float blinkSpeed = Mathf.Lerp(slowBlinkSpeed, fastBlinkSpeed, blinkT);
+                    float blink = Mathf.Abs(Mathf.Sin(Time.time * blinkSpeed));
+
+                    alpha *= Mathf.Lerp(blinkMinAlphaMultiplier, 1f, blink);
+                }
+
+                Color color = radarGraphic.color;
+                color.a = alpha;
+                radarGraphic.color = color;
+            }
         }
     }
 

@@ -4,7 +4,7 @@ public class AsteroidSpawner : MonoBehaviour
 {
     [Header("Spawn Position")]    // Parent of all asteroids spawned
     [SerializeField] private Transform parentOfAsteroids;
-    [SerializeField] private int spawnRadius = 100;    // Radius of perimiter where asteroids can spawn
+    // [SerializeField] private int spawnRadius = 100;    // Radius of perimiter where asteroids can spawn
 
 
     [Header("Asteroid Types")]    // Different types of asteroids to spawn

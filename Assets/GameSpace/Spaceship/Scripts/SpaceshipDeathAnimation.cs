@@ -11,7 +11,7 @@ public class SpaceshipDeathAnimation : MonoBehaviour
     public GameObject explosionPrefab;
 
     private bool isDying = false;
-    private float startTime = 0f;
+    // private float startTime = 0f;
     private float deathTimer = 0f;
     private Vector3 spiralCenter;
 

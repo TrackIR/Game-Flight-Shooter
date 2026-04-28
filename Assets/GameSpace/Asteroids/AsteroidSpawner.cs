@@ -19,8 +19,8 @@ public class AsteroidSpawner : MonoBehaviour
 
 
     [Header("Asteroid Move Speed")]    // Move speed range of asteroids
-    [SerializeField] private float minAsteroidMoveSpeed = 14.0f;
-    [SerializeField] private float maxAsteroidMoveSpeed = 20.0f;
+    [SerializeField] private float minAsteroidMoveSpeed = 20f;
+    [SerializeField] private float maxAsteroidMoveSpeed = 30f;
  
 
     [Header("Asteroid Rotation Speed")]    // Rotation speed range of asteroids

@@ -5,10 +5,6 @@ using System.Collections;
 
 public class SpaceshipDamage : MonoBehaviour
 {
-    [Header("Spaceship")]
-    [SerializeField] private GameObject spaceship;
-    [Header("")]
-
     // Reworked health system for properites
     private int _playerHealth = 3;
     public int playerHealth
@@ -29,7 +25,7 @@ public class SpaceshipDamage : MonoBehaviour
     [Header("Cooldown Timer Method")]
     public float damageCooldown = 1f;
     // private float lastDamageTime = 0f;
-    private float startTime;
+    // private float startTime;
 
     // Coroutine method
     [Header("Coroutine Method")]
@@ -41,12 +37,12 @@ public class SpaceshipDamage : MonoBehaviour
     public Image fadeScreenImage;
     private bool canTakeDamage = true;
 
-    private void Start()
-    {
-        startTime = Time.time;
-    }
+    // private void Start()
+    // {
+    //     startTime = Time.time;
+    // }
 
-    public void HandleTriggerEnter(Collider collider)
+    public void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Asteroid"))
         {
@@ -96,7 +92,7 @@ public class SpaceshipDamage : MonoBehaviour
     IEnumerator Die()
     {
         SoundManager.PlaySound(SoundType.DEATH, 0.75f);
-        spaceship.GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
+        GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
 
         // int highScore = PlayerPrefs.GetInt("HighScore", 0);
         // if (ScoreManager.Instance.GetScore() > highScore)
@@ -105,7 +101,7 @@ public class SpaceshipDamage : MonoBehaviour
         //     PlayerPrefs.Save();
         // }
 
-        Destroy(spaceship.gameObject, 3f);
+        Destroy(gameObject, 3f);
 
         yield return new WaitForSeconds(1f);
 

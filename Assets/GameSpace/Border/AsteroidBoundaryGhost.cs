@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class GhostBoundary : MonoBehaviour
 {
     [Header("Ghost Settings")]
-    public int ghostCount = 1;
-    public float renderDistance = 250f;
+    public float renderDistance = 350f;
+    public int wrapLayers = 1;
     
     private Vector3 boxSize;
     private List<GhostData> ghosts = new List<GhostData>();
@@ -13,33 +13,22 @@ public class GhostBoundary : MonoBehaviour
     private class GhostData
     {
         public GameObject obj;
-        public Vector3 direction;
+        public Vector3Int offset;
     }
 
     void Start()
     {
         Boundary boundary = FindFirstObjectByType<Boundary>();
         if (boundary != null)
-        {
             boxSize = boundary.boxSize;
-        }
         else
-        {
             boxSize = new Vector3(400f, 400f, 400f);
-        }
 
         CreateGhosts();
     }
 
     void CreateGhosts()
     {
-        Vector3[] directions = 
-        {
-            Vector3.right, Vector3.left,
-            Vector3.up, Vector3.down,
-            Vector3.forward, Vector3.back
-        };
-
         Mesh asteroidMesh = null;
         Material asteroidMaterial = null;
 
@@ -64,22 +53,30 @@ public class GhostBoundary : MonoBehaviour
             }
         }
 
-        foreach (Vector3 dir in directions)
+        for (int x = -wrapLayers; x <= wrapLayers; x++)
         {
-            for (int i = 0; i < ghostCount; i++)
+            for (int y = -wrapLayers; y <= wrapLayers; y++)
             {
-                GameObject ghost = new GameObject($"Ghost_{dir}_{i}");
-                
-                MeshFilter ghostMF = ghost.AddComponent<MeshFilter>();
-                ghostMF.mesh = asteroidMesh;
+                for (int z = -wrapLayers; z <= wrapLayers; z++)
+                {
+                    if ( x == 0 && y == 0 && z == 0)
+                        continue;
 
-                MeshRenderer ghostMR = ghost.AddComponent<MeshRenderer>();
-                ghostMR.material = new Material(asteroidMaterial);
-                // ghostMR.material.color = Color.red;         // for testing ghosts
+                    Vector3Int offset = new Vector3Int(x, y, z);
+                    
+                    GameObject ghost = new GameObject($"Ghost_{x}_{y}_{z}");
+                    
+                    MeshFilter ghostMF = ghost.AddComponent<MeshFilter>();
+                    ghostMF.mesh = asteroidMesh;
 
-                GhostData data = new GhostData { obj = ghost, direction = dir };
-                ghosts.Add(data);
+                    MeshRenderer ghostMR = ghost.AddComponent<MeshRenderer>();
+                    ghostMR.material = new Material(asteroidMaterial);
+                    // ghostMR.material.color = Color.red;         // for testing ghosts
+
+                    ghosts.Add(new GhostData { obj = ghost, offset = offset });
+                }
             }
+            
         }
     }
 
@@ -92,75 +89,46 @@ public class GhostBoundary : MonoBehaviour
 
         Quaternion rotationOffset = Quaternion.Euler(270, 0, 0);
 
+        // which boundary(s) is the asteroid close to
+        bool nearRight = halfSize.x - pos.x < renderDistance;
+        bool nearLeft = pos.x + halfSize.x < renderDistance;
+        bool nearUp = halfSize.y - pos.y < renderDistance;
+        bool nearDown = pos.y + halfSize.y < renderDistance;
+        bool nearForward = halfSize.z - pos.z < renderDistance;
+        bool nearBack = pos.z + halfSize.z < renderDistance;
+
         foreach (var ghost in ghosts)
         {
-            Vector3 dir = ghost.direction;
-
-            Quaternion adjustedRot = rot * rotationOffset;      // adjust ghost rotation to be accurate
-
-            ghost.obj.transform.rotation = adjustedRot;
+            ghost.obj.transform.rotation = rot * rotationOffset;
             ghost.obj.transform.localScale = scale;
-        
-            // Calculate the ghost position
-            Vector3 targetPos = pos;
-            
-            if (dir == Vector3.right)
-            {
-                // Object is near right edge, ghost goes near left edge (outside boundary)
-                float distFromEdge = halfSize.x - pos.x;
-                targetPos.x = -halfSize.x - distFromEdge;
-            }
-            else if (dir == Vector3.left)
-            {
-                // Object is near left edge, ghost goes near right edge (outside boundary)
-                float distFromEdge = pos.x + halfSize.x;
-                targetPos.x = halfSize.x + distFromEdge;
-            }
-            else if (dir == Vector3.up)
-            {
-                float distFromEdge = halfSize.y - pos.y;
-                targetPos.y = -halfSize.y - distFromEdge;
-            }
-            else if (dir == Vector3.down)
-            {
-                float distFromEdge = pos.y + halfSize.y;
-                targetPos.y = halfSize.y + distFromEdge;
-            }
-            else if (dir == Vector3.forward)
-            {
-                float distFromEdge = halfSize.z - pos.z;
-                targetPos.z = -halfSize.z - distFromEdge;
-            }
-            else if (dir == Vector3.back)
-            {
-                float distFromEdge = pos.z + halfSize.z;
-                targetPos.z = halfSize.z + distFromEdge;
-            }
+            ghost.obj.transform.position = pos + Vector3.Scale(ghost.offset, boxSize);
 
-            ghost.obj.transform.position = targetPos;
-            
-            // Show/hide based on distance to this edge
-            float distToEdge = 0;
-            if (dir == Vector3.right) distToEdge = halfSize.x - pos.x;
-            else if (dir == Vector3.left) distToEdge = pos.x + halfSize.x;
-            else if (dir == Vector3.up) distToEdge = halfSize.y - pos.y;
-            else if (dir == Vector3.down) distToEdge = pos.y + halfSize.y;
-            else if (dir == Vector3.forward) distToEdge = halfSize.z - pos.z;
-            else if (dir == Vector3.back) distToEdge = pos.z + halfSize.z;
+            bool visible = true;
 
-            ghost.obj.SetActive(distToEdge < renderDistance * 2f);
+            if (ghost.offset.x > 0)
+                visible &= nearRight;
+            else if (ghost.offset.x < 0)
+                visible &= nearLeft;
+
+            if (ghost.offset.y > 0)
+                visible &= nearUp;
+            else if (ghost.offset.y < 0)
+                visible &= nearDown;
+
+            if (ghost.offset.z > 0)
+                visible &= nearForward;
+            else if (ghost.offset.z < 0)
+                visible &= nearBack;
+
+            ghost.obj.SetActive(visible);
         }
     }
 
     void OnDestroy()
     {
         foreach (var ghost in ghosts)
-        {
             if (ghost.obj != null)
-            {
                 Destroy(ghost.obj);
-            }
-        }
         ghosts.Clear();
     }
 }

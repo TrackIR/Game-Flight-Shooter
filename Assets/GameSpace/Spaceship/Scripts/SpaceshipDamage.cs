@@ -94,18 +94,16 @@ public class SpaceshipDamage : MonoBehaviour
         SoundManager.PlaySound(SoundType.DEATH, 0.75f);
         GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
 
-        // int highScore = PlayerPrefs.GetInt("HighScore", 0);
-        // if (ScoreManager.Instance.GetScore() > highScore)
-        // {
-        //     PlayerPrefs.SetInt("HighScore", ScoreManager.Instance.GetScore());
-        //     PlayerPrefs.Save();
-        // }
+        var camera = transform.Find("CameraHolder");
+        if (camera)
+            camera.transform.SetParent(null);
+        else if (Camera.main)
+            Camera.main.transform.SetParent(null);
 
         Destroy(gameObject, 3f);
 
         yield return new WaitForSeconds(1f);
 
-        Time.timeScale = 0f;
         gameOverMenu.SetActive(true);
         cursorCanvas.SetActive(true);
     }

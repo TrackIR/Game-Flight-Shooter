@@ -42,7 +42,7 @@ public class SpaceshipDamage : MonoBehaviour
     //     startTime = Time.time;
     // }
 
-    public void OnTriggerEnter(Collider collider)
+    public void HandleTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Asteroid"))
         {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TriggerProxy : MonoBehaviour
+public class RadarTriggerProxy : MonoBehaviour
 {
     [SerializeField] private SpaceshipRadar parentScript;
 

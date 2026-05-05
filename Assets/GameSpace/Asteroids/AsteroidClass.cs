@@ -26,15 +26,15 @@ public class AsteroidClass : MonoBehaviour
 
     public void Init(int iSize, 
                      float iMoveSpeed, 
-                     float iRotSpeed, 
                      Vector3 iMoveDir, 
                      Vector3 iRotDir)
     {
         size = iSize;
         moveSpeed = iMoveSpeed;
-        rotSpeed = iRotSpeed;
         moveDir = iMoveDir;
         rotDir = iRotDir;
+
+        rotSpeed = Random.Range(-2.0f, 2.0f) * moveSpeed;
 
         transform.localScale = new Vector3(size, size, size);
     }

@@ -60,7 +60,6 @@ public class BasicAsteroid : AsteroidClass
             // int newSize = size * ((curSplitNum - 1) / splitTotal);
 
             float randomMoveSpeed = Random.Range(16.0f, 24.0f);
-            float randomRotSpeed = Random.Range(1.0f, 100.0f);
             Vector3 randomMoveDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 randomRotDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 leftPosition = new Vector3(this.transform.position.x - size, this.transform.position.y, this.transform.position.z);
@@ -70,7 +69,7 @@ public class BasicAsteroid : AsteroidClass
             GameObject asteroid = Instantiate(asteroidPrefab, leftPosition, Quaternion.identity, this.transform.parent);
 
             // Initialize child asteroid
-            asteroid.GetComponent<AsteroidClass>().Init(newSize, randomMoveSpeed, randomRotSpeed, randomMoveDir, randomRotDir);
+            asteroid.GetComponent<AsteroidClass>().Init(newSize, randomMoveSpeed, randomMoveDir, randomRotDir);
 
             // Increment asteroid counter
             AsteroidSpawner.asteroidCount++;

@@ -74,7 +74,6 @@ public class MainMenuAsteroidSpawner : MonoBehaviour
             GameObject asteroid = null;
             int randomSize = (int)UnityEngine.Random.Range(minAsteroidSize, maxAsteroidSize);
             float randomMoveSpeed = UnityEngine.Random.Range(minAsteroidMoveSpeed, maxAsteroidMoveSpeed);
-            float randomRotSpeed = UnityEngine.Random.Range(minAsteroidRotSpeed, maxAsteroidRotSpeed);
             Vector3 randomRotDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 randomPosition = new Vector3(startPosX, Random.Range(spawnHeightMin, spawnHeightMax), Random.Range(spawnDepthMin, spawnDepthMax));
 
@@ -99,7 +98,6 @@ public class MainMenuAsteroidSpawner : MonoBehaviour
             asteroid.GetComponent<AsteroidClass>().Init(
                 /* iSize = */       randomSize,
                 /* iMoveSpeed = */  randomMoveSpeed,
-                /* iRotSpeed = */   randomRotSpeed,
                 /* iMoveDir = */    moveDir,
                 /* iRotDir = */     randomRotDir
             );

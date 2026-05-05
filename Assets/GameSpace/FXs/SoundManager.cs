@@ -24,10 +24,12 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private SoundEntry[] sounds;
     [SerializeField] private AudioClip gameplayMusic;
     [SerializeField, Range(0f, 1f)] private float gameplayMusicVolume = 1f;
+    [SerializeField, Min(0f)] private float explosionReplayDelay = 0.08f;
 
     private static SoundManager instance;
     private AudioSource sfxAudioSource;
     private AudioSource musicAudioSource;
+    private float lastExplosionPlayTime = float.NegativeInfinity;
 
     private void Awake()
     {
@@ -63,6 +65,7 @@ public class SoundManager : MonoBehaviour
     public static void PlaySound(SoundType sound)
     {
         if (instance == null || instance.sfxAudioSource == null) return;
+        if (instance.ShouldSkipSound(sound)) return;
 
         foreach (SoundEntry entry in instance.sounds)
         {
@@ -77,6 +80,7 @@ public class SoundManager : MonoBehaviour
     public static void PlaySound(SoundType sound, float volumeMultiplier)
     {
         if (instance == null || instance.sfxAudioSource == null) return;
+        if (instance.ShouldSkipSound(sound)) return;
 
         foreach (SoundEntry entry in instance.sounds)
         {
@@ -114,5 +118,21 @@ public class SoundManager : MonoBehaviour
             * AudioSettingsPrefs.GetSavedVolumeNormalized(
                 AudioSettingsPrefs.GameplayMusicVolumeKey,
                 fallbackToLegacyMusic: true);
+    }
+
+    private bool ShouldSkipSound(SoundType sound)
+    {
+        if (sound != SoundType.EXPLOSION || explosionReplayDelay <= 0f)
+        {
+            return false;
+        }
+
+        if (Time.unscaledTime - lastExplosionPlayTime < explosionReplayDelay)
+        {
+            return true;
+        }
+
+        lastExplosionPlayTime = Time.unscaledTime;
+        return false;
     }
 }

@@ -100,12 +100,12 @@ public class SpaceshipDamage : MonoBehaviour
         else if (Camera.main)
             Camera.main.transform.SetParent(null);
 
-        Destroy(gameObject, 3f);
-
         yield return new WaitForSeconds(2f);
 
         gameOverMenu.SetActive(true);
         cursorCanvas.SetActive(true);
+
+        Destroy(gameObject, 1f);
     }
 
     private IEnumerator TakeDamageReorientation()

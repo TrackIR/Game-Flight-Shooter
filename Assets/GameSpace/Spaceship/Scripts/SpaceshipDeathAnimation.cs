@@ -54,7 +54,7 @@ public class SpaceshipDeathAnimation : MonoBehaviour
             if (explosionPrefab)
                 Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
-            Destroy(gameObject);
+            // Destroy(gameObject);
         }
     }
 }

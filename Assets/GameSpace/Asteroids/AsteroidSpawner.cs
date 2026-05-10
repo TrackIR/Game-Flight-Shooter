@@ -119,7 +119,7 @@ public class AsteroidSpawner : MonoBehaviour
                 randomPosition /= 2;
 
             // Generate a random number [0-20) and use that number for chance calculations
-            int randChance = UnityEngine.Random.Range(0, 20);
+            int randChance = UnityEngine.Random.Range(0, 10);
 
             // Spawn asteroids based on chance variable, set their position and rotation, and add them as a child of the chosen parent
             switch (randChance)
@@ -132,6 +132,14 @@ public class AsteroidSpawner : MonoBehaviour
                     break;
                 default: // Basic asteroid, 90% of the time
                     asteroid = Instantiate(basicAsteroidPrefab, randomPosition, Quaternion.identity, parentOfAsteroids);
+
+                    // Apply the saved color scheme to the newly spawned asteroid
+                    var apply = asteroid.GetComponent<ApplySavedColors>();
+                    if (apply != null && asteroid.GetComponent<AsteroidClass>().GetAsteroidType() == AsteroidClass.InheritanceType.Basic)
+                        apply.ApplyNow();
+                    else
+                        Debug.LogError("Cannot find ApplySavedColors component on " + asteroid);
+                    
                     break;
             }
 
@@ -143,13 +151,6 @@ public class AsteroidSpawner : MonoBehaviour
                 /* iRotDir = */     randomRotDir
             );
 
-            // Apply the saved color scheme to the newly spawned asteroid
-            var apply = asteroid.GetComponent<ApplySavedColors>();
-            if (apply != null && asteroid.GetComponent<AsteroidClass>().GetAsteroidType() == AsteroidClass.InheritanceType.Basic)
-                apply.ApplyNow();
-            else
-                Debug.LogError("Cannot find ApplySavedColors component on " + asteroid);
-            
             // Debug.Log(asteroid.GetComponent<AsteroidClass>().GetAsteroidType());
 
             asteroidCount++;
@@ -173,7 +174,7 @@ public class AsteroidSpawner : MonoBehaviour
             Vector3 randomPosition = Vector3.zero;
             
             /* Detect if movement direction is intersecting origin of scene */
-            Vector3 toOrigin = Vector3.zero - asteroid.transform.position;
+            Vector3 toOrigin = Vector3.zero - asteroid.transform.position;          // problem here: asteroid is null so it has not .transform.position?
             float thresholdAngle = 5.0f; // Tolerance for angle
             Vector3 randomMoveDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             float asteroidAngle = Vector3.Angle(randomMoveDir, toOrigin);

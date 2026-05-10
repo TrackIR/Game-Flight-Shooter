@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87b365ee1526411418f11b4037506757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostBoundary
-  renderDistance: 550
+  renderDistance: 625
   wrapLayers: 1
 --- !u!1001 &519535639084456999
 PrefabInstance:
@@ -198,6 +198,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efdf37692e7810f40a776ce5bfdba0cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: efdf37692e7810f40a776ce5bfdba0cf, type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: efdf37692e7810f40a776ce5bfdba0cf, type: 3}

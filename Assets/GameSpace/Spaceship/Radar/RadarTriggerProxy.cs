@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class RadarTriggerProxy : MonoBehaviour
 {
-    [SerializeField] private SpaceshipRadar parentScript;
+    [SerializeField] private OffscreenRadar radar;
 
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
-        parentScript.HandleTriggerEnter(other);
+        if (radar != null)
+            radar.AddAsteroid(other.transform);
     }
 
-    private void OnTriggerExit(Collider other) 
+    private void OnTriggerExit(Collider other)
     {
-        parentScript.HandleTriggerExit(other);
+        if (radar != null)
+            radar.RemoveAsteroid(other.transform);
     }
 }

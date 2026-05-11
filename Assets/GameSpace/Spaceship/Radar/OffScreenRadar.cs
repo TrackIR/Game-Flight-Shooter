@@ -6,7 +6,7 @@ public class OffscreenRadar : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
-    public List<Transform> asteroids;
+    public List<Transform> asteroids = new List<Transform>();
     public RectTransform radarIconPrefab;   // prefab now
 
     [Header("UI Sliders")]
@@ -17,10 +17,23 @@ public class OffscreenRadar : MonoBehaviour
     public float screenEdgeMargin = 50f;
     public float maxDistance = 100f;
 
+    [Header("Radar Warning Visuals")]
+    public float minIconScale = 0.4f;
+    public float maxIconScale = 1.5f;
+    public float minIconAlpha = 0.25f;
+    public float maxIconAlpha = 1.0f;
+    public float blinkStartDistance = 35f;
+    public float slowBlinkSpeed = 2f;
+    public float fastBlinkSpeed = 12f;
+    public float blinkMinAlphaMultiplier = 0.25f;
+
     private List<RectTransform> radarIcons = new List<RectTransform>();
 
     void Start()
     {
+        if (player == null)
+            player = transform;
+
         // Distance slider
         if (distanceSlider != null)
         {
@@ -40,11 +53,62 @@ public class OffscreenRadar : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < asteroids.Count; i++)
+        asteroids.RemoveAll(asteroid => asteroid == null);
+
+        while (radarIcons.Count < asteroids.Count)
         {
-            if (asteroids[i] == null) continue;
+            RectTransform icon = Instantiate(radarIconPrefab, radarIconPrefab.parent);
+            icon.gameObject.SetActive(true);
+            radarIcons.Add(icon);
+        }
+
+        for (int i = 0; i < radarIcons.Count; i++)
+        {
+            if (i >= asteroids.Count)
+            {
+                radarIcons[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            if (asteroids[i] == null)
+            {
+                radarIcons[i].gameObject.SetActive(false);
+                continue;
+            }
 
             UpdateRadarForAsteroid(asteroids[i], radarIcons[i]);
+        }
+    }
+
+    public void AddAsteroid(Transform asteroid)
+    {
+        if (asteroid == null)
+            return;
+
+        AsteroidClass asteroidClass = asteroid.GetComponent<AsteroidClass>();
+
+        if (asteroidClass == null)
+            return;
+
+        if (asteroidClass.GetAsteroidType() != AsteroidClass.InheritanceType.Basic)
+            return;
+
+        if (!asteroids.Contains(asteroid))
+        {
+            asteroids.Add(asteroid);
+            CreateRadarIcons();
+        }
+    }
+
+    public void RemoveAsteroid(Transform asteroid)
+    {
+        if (asteroid == null)
+            return;
+
+        if (asteroids.Contains(asteroid))
+        {
+            asteroids.Remove(asteroid);
+            CreateRadarIcons();
         }
     }
 
@@ -80,6 +144,7 @@ public class OffscreenRadar : MonoBehaviour
         foreach (var asteroid in asteroids)
         {
             RectTransform icon = Instantiate(radarIconPrefab, radarIconPrefab.parent);
+            icon.gameObject.SetActive(true);
             radarIcons.Add(icon);
         }
     }
@@ -126,5 +191,35 @@ public class OffscreenRadar : MonoBehaviour
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         icon.rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+        UpdateRadarIconVisuals(icon, distance);
+    }
+
+    void UpdateRadarIconVisuals(RectTransform icon, float distance)
+    {
+        float closeness = 1f - Mathf.Clamp01(distance / maxDistance);
+
+        float scale = Mathf.Lerp(minIconScale, maxIconScale, closeness);
+        icon.localScale = Vector3.one * scale;
+
+        Graphic graphic = icon.GetComponent<Graphic>();
+
+        if (graphic == null)
+            return;
+
+        float alpha = Mathf.Lerp(minIconAlpha, maxIconAlpha, closeness);
+
+        if (distance <= blinkStartDistance)
+        {
+            float blinkCloseness = 1f - Mathf.Clamp01(distance / blinkStartDistance);
+            float blinkSpeed = Mathf.Lerp(slowBlinkSpeed, fastBlinkSpeed, blinkCloseness);
+            float blink = Mathf.Abs(Mathf.Sin(Time.time * blinkSpeed));
+
+            alpha *= Mathf.Lerp(blinkMinAlphaMultiplier, 1f, blink);
+        }
+
+        Color color = graphic.color;
+        color.a = alpha;
+        graphic.color = color;
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 using System;
 
@@ -28,6 +29,10 @@ public class SettingsMenu : MonoBehaviour
     private Button defaultsButton;
     private Button audioButton;
 
+    [SerializeField] private InputActionAsset inputActions;
+    private InputAction shootAction;
+    private Button rebindShootButton;
+
     private void OnEnable()
     {
         VisualElement root = settingsMenuDocument.rootVisualElement;
@@ -54,6 +59,11 @@ public class SettingsMenu : MonoBehaviour
         defaultsButton = root.Q<Button>("defaultsButton");
         audioButton = root.Q<Button>("audioButton");
 
+        rebindShootButton = root.Q<Button>("rebindShoot");
+        shootAction = inputActions.FindAction("Shoot");
+        LoadBinding();
+        UpdateRebindButtonText();
+
         // get the current values
         GetSettingsPrefs();
 
@@ -75,6 +85,8 @@ public class SettingsMenu : MonoBehaviour
         backButton.clicked += LeaveMenu;
         defaultsButton.clicked += RestoreDefaults;
         audioButton.clicked += ToAudioMenu;
+
+        rebindShootButton.clicked += StartRebind;
     }
 
     private void GetSettingsPrefs()
@@ -172,6 +184,50 @@ public class SettingsMenu : MonoBehaviour
         backButton.clicked -= LeaveMenu;
         defaultsButton.clicked -= RestoreDefaults;
         audioButton.clicked -= ToAudioMenu;
+
+        rebindShootButton.clicked -= StartRebind;
+    }
+
+    private void StartRebind()
+    {
+        rebindShootButton.text = "Set Key";
+
+        shootAction.Disable();
+
+        shootAction.PerformInteractiveRebinding(0)
+            .WithControlsExcluding("Mouse")
+            .OnComplete(operation =>
+            {
+                operation.Dispose();
+                shootAction.Enable();
+
+                SaveBinding();
+                UpdateRebindButtonText();
+            })
+            .Start();
+    }
+
+    private void SaveBinding()
+    {
+        string rebinds = inputActions.SaveBindingOverridesAsJson();
+
+        PlayerPrefs.SetString("shootRebind", rebinds);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadBinding()
+    {
+        if (PlayerPrefs.HasKey("shootRebind"))
+        {
+            string rebinds = PlayerPrefs.GetString("shootRebind");
+            inputActions.LoadBindingOverridesFromJson(rebinds);
+        }
+    }
+
+    private void UpdateRebindButtonText()
+    {
+        string binding = shootAction.GetBindingDisplayString(0);
+        rebindShootButton.text = binding;
     }
 
     private void AMToggle()
@@ -244,6 +300,10 @@ public class SettingsMenu : MonoBehaviour
         yawScale.value =  1.5f;
         fullScreen.text = "ON";
         pov.text = "Third";
+
+        shootAction.RemoveBindingOverride(0);
+        SaveBinding();
+        UpdateRebindButtonText();
     }
 
     private void LeaveMenu()

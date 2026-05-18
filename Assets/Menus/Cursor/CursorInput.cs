@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class CursorInput : MonoBehaviour
 {
@@ -15,27 +16,81 @@ public class CursorInput : MonoBehaviour
     private VisualElement pickedElement;
     private float nullElementTimer = 0.25f;
 
+    private bool shootPressedThisFrame = false;
+
+
+    public static CursorInput Instance { get; private set; }
+
+
     private void Awake()
-    {
+    {   
+        // singleton
+        if (Instance != null)
+        {
+            Destroy(transform.root.gameObject);
+            return;
+        }
+        Instance = this;
+
+        DontDestroyOnLoad(transform.root.gameObject);
+
+        shootAction.action.performed += OnShootPerformed;
+
+        shootAction.action.Enable();
+
+        // PlayerPrefs.DeleteKey("shootRebind");
+        // PlayerPrefs.Save();
+
         if (PlayerPrefs.HasKey("shootRebind"))
         {
             string rebinds = PlayerPrefs.GetString("shootRebind");
             inputActions.LoadBindingOverridesFromJson(rebinds);
         }
+        shootAction.action.actionMap.Enable();
     }
 
     private void OnEnable()
     {
-        if (shootAction != null)
-            shootAction.action.Enable();
+        if (Instance != this) return;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
-        if (shootAction != null)
-            shootAction.action.Disable();
+        if (Instance != this) return;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        allMenus = FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance != this) return;
+        shootAction.action.performed -= OnShootPerformed;
+    }
+
+
+    private void OnShootPerformed(InputAction.CallbackContext ctx)
+    {
+        shootPressedThisFrame = true;
+    }
+
+
+    public void SetMenus(UIDocument[] menus)
+    {
+        allMenus = menus;
+    }
+
+
+    public void SetCursorVisible(bool visible)
+    {
+        cursorTransform.gameObject.SetActive(visible);
+    }
+
+    
     void Update()
     {
         // Pick the TOPMOST active menu (important when multiple menus are enabled)
@@ -73,7 +128,7 @@ public class CursorInput : MonoBehaviour
         HandleHover(pickedElement);
 
         // Click when hitting spacebar
-        if (shootAction != null && shootAction.action.WasPressedThisFrame() && pickedElement != null)
+        if (shootPressedThisFrame && pickedElement != null)
         {
             using (var submitEvt = NavigationSubmitEvent.GetPooled())
             {
@@ -81,6 +136,7 @@ public class CursorInput : MonoBehaviour
                 pickedElement.SendEvent(submitEvt);
             }
         }
+        shootPressedThisFrame = false;
     }
 
     private UIDocument GetTopmostActiveMenu()

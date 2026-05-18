@@ -15,7 +15,7 @@ public class SpaceshipDamage : MonoBehaviour
 
     //private SpaceshipDeathAnimation deathAnimation;
     public GameObject gameOverMenu;
-    public GameObject cursorCanvas;
+    // public GameObject cursorCanvas;
 
     public DamageFlashEffect damageFlash;
     // private SpaceshipMovement spaceshipMovement; 
@@ -41,20 +41,17 @@ public class SpaceshipDamage : MonoBehaviour
 
     private Rigidbody rb;
 
-    // private void Start()
-    // {
-    //     startTime = Time.time;
-    // }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        CursorInput.Instance.SetCursorVisible(false);
     }
 
     // public void HandleTriggerEnter(Collider collider)
     public void OnCollisionEnter(Collision collision)
     {
-        // if (collider.CompareTag("Asteroid"))
         if(collision.collider.CompareTag("Asteroid"))
         {
             //** On damage cooldown method **//
@@ -114,7 +111,6 @@ public class SpaceshipDamage : MonoBehaviour
     {
         SoundManager.PlaySound(SoundType.DEATH, 0.75f);
         GetComponent<SpaceshipDeathAnimation>().TriggerDeath();
-        // GetComponentInParent<SpaceshipDeathAnimation>().TriggerDeath();
 
         var camera = transform.Find("CameraHolder");
         if (camera)
@@ -124,8 +120,8 @@ public class SpaceshipDamage : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
+        CursorInput.Instance.SetCursorVisible(true);
         gameOverMenu.SetActive(true);
-        cursorCanvas.SetActive(true);
 
         Destroy(gameObject, 1f);
     }

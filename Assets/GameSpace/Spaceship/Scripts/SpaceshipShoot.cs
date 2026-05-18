@@ -12,13 +12,17 @@ public class SpaceshipShoot : MonoBehaviour
     void Start()
     {
         shootAction = InputSystem.actions.FindAction("Shoot");
-        shootAction.performed += _ => ShootLaser();
-        shootAction.Enable();
+        shootAction.performed += OnShoot;
     }
 
     public void OnDestroy()
     {
-        shootAction.Disable();
+        shootAction.performed -= OnShoot;
+    }
+
+    private void OnShoot(InputAction.CallbackContext _)
+    {
+        ShootLaser();
     }
 
     // Hitscan Method

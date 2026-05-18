@@ -12,8 +12,8 @@ public class GameOverMenu : MonoBehaviour
 
     public GameObject gameOverMenu;
 
-    private IntegerField scoreField;
-    private TextField nameField;
+    private Label scoreField;
+    private Label nameField;
     private Button backButton;
     private Button deleteButton;
 
@@ -32,8 +32,8 @@ public class GameOverMenu : MonoBehaviour
     {
         VisualElement root = gameOverMenuDocument.rootVisualElement;
 
-        scoreField = root.Q<IntegerField>("ScoreField");
-        nameField = root.Q<TextField>("NameField");
+        scoreField = root.Q<Label>("ScoreField");
+        nameField = root.Q<Label>("NameField");
         backButton = root.Q<Button>("BackButton");
         deleteButton = root.Q<Button>("Delete");
 
@@ -42,7 +42,7 @@ public class GameOverMenu : MonoBehaviour
 
         RegisterKeyboardButtons(root);        
 
-        scoreField.value = ScoreManager.Instance.GetScore();
+        scoreField.text = ScoreManager.Instance.GetScore().ToString();
     }
 
     void OnDisable()
@@ -71,12 +71,12 @@ public class GameOverMenu : MonoBehaviour
 
     private void AppendCharacter(string chara)
     {
-        nameField.value = (nameField.value ?? string.Empty) + chara;
+        nameField.text = (nameField.text ?? string.Empty) + chara;
     }
 
     private void ToMainMenu()
     {
-        LeaderboardManager.Instance.AddScore(nameField.value, ScoreManager.Instance.GetScore(), GameModeMenu.gameModeSetting);
+        LeaderboardManager.Instance.AddScore(nameField.text, ScoreManager.Instance.GetScore(), GameModeMenu.gameModeSetting);
 
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
@@ -84,7 +84,7 @@ public class GameOverMenu : MonoBehaviour
 
     private void DeleteChar()
     {
-        if (nameField.value != "")
-            nameField.value = nameField.value[..^1];
+        if (nameField.text != "")
+            nameField.text = nameField.text[..^1];
     }
 }

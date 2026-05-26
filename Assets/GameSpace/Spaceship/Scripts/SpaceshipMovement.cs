@@ -161,7 +161,7 @@ public class SpaceshipMovement : MonoBehaviour
         {
             // Convert input to degrees per second, then apply per fixed step
             Vector3 eulerDelta =
-                new Vector3(pitch, yaw, roll) * DirectRotationSpeed * Time.fixedDeltaTime;
+                new Vector3(pitch * PitchScaler, yaw * YawScaler, roll * RollScaler) * DirectRotationSpeed * Time.fixedDeltaTime;
 
             // Use Rigidbody rotation
             rb.MoveRotation(rb.rotation * Quaternion.Euler(eulerDelta));

@@ -87,6 +87,7 @@ public class CursorInput : MonoBehaviour
     public void SetCursorVisible(bool visible)
     {
         cursorTransform.gameObject.SetActive(visible);
+        shootPressedThisFrame = false;
     }
 
     

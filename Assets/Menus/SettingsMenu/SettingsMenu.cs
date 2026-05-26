@@ -17,11 +17,11 @@ public class SettingsMenu : MonoBehaviour
     public GameObject audioMenu;
 
     private Button angularMomentum;
-    private FloatField pitchScale;
+    private Label pitchScale;
     private Button pitchDec, pitchInc;
-    private FloatField rollScale;
+    private Label rollScale;
     private Button rollDec, rollInc;
-    private FloatField yawScale;
+    private Label yawScale;
     private Button yawDec, yawInc;
     private Button fullScreen;
     private Button pov;
@@ -40,15 +40,15 @@ public class SettingsMenu : MonoBehaviour
         // get the UI element
         angularMomentum = root.Q<Button>("angularMomentum");
 
-        pitchScale = root.Q<FloatField>("pitchScale");
+        pitchScale = root.Q<Label>("pitchScale");
         pitchDec = root.Q<Button>("pitchDec");
         pitchInc = root.Q<Button>("pitchInc");
 
-        rollScale = root.Q<FloatField>("rollScale");
+        rollScale = root.Q<Label>("rollScale");
         rollDec = root.Q<Button>("rollDec");
         rollInc = root.Q<Button>("rollInc");
 
-        yawScale = root.Q<FloatField>("yawScale");
+        yawScale = root.Q<Label>("yawScale");
         yawDec = root.Q<Button>("yawDec");
         yawInc = root.Q<Button>("yawInc");
 
@@ -102,19 +102,19 @@ public class SettingsMenu : MonoBehaviour
             angularMomentum.text = "OFF";
         
         if (PlayerPrefs.HasKey("ptchScl"))
-            pitchScale.value = PlayerPrefs.GetFloat("ptchScl");
+            pitchScale.text = PlayerPrefs.GetFloat("ptchScl").ToString();
         else
-            pitchScale.value = 1.0f;     // default values in SpaceshipMovement.cs
+            pitchScale.text = "1.0";     // default values in SpaceshipMovement.cs
 
         if (PlayerPrefs.HasKey("rollScl"))
-            rollScale.value = PlayerPrefs.GetFloat("rollScl");
+            rollScale.text = PlayerPrefs.GetFloat("rollScl").ToString();
         else
-            rollScale.value = 1.1f;
+            rollScale.text = "1.1";
 
         if (PlayerPrefs.HasKey("yawScl"))
-            yawScale.value = PlayerPrefs.GetFloat("yawScl");
+            yawScale.text = PlayerPrefs.GetFloat("yawScl").ToString();
         else
-            yawScale.value = 1.5f;
+            yawScale.text = "1.5";
 
         if (PlayerPrefs.HasKey("fullScrn"))
         {
@@ -160,9 +160,9 @@ public class SettingsMenu : MonoBehaviour
     {
         //save playerPrefs
         PlayerPrefs.SetInt("angMoment", angularMomentum.text == "ON" ? 1 : 0);
-        PlayerPrefs.SetFloat("ptchScl", pitchScale.value);
-        PlayerPrefs.SetFloat("rollScl", rollScale.value);
-        PlayerPrefs.SetFloat("yawScl", yawScale.value);
+        PlayerPrefs.SetFloat("ptchScl", float.Parse(pitchScale.text));
+        PlayerPrefs.SetFloat("rollScl", float.Parse(rollScale.text));
+        PlayerPrefs.SetFloat("yawScl", float.Parse(yawScale.text));
         PlayerPrefs.SetInt("fullScrn", fullScreen.text == "ON" ? 1 : 0);
         PlayerPrefs.SetInt("povFrst", pov.text == "First" ? 1 : 0);
         PlayerPrefs.Save();
@@ -240,38 +240,44 @@ public class SettingsMenu : MonoBehaviour
 
     private void DecPitch()
     {
-        if(SpaceshipMovement.PitchScaler > 0.0f)
-            pitchScale.value -= 0.1f;
+        float value = float.Parse(pitchScale.text);
+        if(value > 0.1f)
+            pitchScale.text = (value - 0.1f).ToString();
     }
 
     private void IncPitch()
     {
-        if(SpaceshipMovement.PitchScaler < 3.0f)
-            pitchScale.value += 0.1f;
+        float value = float.Parse(pitchScale.text);
+        if(value < 3.0f)
+            pitchScale.text = (value + 0.1f).ToString();
     }
 
     private void DecRoll()
     {
-        if(SpaceshipMovement.RollScaler > 0.0f)
-            rollScale.value -= 0.1f;
+        float value = float.Parse(rollScale.text);
+        if(value > 0.1f)
+            rollScale.text = (value - 0.1f).ToString();
     }
 
     private void IncRoll()
     {
-        if(SpaceshipMovement.RollScaler < 3.0f)
-            rollScale.value += 0.1f;
+        float value = float.Parse(rollScale.text);
+        if(value < 3.0f)
+            rollScale.text = (value + 0.1f).ToString();
     }
 
     private void DecYaw()
     {
-        if(SpaceshipMovement.YawScaler > 0.0f)
-            yawScale.value -= 0.1f;
+        float value = float.Parse(yawScale.text);
+        if(value > 0.1f)
+            yawScale.text = (value - 0.1f).ToString();
     }
 
     private void IncYaw()
     {
-        if(SpaceshipMovement.YawScaler < 3.0f)
-            yawScale.value += 0.1f;
+        float value = float.Parse(yawScale.text);
+        if(value < 3.0f)
+            yawScale.text = (value + 0.1f).ToString();
     }
 
     private void FSToggle()
@@ -295,9 +301,9 @@ public class SettingsMenu : MonoBehaviour
     private void RestoreDefaults()
     {
         angularMomentum.text = "OFF";
-        pitchScale.value = 1.0f;
-        rollScale.value = 1.1f;
-        yawScale.value =  1.5f;
+        pitchScale.text = "1.0";
+        rollScale.text = "1.1";
+        yawScale.text =  "1.5";
         fullScreen.text = "ON";
         pov.text = "Third";
 

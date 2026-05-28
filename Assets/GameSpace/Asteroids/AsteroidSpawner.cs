@@ -37,10 +37,15 @@ public class AsteroidSpawner : MonoBehaviour
     // incs in SpawnXAsteroids function and Basic Asteroid's Split function, decs in each Asteroid's Die function
     public static int asteroidCount = 0;
     
-    private int gameModeSetting = GameModeMenu.gameModeSetting;
+    private int gameModeSetting;
 
     void Start()
     {
+
+        asteroidCount = 0;
+
+        gameModeSetting = GameModeMenu.gameModeSetting;
+
         // for testing different game modes in scene
         // gameModeSetting = 2;
 

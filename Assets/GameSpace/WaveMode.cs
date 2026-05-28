@@ -14,6 +14,10 @@ public class WaveMode : MonoBehaviour
 
     private int waveNumber = 0;
 
+    void Start()
+    {
+        waveNumber = 0;
+    }
     void Update()
     {
         if (AsteroidSpawner.asteroidCount <= 0)

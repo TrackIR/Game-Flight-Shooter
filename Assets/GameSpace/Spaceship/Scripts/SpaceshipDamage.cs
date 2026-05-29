@@ -17,7 +17,6 @@ public class SpaceshipDamage : MonoBehaviour
 
     //private SpaceshipDeathAnimation deathAnimation;
     public GameObject gameOverMenu;
-    // public GameObject cursorCanvas;
 
     public DamageFlashEffect damageFlash;
     // private SpaceshipMovement spaceshipMovement; 

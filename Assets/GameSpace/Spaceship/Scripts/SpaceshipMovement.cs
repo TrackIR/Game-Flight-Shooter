@@ -30,7 +30,7 @@ public class SpaceshipMovement : MonoBehaviour
     private float roll;
 
     // Spaceship feel values
-    public float MaxSpeed = 4.25f;
+    public float MaxSpeed = 6.25f;
     public float LinearDamping = 0.5f;
     public float AngularDamping = 0.5f;
 

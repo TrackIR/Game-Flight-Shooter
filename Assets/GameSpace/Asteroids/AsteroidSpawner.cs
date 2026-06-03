@@ -4,7 +4,7 @@ public class AsteroidSpawner : MonoBehaviour
 {
     [Header("Spawn Position")]    // Parent of all asteroids spawned
     [SerializeField] private Transform parentOfAsteroids;
-    // [SerializeField] private int spawnRadius = 100;    // Radius of perimiter where asteroids can spawn
+    [SerializeField] private Transform spaceshipTransform;
 
 
     [Header("Asteroid Types")]    // Different types of asteroids to spawn
@@ -79,6 +79,52 @@ public class AsteroidSpawner : MonoBehaviour
         WaveMode.SetActive(true);
     }
 
+    // Generates a random spawn position on a cube face while avoiding a sphere around the spaceship
+    private Vector3 RangeWithExclusionZone(float half, float exclusionRadius)
+    {
+        Vector3 randomPosition;
+
+        // DEBUG
+        bool attemptplus = false;
+
+        do
+        {
+            if (attemptplus)
+                Debug.Log("Attempting to spawn asteroid in exclusion zone");
+            attemptplus = true;
+
+            int face = UnityEngine.Random.Range(0, 6);
+
+            switch (face)
+            {
+                case 0: // +X face
+                    randomPosition = new Vector3(half, UnityEngine.Random.Range(-half, half), UnityEngine.Random.Range(-half, half));
+                    break;
+                case 1: // -X face
+                    randomPosition = new Vector3(-half, UnityEngine.Random.Range(-half, half), UnityEngine.Random.Range(-half, half));
+                    break;
+                case 2: // +Y face
+                    randomPosition = new Vector3(UnityEngine.Random.Range(-half, half), half, UnityEngine.Random.Range(-half, half));
+                    break;
+                case 3: // -Y face
+                    randomPosition = new Vector3(UnityEngine.Random.Range(-half, half), -half, UnityEngine.Random.Range(-half, half));
+                    break;
+                case 4: // +Z face
+                    randomPosition = new Vector3(UnityEngine.Random.Range(-half, half), UnityEngine.Random.Range(-half, half), half);
+                    break;
+                default: // -Z face
+                    randomPosition = new Vector3(UnityEngine.Random.Range(-half, half), UnityEngine.Random.Range(-half, half), -half);
+                    break;
+            }
+
+            if (gameModeSetting == 0)
+                randomPosition /= 2f;
+        }
+        while ((randomPosition - spaceshipTransform.position).sqrMagnitude < exclusionRadius * exclusionRadius);
+
+        return randomPosition;
+    }
+
     // Spawns X amount of asteroids in the spawn radius
     public void SpawnXAsteroids(int x)
     {
@@ -92,37 +138,10 @@ public class AsteroidSpawner : MonoBehaviour
             Vector3 randomMoveDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             Vector3 randomRotDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             float half = 200f;
+            float exclusionRadius = half / 2f;
+            Vector3 randomPosition = RangeWithExclusionZone(half, exclusionRadius);
 
-            int face = UnityEngine.Random.Range(0, 6);
-            
-            Vector3 randomPosition = Vector3.zero;
-            
-            switch (face)
-            {
-                case 0: // +X face
-                    randomPosition = new Vector3(half, Random.Range(-half, half), Random.Range(-half, half));
-                    break;
-                case 1: // -X face
-                    randomPosition = new Vector3(-half, Random.Range(-half, half), Random.Range(-half, half));
-                    break;
-                case 2: // +Y face
-                    randomPosition = new Vector3(Random.Range(-half, half), half, Random.Range(-half, half));
-                    break;
-                case 3: // -Y face
-                    randomPosition = new Vector3(Random.Range(-half, half), -half, Random.Range(-half, half));
-                    break;
-                case 4: // +Z face
-                    randomPosition = new Vector3(Random.Range(-half, half), Random.Range(-half, half), half);
-                    break;
-                case 5: // -Z face
-                    randomPosition = new Vector3(Random.Range(-half, half), Random.Range(-half, half), -half);
-                    break;
-            }
-
-            if (gameModeSetting == 0)
-                randomPosition /= 2;
-
-            // Generate a random number [0-20) and use that number for chance calculations
+            // Generate a random number [0-20] and use that number for chance calculations
             int randChance = UnityEngine.Random.Range(0, 20);
 
             // Spawn asteroids based on chance variable, set their position and rotation, and add them as a child of the chosen parent
@@ -172,35 +191,8 @@ public class AsteroidSpawner : MonoBehaviour
             float randomMoveSpeed = UnityEngine.Random.Range(minAsteroidMoveSpeed, maxAsteroidMoveSpeed);
             Vector3 randomRotDir = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized;
             float half = 200f;
-
-            int face = UnityEngine.Random.Range(0, 6);
-            
-            Vector3 randomPosition = Vector3.zero;
-            
-            switch (face)
-            {
-                case 0: // +X face
-                    randomPosition = new Vector3(half, Random.Range(-half, half), Random.Range(-half, half));
-                    break;
-                case 1: // -X face
-                    randomPosition = new Vector3(-half, Random.Range(-half, half), Random.Range(-half, half));
-                    break;
-                case 2: // +Y face
-                    randomPosition = new Vector3(Random.Range(-half, half), half, Random.Range(-half, half));
-                    break;
-                case 3: // -Y face
-                    randomPosition = new Vector3(Random.Range(-half, half), -half, Random.Range(-half, half));
-                    break;
-                case 4: // +Z face
-                    randomPosition = new Vector3(Random.Range(-half, half), Random.Range(-half, half), half);
-                    break;
-                case 5: // -Z face
-                    randomPosition = new Vector3(Random.Range(-half, half), Random.Range(-half, half), -half);
-                    break;
-            }
-            
-            if (gameModeSetting == 0)
-                randomPosition /= 2;
+            float exclusionRadius = half / 2f;
+            Vector3 randomPosition = RangeWithExclusionZone(half, exclusionRadius);
 
             // Generate a random number [0-20) and use that number for chance calculations
             int randChance = UnityEngine.Random.Range(0, 20);
